@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="true">
+
+
+
+
+    <!--测试连接池-->
+    <bean id = "connectionManager" class="com.mianbao.util.DbDriverConfig">
+        <property name="initialSize" value="20"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="50"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mianbao"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+    </bean>
+
+</beans>
