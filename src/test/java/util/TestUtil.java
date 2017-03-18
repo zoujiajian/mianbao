@@ -8,10 +8,13 @@ import com.mianbao.service.RedisService;
 import com.mianbao.util.DbConnectionManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class TestUtil {
     @Resource
     private DynamicEvaluateMapper dynamicEvaluateMapper;
 
+
     @Test
     public void testRedis() throws SQLException {
         redisService.addByKey("name","zoujiajian");
@@ -41,4 +45,5 @@ public class TestUtil {
         List<DynamicEvaluate> list = dynamicEvaluateMapper.selectByExample(dynamicEvaluateExample);
         System.out.println("value =" + JSON.toJSONString(list));
     }
+
 }

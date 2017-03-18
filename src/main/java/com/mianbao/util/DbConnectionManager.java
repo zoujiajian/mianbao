@@ -19,28 +19,39 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by zoujiajian on 2017-3-14.
  */
-public class DbConnectionManager extends  DbDriverConfig{
-
-    private static final int DEFAULT_INIT_SIZE = 16;
+public class DbConnectionManager{
 
     /**
-     * 连接数
+     * 初始化连接池大小
      */
-    private AtomicInteger poolSize;
+    private int initialSize = 10;
 
-    private Set<Connection> connectionPool;
+    /**
+     * 最小活跃连接数
+     */
+    private int minIdle = 10;
 
-    private ExecutorService producerService;
+    /**
+     * 最大活跃连接数
+     */
+    private int maxActive = 50;
+
+    private String url = null;
+
+    private String username = null ;
+
+    private String password = null;
+
+    private String driver = null;
+
+    private AtomicInteger poolSize =  new AtomicInteger();
+
+    private Set<Connection> connectionPool = Sets.newConcurrentHashSet();
+
+    private ExecutorService producerService = new ThreadPoolExecutor(5,10,10, TimeUnit.SECONDS ,new LinkedBlockingQueue<>(100));;
 
     private DbConnectionManager(){
-        int init = getInitialSize();
-        if(init <= 0){
-            init = DEFAULT_INIT_SIZE;
-        }
-        poolSize = new AtomicInteger(init);
-        producerService = new ThreadPoolExecutor(5,10,10, TimeUnit.SECONDS ,new LinkedBlockingQueue<>(100));
-        connectionPool = Sets.newConcurrentHashSet();
-        producerWithCapacity(init);
+
     }
 
     //使用静态内部类实现单列 从而实现连接池的单实例 多线程
@@ -55,21 +66,24 @@ public class DbConnectionManager extends  DbDriverConfig{
     }
 
     private Connection producer() throws ClassNotFoundException, SQLException {
-        if(StringUtils.isEmpty(getDriver())
-                || StringUtils.isEmpty(getUrl()) || StringUtils.isEmpty(getUsername())){
+
+        if(StringUtils.isEmpty(driver)
+                || StringUtils.isEmpty(url) || StringUtils.isEmpty(username)){
             throw new IllegalArgumentException("driver or url or userName is empty");
         }
-        Class.forName(getDriver());
-        return DriverManager.getConnection(getUrl(),getUsername(),getPassword());
+        Class.forName(driver);
+        return DriverManager.getConnection(url,username,password);
     }
 
     private void producerWithCapacity(int capacity){
         if(capacity <= 0){
             throw new IllegalArgumentException("capacity exception");
         }
-        while(capacity != 0 && getPoolSize() < getMaxActive()){
+        //check 防止多线程进入一个线程初始化的时候 另外一个线程生产 导致溢出
+        while(capacity != 0 && getPoolSize() < initialSize){
             try {
                 connectionPool.add(producer());
+                poolSize.incrementAndGet();
                 capacity -- ;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,6 +105,11 @@ public class DbConnectionManager extends  DbDriverConfig{
     }
 
     public Connection getConnection(Long timeOut, TimeUnit timeUnit){
+        // 第一次获取连接的时候连接池初始化
+        if(poolSize.get() == 0){
+            producerWithCapacity(initialSize);
+        }
+
         long count = timeUnit.toMillis(timeOut);
         //cas 获取连接
         while(count > 0){
@@ -99,9 +118,10 @@ public class DbConnectionManager extends  DbDriverConfig{
                 Iterator<Connection> iterator = connectionPool.iterator();
                 while(iterator.hasNext()){
                     Connection connection =  iterator.next();
+
                     connectionPool.remove(connection);
                     // 连接池中连接数是否小于最小活跃数
-                    if(getPoolSize() <= getMinIdle()){
+                    if(getPoolSize() <= minIdle){
                         producerService.submit(new Procuder(10));
                     }
                     poolSize.decrementAndGet() ;
@@ -118,9 +138,9 @@ public class DbConnectionManager extends  DbDriverConfig{
     public void returnPool(Connection connection){
         if(connection != null){
             try{
-                if(getPoolSize() < getMaxActive()){
+                if(getPoolSize() < maxActive){
                     final int currentSize = getPoolSize();
-                    if(currentSize < getMaxActive()){
+                    if(currentSize < maxActive){
                         connectionPool.add(connection);
                     }
                     poolSize.incrementAndGet();
@@ -142,10 +162,11 @@ public class DbConnectionManager extends  DbDriverConfig{
         @Override
         public void run() {
             while(procuderNum > 0 ){
-                if(getPoolSize() < getMaxActive()){
+                if(getPoolSize() < maxActive){
                     try {
                         poolSize.incrementAndGet();
                         connectionPool.add(producer());
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -159,5 +180,81 @@ public class DbConnectionManager extends  DbDriverConfig{
 
     private int getPoolSize(){
         return poolSize.get();
+    }
+
+    public void setPoolSize(AtomicInteger poolSize) {
+        this.poolSize = poolSize;
+    }
+
+    public int getInitialSize() {
+        return initialSize;
+    }
+
+    public void setInitialSize(int initialSize) {
+        this.initialSize = initialSize;
+    }
+
+    public int getMinIdle() {
+        return minIdle;
+    }
+
+    public void setMinIdle(int minIdle) {
+        this.minIdle = minIdle;
+    }
+
+    public int getMaxActive() {
+        return maxActive;
+    }
+
+    public void setMaxActive(int maxActive) {
+        this.maxActive = maxActive;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public Set<Connection> getConnectionPool() {
+        return connectionPool;
+    }
+
+    public void setConnectionPool(Set<Connection> connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+
+    public ExecutorService getProducerService() {
+        return producerService;
+    }
+
+    public void setProducerService(ExecutorService producerService) {
+        this.producerService = producerService;
     }
 }
