@@ -12,24 +12,24 @@ import redis.clients.jedis.JedisPoolConfig;
  * redis 配置类
  */
 @Component
-public  class RedisConfig{
+public class RedisConfig{
 
-    @Value(value = "${redis.MaxActive}")
+    @Value("${redis.MaxActive}")
     private int maxActive;
 
-    @Value(value = "${redis.MaxIdle}")
+    @Value("${redis.MaxIdle}")
     private int maxIdle;
 
-    @Value(value = "${redis.MaxWait}")
+    @Value("${redis.MaxWait}")
     private int maxWait;
 
-    @Value(value = "${redis.borrow}")
+    @Value("${redis.borrow}")
     private boolean borrow;
 
-    @Value(value = "${redis.address}")
+    @Value("${redis.address}")
     private String address;
 
-    @Value(value = "${redis.port}")
+    @Value("${redis.port}")
     private int port;
 
     public int getMaxActive() {
@@ -109,10 +109,7 @@ public  class RedisConfig{
     }
 
     protected Jedis getJedisClient(){
-        if(jedisPool != null){
-            return getJedisPool().getResource();
-        }
-        return null;
+        return getJedisPool().getResource();
     }
 
     protected void checkKey(String key){
