@@ -1,11 +1,18 @@
 package com.mianbao.pojo;
 
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
  * Created by zoujiajian on 2017-3-20.
  */
+@Getter
+@Setter
+@ToString
 public class LogAround implements Serializable{
 
     private Object[] request;
@@ -14,40 +21,6 @@ public class LogAround implements Serializable{
 
     private Long timeOut;
 
-    public LogAround() {
+    private boolean isCache = Boolean.FALSE;
 
-    }
-
-    public Object[] getRequest() {
-        return request;
-    }
-
-    public void setRequest(Object[] request) {
-        this.request = request;
-    }
-
-    public Object getResponse() {
-        return response;
-    }
-
-    public void setResponse(Object response) {
-        this.response = response;
-    }
-
-    public Long getTimeOut() {
-        return timeOut;
-    }
-
-    public void setTimeOut(Long timeOut) {
-        this.timeOut = timeOut;
-    }
-
-    @Override
-    public String toString() {
-        return "LogAround{" +
-                "request='" + request + '\'' +
-                ", response='" + response + '\'' +
-                ", timeOut=" + timeOut +
-                '}';
-    }
 }
