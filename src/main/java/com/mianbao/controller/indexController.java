@@ -1,5 +1,7 @@
 package com.mianbao.controller;
 
+import com.mianbao.annotation.LogAround;
+import com.mianbao.common.Result;
 import com.mianbao.dao.DynamicEvaluateMapper;
 import com.mianbao.domain.DynamicEvaluate;
 import com.mianbao.domain.DynamicEvaluateExample;
@@ -16,14 +18,18 @@ import java.util.List;
  * Created by zoujiajian on 2017-3-9.
  */
 @RestController
-@EnableAutoConfiguration
 @RequestMapping("/")
 public class indexController {
 
+
     @RequestMapping("index")
-    public String index(){
-        return "hello springBoot";
+    @LogAround
+    public Result<Object> index(){
+       return test();
     }
 
+    private Result<Object> test(){
+        return new Result<>(Boolean.FALSE,500,"errorMsg",null);
+    }
 
 }

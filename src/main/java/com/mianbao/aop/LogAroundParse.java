@@ -27,48 +27,33 @@ public class LogAroundParse {
     public void pointCut(){}
 
     @Around("pointCut()")
-    public void advice(ProceedingJoinPoint joinPoint){
+    public Object advice(ProceedingJoinPoint joinPoint){
         Object target = joinPoint.getTarget();
         String methodName = joinPoint.getSignature().getName();
         Class clazz = target.getClass();
         Method[] methods = clazz.getDeclaredMethods();
-        for(Method method : methods){
-            if(method.getName().equals(methodName)){
-                //判断拦截方法上是否存在logAround日志注解
-                if(method.isAnnotationPresent(LogAround.class)){
-                    Object[] arguments = joinPoint.getArgs();
-                    try {
-                        long startTime = System.currentTimeMillis();
-                        Object result = joinPoint.proceed();
-                        long endTime = System.currentTimeMillis();
-                        String log = getLoggerFormat(method,arguments,result,endTime - startTime);
-                        logger.info(log);
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
-                        logger.error("logAround is error");
+        Object result = null;
+        try {
+            long startTime = System.currentTimeMillis();
+            result = joinPoint.proceed();
+            long endTime = System.currentTimeMillis();
+            for(Method method : methods){
+                if(method.getName().equals(methodName)){
+                    //判断拦截方法上是否存在logAround日志注解
+                    if(method.isAnnotationPresent(LogAround.class)){
+                        Object[] arguments = joinPoint.getArgs();
+
+                        com.mianbao.pojo.LogAround logAround = new com.mianbao.pojo.LogAround();
+                        logAround.setRequest(arguments);
+                        logAround.setResponse(result);
+                        logAround.setTimeOut(endTime - startTime);
+                        logger.info(JSON.toJSONString(logAround));
                     }
                 }
             }
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
-    }
-
-    /**
-     * 组装logger格式
-     * @param method
-     * @param args
-     * @param response
-     * @param timeOut
-     * @return
-     */
-    private String getLoggerFormat(Method method, Object[] args, Object response, long timeOut){
-        String methodName = method.getName();
-        String request = JSON.toJSONString(args);
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(methodName).append(" = ").append("request : ").
-                     append(request).append(" response : ").
-                     append(JSON.toJSONString(response)).append(" timeOut : {").
-                     append(timeOut).append("}");
-
-        return stringBuffer.toString();
+        return result;
     }
 }
