@@ -1,5 +1,7 @@
 package com.mianbao.annotation;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.lang.annotation.*;
 
 /**

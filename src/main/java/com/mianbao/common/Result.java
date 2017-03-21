@@ -20,6 +20,9 @@ public class Result<T> {
 
     private T data;
 
+    public Result() {
+    }
+
     public Result(boolean isSuccess, int code, String errorMsg, T data) {
         this.isSuccess = isSuccess;
         this.code = code;

@@ -1,6 +1,7 @@
 package com.mianbao.controller;
 
 import com.mianbao.annotation.LogAround;
+import com.mianbao.annotation.RedisCache;
 import com.mianbao.common.Result;
 import com.mianbao.dao.DynamicEvaluateMapper;
 import com.mianbao.domain.DynamicEvaluate;
@@ -18,14 +19,15 @@ import java.util.List;
  * Created by zoujiajian on 2017-3-9.
  */
 @RestController
-@RequestMapping("/")
+@RequestMapping("/test")
 public class TestController {
 
 
     @RequestMapping("index")
-    @LogAround
-    public Result<Object> index(){
-       return test();
+    @RedisCache(type = Result.class)
+    public Result<Object> index(String name){
+        System.out.println("执行方法");
+        return test();
     }
 
     private Result<Object> test(){

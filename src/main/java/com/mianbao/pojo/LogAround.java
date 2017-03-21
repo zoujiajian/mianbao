@@ -15,12 +15,16 @@ import java.io.Serializable;
 @ToString
 public class LogAround implements Serializable{
 
+    private String methodName;
+
+    private String className;
+
     private Object[] request;
 
     private Object response;
 
     private Long timeOut;
 
-    private boolean isCache = Boolean.FALSE;
+    private boolean isCache;
 
 }

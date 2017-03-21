@@ -1,6 +1,5 @@
 package com.mianbao.controller;
 
-import com.mianbao.common.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
