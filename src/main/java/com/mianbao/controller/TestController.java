@@ -22,16 +22,15 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
 
-
+    @RedisCache()
     @RequestMapping("index")
-    @RedisCache(type = Result.class)
     public Result<Object> index(String name){
         System.out.println("执行方法");
         return test();
     }
 
     private Result<Object> test(){
-        return new Result<>(Boolean.FALSE,500,"errorMsg",null);
+        return new Result<>(Boolean.TRUE,500,"errorMsg",null);
     }
 
 }

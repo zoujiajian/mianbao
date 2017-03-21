@@ -35,7 +35,7 @@
 
 
     <!--测试连接池-->
-    <bean class="com.mianbao.util.DbConnectionManager">
+    <bean class="com.mianbao.util.DbConnectionUtil">
         <property name="initialSize" value="${jdbc.initialPoolSize}"/>
         <property name="minIdle" value="${jdbc.minPoolSize}"/>
         <property name="maxActive" value="${jdbc.maxPoolSize}"/>

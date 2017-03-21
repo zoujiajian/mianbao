@@ -42,33 +42,40 @@ public class RedisCacheParse {
         Method[] methods = clazz.getDeclaredMethods();
         Object[] argument = joinPoint.getArgs();
         String key = getKey(argument);
-        try{
-            for(Method method : methods){
-                if(method.getName().equals(methodName)){
-                   if(method.isAnnotationPresent(RedisCache.class)){
-                       RedisCache redisCache = method.getAnnotation(RedisCache.class);
-                       Class type = redisCache.type();
-                       Long startTime = System.currentTimeMillis();
 
-                       String cacheValue = redisService.getByKey(key);
-                       Long endTime = System.currentTimeMillis();
-                       //缓存命中
-                       if(cacheValue != null){
-                           // TODO 必须有默认的构造函数
-                           result = JSON.parseObject(cacheValue,type);
-                           if(result != null){
-                               logPrint(argument,method.getName(),target.getClass().getName(),
-                                       result,startTime,endTime,Boolean.TRUE);
-                           }
-                           return result;
-                       }
-                   }
+        for(Method method : methods){
+            if(method.getName().equals(methodName)){
+                if(method.isAnnotationPresent(RedisCache.class)){
+                    RedisCache redisCache = method.getAnnotation(RedisCache.class);
+                    Class type = redisCache.type();
+                    Long startTime = System.currentTimeMillis();
+
+                    String cacheValue = redisService.getByKey(key);
+                    Long endTime = System.currentTimeMillis();
+                    //缓存命中
+                    if(cacheValue != null){
+                        // TODO 必须有默认的构造函数
+                        result = JSON.parseObject(cacheValue,type);
+                        if(result != null){
+                            logPrint(argument,method.getName(),target.getClass().getName(),
+                                    result,startTime,endTime,Boolean.TRUE);
+                        }
+                        return result;
+                    }
                 }
             }
+        }
+
+        try{
             Long startTime = System.currentTimeMillis();
             result = joinPoint.proceed();
-            setRedis(key,result);
             Long endTime = System.currentTimeMillis();
+            Result response = (Result) result;
+            //服务正确返回的情况下缓存结果
+            if(response.isSuccess()){
+                setRedis(key,result);
+            }
+
             logPrint(argument,methodName,target.getClass().getName(),
                     result,startTime,endTime,Boolean.FALSE);
             return result;

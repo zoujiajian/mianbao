@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by zoujiajian on 2017-3-14.
  */
-public class DbConnectionManager{
+public class DbConnectionUtil {
 
     /**
      * 初始化连接池大小
@@ -50,18 +50,18 @@ public class DbConnectionManager{
 
     private ExecutorService producerService = new ThreadPoolExecutor(5,10,10, TimeUnit.SECONDS ,new LinkedBlockingQueue<>(100));;
 
-    private DbConnectionManager(){
+    private DbConnectionUtil(){
 
     }
 
     //使用静态内部类实现单列 从而实现连接池的单实例 多线程
     private static class DbConnectionFactory{
 
-        private static DbConnectionManager dbConnectionManager = new DbConnectionManager();
+        private static DbConnectionUtil dbConnectionManager = new DbConnectionUtil();
 
     }
 
-    public static DbConnectionManager createDbConnectionManager(){
+    public static DbConnectionUtil createDbConnectionManager(){
         return DbConnectionFactory.dbConnectionManager;
     }
 

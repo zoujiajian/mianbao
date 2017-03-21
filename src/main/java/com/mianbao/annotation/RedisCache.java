@@ -1,6 +1,6 @@
 package com.mianbao.annotation;
 
-import com.alibaba.fastjson.JSONObject;
+import com.mianbao.common.Result;
 
 import java.lang.annotation.*;
 
@@ -17,5 +17,5 @@ public @interface RedisCache {
      * redis解析之后的类型
      * @return
      */
-    Class type() default Object.class;
+    Class type() default Result.class;
 }
