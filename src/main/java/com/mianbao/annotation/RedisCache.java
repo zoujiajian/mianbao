@@ -18,4 +18,23 @@ public @interface RedisCache {
      * @return
      */
     Class type() default Result.class;
+
+    /**
+     * 是否带上时间段
+     * @return
+     */
+    boolean time() default false;
+
+    /**
+     * 开始时间
+     * @return
+     */
+    long startTime() default 0;
+
+    /**
+     * 结束时间
+     * @return
+     */
+    long endTime() default 0;
+
 }

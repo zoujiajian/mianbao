@@ -1,6 +1,7 @@
 package com.mianbao.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.mianbao.annotation.RedisCache;
 import com.mianbao.common.Result;
 import com.mianbao.pojo.LogAround;
@@ -29,7 +30,7 @@ public class RedisCacheParse {
     @Resource
     private RedisService redisService;
 
-    @Pointcut("execution(* com.mianbao.controller..*(..))")
+    @Pointcut("execution(* com.mianbao.service..*(..))")
     public void pointCut(){}
 
     @Around("pointCut()")
@@ -41,17 +42,18 @@ public class RedisCacheParse {
         Class clazz = target.getClass();
         Method[] methods = clazz.getDeclaredMethods();
         Object[] argument = joinPoint.getArgs();
-        String key = getKey(argument);
+        Long startTime,endTime;
 
         for(Method method : methods){
             if(method.getName().equals(methodName)){
                 if(method.isAnnotationPresent(RedisCache.class)){
                     RedisCache redisCache = method.getAnnotation(RedisCache.class);
                     Class type = redisCache.type();
-                    Long startTime = System.currentTimeMillis();
+                    String key = getKey(argument, redisCache);
 
+                    startTime = System.currentTimeMillis();
                     String cacheValue = redisService.getByKey(key);
-                    Long endTime = System.currentTimeMillis();
+                    endTime = System.currentTimeMillis();
                     //缓存命中
                     if(cacheValue != null){
                         // TODO 必须有默认的构造函数
@@ -62,19 +64,31 @@ public class RedisCacheParse {
                         }
                         return result;
                     }
+                    //缓存未命中但需要缓存
+                    try {
+                        startTime = System.currentTimeMillis();
+                        result = joinPoint.proceed();
+                        endTime = System.currentTimeMillis();
+                        Result response = (Result) result;
+                        //服务正确返回的情况下缓存结果
+                        if (response.isSuccess()) {
+                            setRedis(key, result);
+                        }
+
+                        logPrint(argument,methodName,target.getClass().getName(),
+                                result,startTime,endTime,Boolean.FALSE);
+                        return result;
+                    }catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
                 }
             }
         }
-
+        //不需要缓存
         try{
-            Long startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
             result = joinPoint.proceed();
-            Long endTime = System.currentTimeMillis();
-            Result response = (Result) result;
-            //服务正确返回的情况下缓存结果
-            if(response.isSuccess()){
-                setRedis(key,result);
-            }
+            endTime = System.currentTimeMillis();
 
             logPrint(argument,methodName,target.getClass().getName(),
                     result,startTime,endTime,Boolean.FALSE);
@@ -86,12 +100,23 @@ public class RedisCacheParse {
         return  result;
     }
 
-    private String getKey(Object[] objects){
-        return JSON.toJSONString(objects);
+    private String getKey(Object[] argument, RedisCache cacheAround){
+        //加上时间段构成key
+        if(cacheAround.time()){
+            if(cacheAround.startTime() < 0 || cacheAround.endTime() < 0){
+                throw new IllegalArgumentException("time is less zero");
+            }
+            StringBuffer key = new StringBuffer();
+            key.append(cacheAround.startTime()).
+                    append(Lists.newArrayList(argument)).
+                    append(cacheAround);
+            return JSON.toJSONString(key);
+        }
+        return JSON.toJSONString(argument);
     }
 
-    private boolean setRedis(String key, Object value){
-        return redisService.addByKey(key, JSON.toJSONString(value));
+    private void setRedis(String key, Object value){
+        redisService.addByKey(key,JSON.toJSONString(value));
     }
 
     private void logPrint(Object[] arguments ,String methodName, String className , Object result,
