@@ -84,14 +84,9 @@ public class RedisCacheParse {
                 }
             }
         }
-        //不需要缓存
-        try{
-            startTime = System.currentTimeMillis();
-            result = joinPoint.proceed();
-            endTime = System.currentTimeMillis();
 
-            logPrint(argument,methodName,target.getClass().getName(),
-                    result,startTime,endTime,Boolean.FALSE);
+        try{
+            result = joinPoint.proceed();
             return result;
 
         }catch (Throwable throwable) {
