@@ -32,17 +32,4 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <property name="annotationClass" value="org.springframework.stereotype.Repository" />
     </bean>
-
-
-    <!--测试连接池-->
-    <bean class="com.mianbao.util.DbConnectionUtil">
-        <property name="initialSize" value="${jdbc.initialPoolSize}"/>
-        <property name="minIdle" value="${jdbc.minPoolSize}"/>
-        <property name="maxActive" value="${jdbc.maxPoolSize}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-        <property name="driver" value="${jdbc.driver}"/>
-    </bean>
-
 </beans>

@@ -4,6 +4,8 @@ package com.mianbao.util;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,29 +21,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by zoujiajian on 2017-3-14.
  */
+@Service
 public class DbConnectionUtil {
 
     /**
      * 初始化连接池大小
      */
+    @Value("${jdbc.initialPoolSize}")
     private int initialSize = 10;
 
     /**
      * 最小活跃连接数
      */
+    @Value("${jdbc.minPoolSize}")
     private int minIdle = 10;
 
     /**
      * 最大活跃连接数
      */
+    @Value("${jdbc.maxPoolSize}")
     private int maxActive = 50;
 
+    @Value("${jdbc.url}")
     private String url = null;
 
+    @Value("${jdbc.username}")
     private String username = null ;
 
+    @Value("${jdbc.password}")
     private String password = null;
 
+    @Value("${jdbc.driver}")
     private String driver = null;
 
     private AtomicInteger poolSize =  new AtomicInteger();
@@ -50,19 +60,8 @@ public class DbConnectionUtil {
 
     private ExecutorService producerService = new ThreadPoolExecutor(5,10,10, TimeUnit.SECONDS ,new LinkedBlockingQueue<>(100));;
 
-    private DbConnectionUtil(){
+    public DbConnectionUtil(){
 
-    }
-
-    //使用静态内部类实现单列 从而实现连接池的单实例 多线程
-    private static class DbConnectionFactory{
-
-        private static DbConnectionUtil dbConnectionManager = new DbConnectionUtil();
-
-    }
-
-    public static DbConnectionUtil createDbConnectionManager(){
-        return DbConnectionFactory.dbConnectionManager;
     }
 
     private Connection producer() throws ClassNotFoundException, SQLException {

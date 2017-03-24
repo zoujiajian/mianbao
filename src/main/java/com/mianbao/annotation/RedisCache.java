@@ -20,6 +20,12 @@ public @interface RedisCache {
     Class type() default Result.class;
 
     /**
+     * 解析结果是否为数组 如果结果为数组 必须传入true
+     * @return
+     */
+    boolean isArray() default false;
+
+    /**
      * 是否带上时间段
      * @return
      */

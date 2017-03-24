@@ -1,14 +1,11 @@
 package com.mianbao.enums;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 /**
  * Created by zoujiajian on 2017-3-21.
  */
-@Getter
-@Setter
+
 @ToString
 public enum Response {
 
@@ -17,6 +14,22 @@ public enum Response {
     private int code;
 
     private String msg;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
     Response(int code, String msg) {
         this.code = code;

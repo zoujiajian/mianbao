@@ -5,12 +5,14 @@ import com.mianbao.dao.DynamicEvaluateMapper;
 import com.mianbao.domain.DynamicEvaluate;
 import com.mianbao.domain.DynamicEvaluateExample;
 import com.mianbao.service.RedisService;
+import com.mianbao.util.DbConnectionUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -42,4 +44,13 @@ public class TestUtil {
         System.out.println("value =" + JSON.toJSONString(list));
     }
 
+    @Resource
+    private DbConnectionUtil dbConnectionUtil;
+
+    @Test
+    public void testConnection(){
+        Connection connection = dbConnectionUtil.getConnection();
+        System.out.println(connection);
+        dbConnectionUtil.returnPool(connection);
+    }
 }
