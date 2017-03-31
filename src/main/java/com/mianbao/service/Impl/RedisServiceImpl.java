@@ -2,7 +2,7 @@ package com.mianbao.service.Impl;
 
 import com.google.common.collect.Sets;
 import com.mianbao.service.RedisService;
-import com.mianbao.util.RedisKeyPrefix;
+import com.mianbao.util.RedisKeyPrefixUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     private static final Logger logger = LoggerFactory.getLogger(RedisServiceImpl.class);
 
     private String getKeyPrefix(String key){
-        return RedisKeyPrefix.getKeyAddPrefix(key);
+        return RedisKeyPrefixUtil.getKeyAddPrefix(key);
     }
 
     @Override
