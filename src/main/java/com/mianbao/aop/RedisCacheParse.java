@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 @Component
 public class RedisCacheParse {
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisCacheParse.class);
+    private static final Logger logger = LoggerFactory.getLogger("cache");
 
 
     private static final int EXPIRE =  60 * 60;
@@ -118,7 +118,7 @@ public class RedisCacheParse {
         if(argument.length > 0){
             int count = 0;
             for(Object obj : argument){
-                key.append(obj);
+                key.append(JSON.toJSONString(obj));
                 count ++ ;
                 if(count < argument.length){
                     key.append("_");

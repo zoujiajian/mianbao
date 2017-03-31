@@ -2,6 +2,7 @@ package com.mianbao.service.Impl;
 
 import com.google.common.collect.Sets;
 import com.mianbao.service.RedisService;
+import com.mianbao.util.RedisKeyPrefix;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +19,14 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisServiceImpl.class);
 
+    private String getKeyPrefix(String key){
+        return RedisKeyPrefix.getKeyAddPrefix(key);
+    }
+
     @Override
     public String getByKey(String key) {
         checkKey(key);
+        key = getKeyPrefix(key);
         String value = null;
         Jedis jedis = getJedisClient();
         if(jedis != null){
@@ -38,6 +44,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public boolean delByKey(String key) {
         checkKey(key);
+        key = getKeyPrefix(key);
         boolean flag = Boolean.FALSE;
         Jedis jedis = getJedisClient();
         if(jedis != null){
@@ -56,6 +63,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public boolean addByKey(String key, String value) {
         checkKv(key,value);
+        key = getKeyPrefix(key);
         boolean flag = Boolean.FALSE;
         Jedis jedis = getJedisClient();
         if(jedis != null){
@@ -74,6 +82,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public boolean updByKey(String key, String value) {
         checkKv(key,value);
+        key = getKeyPrefix(key);
         String val = getByKey(key);
         if(StringUtils.isEmpty(val)){
             return Boolean.FALSE;
@@ -84,6 +93,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public boolean incr(String key) {
         checkKey(key);
+        key = getKeyPrefix(key);
         Boolean flag = Boolean.FALSE;
         Jedis jedis = getJedisClient();
         if(jedis != null){
@@ -102,6 +112,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public boolean addToOrderSet(String key, int score, String member) {
         checkKey(key);
+        key = getKeyPrefix(key);
         Boolean flag = Boolean.FALSE;
         Jedis jedis = getJedisClient();
         if(jedis != null){
@@ -120,6 +131,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public Set<String> getTopByOrderSet(String key, int top) {
         checkKey(key);
+        key = getKeyPrefix(key);
         Set<String> order = Sets.newHashSet();
         Jedis jedis = getJedisClient();
         if(jedis != null){
@@ -136,6 +148,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
 
     @Override
     public boolean addByKeyWithExpire(String key, String val, int expire){
+        key = getKeyPrefix(key);
         Boolean flag = addByKey(key,val);
         if(flag){
             Jedis jedis = getJedisClient();

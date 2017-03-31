@@ -17,7 +17,11 @@ public interface UserService {
      */
     Result register(UserInfo userInfo);
 
-
+    /**
+     * 用户登录
+     * @param userLogin
+     * @return
+     */
     Result login(UserLogin userLogin);
 
 

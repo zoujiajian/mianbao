@@ -9,7 +9,8 @@ import lombok.ToString;
 @ToString
 public enum Response {
 
-    REGION_FAIL(100001,"注册失败");
+    REGION_FAIL(100001,"注册失败"),
+    LOGIN_FAIL(100002,"登录失败，用户名或者密码错误");
 
     private int code;
 

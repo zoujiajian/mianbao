@@ -29,7 +29,6 @@ public class TestUtil {
     @Resource
     private DynamicEvaluateMapper dynamicEvaluateMapper;
 
-
     @Test
     public void testRedis() throws SQLException {
         redisService.addByKey("name","zoujiajian");
@@ -52,5 +51,18 @@ public class TestUtil {
         Connection connection = dbConnectionUtil.getConnection();
         System.out.println(connection);
         dbConnectionUtil.returnPool(connection);
+    }
+
+    @Test
+    public void test(){
+        final int a = 0;
+        int b = 1;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(a);
+                System.out.println(b);
+            }
+        }).start();
     }
 }
