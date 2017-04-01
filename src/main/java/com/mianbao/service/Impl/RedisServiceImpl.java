@@ -19,6 +19,8 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisServiceImpl.class);
 
+    private static final String LOCK = "mianbao_lock";
+
     private String getKeyPrefix(String key){
         return RedisKeyPrefixUtil.getKeyAddPrefix(key);
     }
@@ -148,6 +150,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
 
     @Override
     public boolean addByKeyWithExpire(String key, String val, int expire){
+        checkKey(key);
         key = getKeyPrefix(key);
         Boolean flag = addByKey(key,val);
         if(flag){
@@ -164,5 +167,97 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
             }
         }
         return Boolean.FALSE;
+    }
+
+    @Override
+    public long delOrderSetBetweenXAndY(String key , long x ,long y){
+        checkKey(key);
+        key = getKeyPrefix(key);
+        Long number = null;
+        Jedis jedis = getJedisClient();
+        if(jedis != null){
+            try{
+                number = jedis.zremrangeByRank (key,x,y);
+            }catch (Exception e){
+                logger.error("从有序集合删除指定区间元素失败,key : {}, x:{},y:{}",key,x,y);
+            }finally {
+                jedis.close();
+            }
+        }
+        return number == null ? 0 : number;
+    }
+
+    @Override
+    public double getOrderSetScoreByMember(String key,String member){
+        checkKey(key);
+        key = getKeyPrefix(key);
+        Double score = null;
+        Jedis jedis = getJedisClient();
+        if(jedis != null){
+            try{
+                score = jedis.zincrby (key,1,member);
+            }catch (Exception e){
+                logger.error("指定成员的分数加1失败,key : {},member : {}",key,member);
+            }finally {
+                jedis.close();
+            }
+        }
+        return score == null? 0 : score;
+    }
+
+    @Override
+    public boolean lock(long timeOut, long lockTime) throws InterruptedException{
+        return acquire(timeOut,lockTime);
+    }
+
+    @Override
+    public boolean lock(long timeOut) throws InterruptedException{
+        return acquire(timeOut,500);
+    }
+
+    @Override
+    public boolean tryLock() throws InterruptedException{
+        return acquire(100,500);
+    }
+
+    @Override
+    public void unLock() {
+        release();
+    }
+
+    private boolean acquire(long timeOut,long lockTime) throws InterruptedException {
+        boolean locked = false;
+        Jedis jedis = getJedisClient();
+        if(jedis != null){
+            while (timeOut >= 0) {
+                long expires = System.currentTimeMillis() + lockTime + 1;
+                String expiresStr = String.valueOf(expires); //锁到期时间
+                if (jedis.setnx(LOCK, expiresStr) == 1) {
+                    locked = true;
+                    break;
+                }
+                String currentValueStr = jedis.get(LOCK); //redis里的时间
+                if (currentValueStr != null && Long.parseLong(currentValueStr) < System.currentTimeMillis()) {
+                    String oldValueStr = jedis.getSet(LOCK, expiresStr);
+                    if (oldValueStr != null && oldValueStr.equals(currentValueStr)) {
+                        locked = true;
+                        break;
+                    }
+                }
+                timeOut -= 100;
+                Thread.sleep(100);
+            }
+        }
+        if(jedis != null){
+            jedis.close();
+        }
+        return locked;
+    }
+
+    private void release(){
+        Jedis jedis = getJedisClient();
+        if(jedis != null){
+            jedis.del(LOCK);
+        }
     }
 }
