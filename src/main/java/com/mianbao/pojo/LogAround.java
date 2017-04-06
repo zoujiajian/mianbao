@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class LogAround implements Serializable{
+public class LogAround extends BasePojo implements Serializable{
 
     private String methodName;
 

@@ -3,10 +3,13 @@ package com.mianbao.aop;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.mianbao.annotation.RedisCache;
+import com.mianbao.common.CacheKey;
 import com.mianbao.common.Result;
 import com.mianbao.pojo.LogAround;
 import com.mianbao.service.RedisService;
 import com.mianbao.util.Md5Util;
+import com.mianbao.util.TopMethodUtil;
+import com.mianbao.worker.TopWorker;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,13 +31,13 @@ public class RedisCacheParse {
 
     private static final Logger logger = LoggerFactory.getLogger("cache");
 
-
     private static final int EXPIRE =  60 * 60;
-
-    private static final String CACHE_PREFIX = "mianbao";
 
     @Resource
     private RedisService redisService;
+
+    @Resource
+    private TopWorker worker;
 
     @Pointcut("execution(* com.mianbao.service..*(..))")
     public void pointCut(){}
@@ -49,6 +52,7 @@ public class RedisCacheParse {
         Method[] methods = clazz.getDeclaredMethods();
         Object[] argument = joinPoint.getArgs();
         Long startTime,endTime;
+        top(argument,methodName);
 
         for(Method method : methods){
             if(method.getName().equals(methodName)){
@@ -74,12 +78,16 @@ public class RedisCacheParse {
                         }
                         return result;
                     }
-                    //TODO 这里有个问题 现在判断的标准是方法没有抛出异常则表明成功
+
                     try {
                         startTime = System.currentTimeMillis();
                         result = joinPoint.proceed();
                         endTime = System.currentTimeMillis();
-                        setRedis(key, result);
+                        Result response = (Result) result;
+                        //方法执行成功才缓存
+                        if(response.isSuccess()){
+                            setRedis(key, response);
+                        }
 
                         logPrint(argument,methodName,target.getClass().getName(),
                                 result,startTime,endTime,Boolean.FALSE);
@@ -102,7 +110,7 @@ public class RedisCacheParse {
 
     private String getKey(Object[] argument, RedisCache cacheAround, ProceedingJoinPoint joinPoint){
 
-        StringBuilder key = new StringBuilder(CACHE_PREFIX).append("_").
+        StringBuilder key = new StringBuilder(CacheKey.CACHE_PREFIX).append("_").
                 append(joinPoint.getSignature().getName()).append("_");
         //加上时间段构成key
         if(cacheAround.time()){
@@ -150,5 +158,15 @@ public class RedisCacheParse {
         logAround.setCache(cache);
 
         logger.info(JSON.toJSONString(logAround));
+    }
+
+    private void top(Object[] arguments , String methodName){
+        if(TopMethodUtil.containsMethodName(methodName)){
+            worker.recordAccess(getMemberByArgument(arguments));
+        }
+    }
+
+    private String getMemberByArgument(Object[] arguments){
+        return null;
     }
 }

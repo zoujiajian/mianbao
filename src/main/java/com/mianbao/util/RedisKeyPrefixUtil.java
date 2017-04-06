@@ -6,7 +6,7 @@ package com.mianbao.util;
  */
 public class RedisKeyPrefixUtil {
 
-    private static final String KEY_PREFIX = "mianbao_";
+    private static final String KEY_PREFIX = "c";
 
     public static String getKeyAddPrefix(String key){
         return KEY_PREFIX + key;

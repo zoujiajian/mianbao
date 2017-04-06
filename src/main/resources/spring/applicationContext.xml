@@ -12,7 +12,9 @@
 
 
     <context:property-placeholder
-            location="classpath:config/jdbc.properties,classpath:config/redis.properties"
+            location="classpath:config/jdbc.properties,
+            classpath:config/redis.properties,
+            classpath:config/top.properties"
             ignore-unresolvable="false"/>
 
 

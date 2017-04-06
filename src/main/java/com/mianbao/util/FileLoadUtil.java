@@ -19,7 +19,7 @@ public class FileLoadUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(FileLoadUtil.class);
 
-    private static final String PATH_PREFIX = "E:/scenicSpotPicutre";
+    private static final String PATH_PREFIX = "E:/scenicSpotPicture";
 
     private FileLoadUtil(){
 

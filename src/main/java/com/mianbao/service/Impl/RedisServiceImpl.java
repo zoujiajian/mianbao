@@ -188,7 +188,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     }
 
     @Override
-    public double getOrderSetScoreByMember(String key,String member){
+    public double orderSetScoreIncrByMember(String key,String member){
         checkKey(key);
         key = getKeyPrefix(key);
         Double score = null;
@@ -223,6 +223,24 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     @Override
     public void unLock() {
         release();
+    }
+
+    @Override
+    public boolean exists(String key) {
+        checkKey(key);
+        key = getKeyPrefix(key);
+        Jedis jedis = getJedisClient();
+        boolean exists = false;
+        if(jedis != null){
+           try {
+               exists = jedis.exists(key);
+           }catch (Exception e){
+               logger.error("exists exception",e);
+           }finally {
+               jedis.close();
+           }
+        }
+        return exists;
     }
 
     private boolean acquire(long timeOut,long lockTime) throws InterruptedException {

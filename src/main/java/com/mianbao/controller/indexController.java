@@ -10,6 +10,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/index")
 public class IndexController {
 
-
-
 }

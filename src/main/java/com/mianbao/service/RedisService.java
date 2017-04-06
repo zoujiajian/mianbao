@@ -57,7 +57,7 @@ public interface RedisService {
      * @param member
      * @return
      */
-    double getOrderSetScoreByMember(String key,String member);
+    double orderSetScoreIncrByMember(String key,String member);
 
     /**
      *
@@ -84,4 +84,11 @@ public interface RedisService {
      * 释放锁
      */
     void unLock();
+
+    /**
+     * 判断当前key在缓存中是否存在
+     * @param key
+     * @return
+     */
+    boolean exists(String key);
 }
