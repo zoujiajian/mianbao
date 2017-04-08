@@ -19,8 +19,6 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisServiceImpl.class);
 
-    private static final String LOCK = "mianbao_lock";
-
     private String getKeyPrefix(String key){
         return RedisKeyPrefixUtil.getKeyAddPrefix(key);
     }
@@ -207,26 +205,6 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
     }
 
     @Override
-    public boolean lock(long timeOut, long lockTime) throws InterruptedException{
-        return acquire(timeOut,lockTime);
-    }
-
-    @Override
-    public boolean lock(long timeOut) throws InterruptedException{
-        return acquire(timeOut,500);
-    }
-
-    @Override
-    public boolean tryLock() throws InterruptedException{
-        return acquire(100,500);
-    }
-
-    @Override
-    public void unLock() {
-        release();
-    }
-
-    @Override
     public boolean exists(String key) {
         checkKey(key);
         key = getKeyPrefix(key);
@@ -244,39 +222,78 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
         return exists;
     }
 
-    private boolean acquire(long timeOut,long lockTime) throws InterruptedException {
-        boolean locked = false;
+    @Override
+    public boolean addValueToSet(String key, String ... value) {
+        boolean success = false;
+        key = getKeyPrefix(key);
         Jedis jedis = getJedisClient();
         if(jedis != null){
-            while (timeOut >= 0) {
-                long expires = System.currentTimeMillis() + lockTime + 1;
-                String expiresStr = String.valueOf(expires); //锁到期时间
-                if (jedis.setnx(LOCK, expiresStr) == 1) {
-                    locked = true;
-                    break;
+            try{
+                Long record = jedis.sadd(key,value);
+                if(record > 1){
+                    success = true;
                 }
-                String currentValueStr = jedis.get(LOCK); //redis里的时间
-                if (currentValueStr != null && Long.parseLong(currentValueStr) < System.currentTimeMillis()) {
-                    String oldValueStr = jedis.getSet(LOCK, expiresStr);
-                    if (oldValueStr != null && oldValueStr.equals(currentValueStr)) {
-                        locked = true;
-                        break;
-                    }
-                }
-                timeOut -= 100;
-                Thread.sleep(100);
+            }catch (Exception e){
+                logger.error("添加元素到集合失败",e);
+            }finally {
+                jedis.close();
             }
         }
-        if(jedis != null){
-            jedis.close();
-        }
-        return locked;
+        return success;
     }
 
-    private void release(){
+    @Override
+    public Set<String> getSetByKey(String key) {
+        Set<String> set = Sets.newHashSet();
+        key = getKeyPrefix(key);
         Jedis jedis = getJedisClient();
         if(jedis != null){
-            jedis.del(LOCK);
+            try{
+                set = jedis.smembers(key);
+            }catch (Exception e){
+                logger.error("获取集合失败",e);
+            }
+            finally {
+                jedis.close();
+            }
         }
+        return set;
+    }
+
+    @Override
+    public boolean removeFromSetByKey(String key, String... removeKey) {
+        boolean removeSuccess = false;
+        key = getKeyPrefix(key);
+        Jedis jedis = getJedisClient();
+        if(jedis != null){
+            try{
+                Long removeNumber = jedis.srem(key,removeKey);
+                if(removeNumber == removeKey.length){
+                    removeSuccess = true;
+                }
+            }catch (Exception e){
+                logger.error("从集合中移除元素失败",e);
+            }finally {
+                jedis.close();
+            }
+        }
+        return removeSuccess;
+    }
+
+    @Override
+    public Long getSetNumber(String key) {
+        Long setNumber = null;
+        key = getKeyPrefix(key);
+        Jedis jedis = getJedisClient();
+        if(jedis != null){
+            try{
+                setNumber = jedis.scard(key);
+            }catch (Exception e){
+                logger.error("获取集合的基数失败",e);
+            }finally {
+                jedis.close();
+            }
+        }
+        return setNumber;
     }
 }

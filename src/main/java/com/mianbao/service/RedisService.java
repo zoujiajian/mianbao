@@ -59,31 +59,6 @@ public interface RedisService {
      */
     double orderSetScoreIncrByMember(String key,String member);
 
-    /**
-     *
-     * @param timeOut  等待时间
-     * @param lockTime 锁定时间
-     * @return
-     */
-    boolean lock(long timeOut, long lockTime) throws InterruptedException;
-
-    /**
-     *
-     * @param timeOut 等待时间
-     * @return
-     */
-    boolean lock(long timeOut) throws InterruptedException;
-
-    /**
-     * 尝试获取锁 不等待
-     * @return
-     */
-    boolean tryLock() throws InterruptedException;
-
-    /**
-     * 释放锁
-     */
-    void unLock();
 
     /**
      * 判断当前key在缓存中是否存在
@@ -91,4 +66,34 @@ public interface RedisService {
      * @return
      */
     boolean exists(String key);
+
+    /**
+     * 添加元素到集合中
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean addValueToSet(String key, String ...value);
+
+    /**
+     * 获取指定集合
+     * @param key
+     * @return
+     */
+    Set<String> getSetByKey(String key);
+
+    /**
+     * 从集合中移除指定removeKey
+     * @param key
+     * @param removeKey
+     * @return
+     */
+    boolean removeFromSetByKey(String key , String ... removeKey);
+
+    /**
+     * 获取集合的大小
+     * @param key
+     * @return
+     */
+    Long getSetNumber(String key);
 }
