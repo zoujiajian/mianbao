@@ -102,19 +102,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.mianbao.domain.ScenicSpotEvaluate">
-    insert into tb_scenic_spot_evaluate (id, user_id, evaluate_content, 
-      evaluate_picutre, create_time, evaluate_star
-      )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR}, 
-      #{evaluatePicutre,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{evaluateStar,jdbcType=TINYINT}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_scenic_spot_evaluate (user_id, evaluate_content, evaluate_picutre, 
+      create_time, evaluate_star)
+    values (#{userId,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR}, #{evaluatePicutre,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{evaluateStar,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.ScenicSpotEvaluate">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_scenic_spot_evaluate
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="userId != null">
         user_id,
       </if>
@@ -132,9 +133,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>

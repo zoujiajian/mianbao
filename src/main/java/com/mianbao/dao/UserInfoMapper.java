@@ -1,18 +1,19 @@
 package com.mianbao.dao;
 
+
 import com.mianbao.domain.UserInfo;
 import com.mianbao.domain.UserInfoExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 @Repository
 public interface UserInfoMapper {
     long countByExample(UserInfoExample example);
 
     int deleteByExample(UserInfoExample example);
 
-    int deleteByPrimaryKey(Integer userId);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(UserInfo record);
 
@@ -20,7 +21,7 @@ public interface UserInfoMapper {
 
     List<UserInfo> selectByExample(UserInfoExample example);
 
-    UserInfo selectByPrimaryKey(Integer userId);
+    UserInfo selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") UserInfo record, @Param("example") UserInfoExample example);
 

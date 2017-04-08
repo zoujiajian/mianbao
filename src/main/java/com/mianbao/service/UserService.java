@@ -1,8 +1,8 @@
 package com.mianbao.service;
 
 
-import com.mianbao.common.Result;
 import com.mianbao.domain.UserInfo;
+import com.mianbao.common.Result;
 import com.mianbao.pojo.user.UserLogin;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,5 +46,4 @@ public interface UserService {
      * @return
      */
     Result getUserInfo(Integer userId);
-
 }

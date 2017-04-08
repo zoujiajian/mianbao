@@ -3,11 +3,11 @@ package com.mianbao.domain;
 import java.util.Date;
 
 public class UserInfo {
-    private Integer userId;
+    private Integer id;
 
     private String userName;
 
-    private String userPicutre;
+    private String userPicture;
 
     private String userPassword;
 
@@ -17,12 +17,12 @@ public class UserInfo {
 
     private Date userCreatetime;
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -33,12 +33,12 @@ public class UserInfo {
         this.userName = userName == null ? null : userName.trim();
     }
 
-    public String getUserPicutre() {
-        return userPicutre;
+    public String getUserPicture() {
+        return userPicture;
     }
 
-    public void setUserPicutre(String userPicutre) {
-        this.userPicutre = userPicutre == null ? null : userPicutre.trim();
+    public void setUserPicture(String userPicture) {
+        this.userPicture = userPicture == null ? null : userPicture.trim();
     }
 
     public String getUserPassword() {

@@ -105,63 +105,63 @@ public class ScenicSpotExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andScenicSpotIdIsNull() {
-            addCriterion("scenic_spot_id is null");
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdIsNotNull() {
-            addCriterion("scenic_spot_id is not null");
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdEqualTo(Integer value) {
-            addCriterion("scenic_spot_id =", value, "scenicSpotId");
+        public Criteria andIdEqualTo(Integer value) {
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdNotEqualTo(Integer value) {
-            addCriterion("scenic_spot_id <>", value, "scenicSpotId");
+        public Criteria andIdNotEqualTo(Integer value) {
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdGreaterThan(Integer value) {
-            addCriterion("scenic_spot_id >", value, "scenicSpotId");
+        public Criteria andIdGreaterThan(Integer value) {
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("scenic_spot_id >=", value, "scenicSpotId");
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdLessThan(Integer value) {
-            addCriterion("scenic_spot_id <", value, "scenicSpotId");
+        public Criteria andIdLessThan(Integer value) {
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdLessThanOrEqualTo(Integer value) {
-            addCriterion("scenic_spot_id <=", value, "scenicSpotId");
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdIn(List<Integer> values) {
-            addCriterion("scenic_spot_id in", values, "scenicSpotId");
+        public Criteria andIdIn(List<Integer> values) {
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdNotIn(List<Integer> values) {
-            addCriterion("scenic_spot_id not in", values, "scenicSpotId");
+        public Criteria andIdNotIn(List<Integer> values) {
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdBetween(Integer value1, Integer value2) {
-            addCriterion("scenic_spot_id between", value1, value2, "scenicSpotId");
+        public Criteria andIdBetween(Integer value1, Integer value2) {
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("scenic_spot_id not between", value1, value2, "scenicSpotId");
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 

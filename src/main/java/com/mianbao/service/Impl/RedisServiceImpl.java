@@ -157,6 +157,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
             Jedis jedis = getJedisClient();
             if(jedis != null){
                 try{
+                    jedis.set(key,val);
                     jedis.expire(key,expire);
                     return Boolean.TRUE;
                 }catch (Exception e){

@@ -1,8 +1,10 @@
 package com.mianbao.dao;
 
+
+import java.util.List;
+
 import com.mianbao.domain.ScenicSpot;
 import com.mianbao.domain.ScenicSpotExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +14,7 @@ public interface ScenicSpotMapper {
 
     int deleteByExample(ScenicSpotExample example);
 
-    int deleteByPrimaryKey(Integer scenicSpotId);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(ScenicSpot record);
 
@@ -20,7 +22,7 @@ public interface ScenicSpotMapper {
 
     List<ScenicSpot> selectByExample(ScenicSpotExample example);
 
-    ScenicSpot selectByPrimaryKey(Integer scenicSpotId);
+    ScenicSpot selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") ScenicSpot record, @Param("example") ScenicSpotExample example);
 

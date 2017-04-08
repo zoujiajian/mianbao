@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
  * Created by zoujiajian on 2017-3-20.
  * 缓存解析
  */
-@Aspect
+//@Aspect
 @Component
 public class RedisCacheParse {
 
@@ -39,10 +39,10 @@ public class RedisCacheParse {
     @Resource
     private TopWorker worker;
 
-    @Pointcut("execution(* com.mianbao.service..*(..))")
+//    @Pointcut("execution(* com.mianbao.service..*(..))")
     public void pointCut(){}
 
-    @Around("pointCut()")
+//    @Around("pointCut()")
     @SuppressWarnings("unchecked")
     public Object around(ProceedingJoinPoint joinPoint){
         Object result = null;

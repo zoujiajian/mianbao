@@ -3,7 +3,7 @@ package com.mianbao.domain;
 import java.util.Date;
 
 public class ScenicSpot {
-    private Integer scenicSpotId;
+    private Integer id;
 
     private String scenicSpotName;
 
@@ -15,12 +15,12 @@ public class ScenicSpot {
 
     private Integer createUser;
 
-    public Integer getScenicSpotId() {
-        return scenicSpotId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setScenicSpotId(Integer scenicSpotId) {
-        this.scenicSpotId = scenicSpotId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getScenicSpotName() {

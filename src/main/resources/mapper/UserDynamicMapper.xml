@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mianbao.dao.UserDynamicMapper">
   <resultMap id="BaseResultMap" type="com.mianbao.domain.UserDynamic">
-    <id column="dynamic_id" jdbcType="INTEGER" property="dynamicId" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="dynamic_title" jdbcType="VARCHAR" property="dynamicTitle" />
     <result column="dynamic_content" jdbcType="VARCHAR" property="dynamicContent" />
@@ -69,8 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    dynamic_id, user_id, dynamic_title, dynamic_content, dynamic_picutre, scenic_spot, 
-    createTime
+    id, user_id, dynamic_title, dynamic_content, dynamic_picutre, scenic_spot, createTime
   </sql>
   <select id="selectByExample" parameterType="com.mianbao.domain.UserDynamicExample" resultMap="BaseResultMap">
     select
@@ -91,11 +90,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_user_dynamic
-    where dynamic_id = #{dynamicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_user_dynamic
-    where dynamic_id = #{dynamicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.mianbao.domain.UserDynamicExample">
     delete from tb_user_dynamic
@@ -104,19 +103,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.mianbao.domain.UserDynamic">
-    insert into tb_user_dynamic (dynamic_id, user_id, dynamic_title, 
-      dynamic_content, dynamic_picutre, scenic_spot, 
-      createTime)
-    values (#{dynamicId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{dynamicTitle,jdbcType=VARCHAR}, 
-      #{dynamicContent,jdbcType=VARCHAR}, #{dynamicPicutre,jdbcType=VARCHAR}, #{scenicSpot,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_user_dynamic (user_id, dynamic_title, dynamic_content, 
+      dynamic_picutre, scenic_spot, createTime
+      )
+    values (#{userId,jdbcType=INTEGER}, #{dynamicTitle,jdbcType=VARCHAR}, #{dynamicContent,jdbcType=VARCHAR}, 
+      #{dynamicPicutre,jdbcType=VARCHAR}, #{scenicSpot,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.UserDynamic">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_user_dynamic
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="dynamicId != null">
-        dynamic_id,
-      </if>
       <if test="userId != null">
         user_id,
       </if>
@@ -137,9 +139,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="dynamicId != null">
-        #{dynamicId,jdbcType=INTEGER},
-      </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
@@ -169,8 +168,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_user_dynamic
     <set>
-      <if test="record.dynamicId != null">
-        dynamic_id = #{record.dynamicId,jdbcType=INTEGER},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
@@ -197,7 +196,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_user_dynamic
-    set dynamic_id = #{record.dynamicId,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
       dynamic_title = #{record.dynamicTitle,jdbcType=VARCHAR},
       dynamic_content = #{record.dynamicContent,jdbcType=VARCHAR},
@@ -230,7 +229,7 @@
         createTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where dynamic_id = #{dynamicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.mianbao.domain.UserDynamic">
     update tb_user_dynamic
@@ -240,6 +239,6 @@
       dynamic_picutre = #{dynamicPicutre,jdbcType=VARCHAR},
       scenic_spot = #{scenicSpot,jdbcType=INTEGER},
       createTime = #{createtime,jdbcType=TIMESTAMP}
-    where dynamic_id = #{dynamicId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,8 +1,10 @@
 package com.mianbao.dao;
 
+
+import java.util.List;
+
 import com.mianbao.domain.ScenicSpotDynamic;
 import com.mianbao.domain.ScenicSpotDynamicExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

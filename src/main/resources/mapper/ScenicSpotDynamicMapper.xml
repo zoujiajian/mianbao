@@ -100,17 +100,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.mianbao.domain.ScenicSpotDynamic">
-    insert into tb_scenic_spot_dynamic (id, scenic_spot_id, dynamic_id, 
-      create_time)
-    values (#{id,jdbcType=INTEGER}, #{scenicSpotId,jdbcType=INTEGER}, #{dynamicId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_scenic_spot_dynamic (scenic_spot_id, dynamic_id, create_time
+      )
+    values (#{scenicSpotId,jdbcType=INTEGER}, #{dynamicId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.ScenicSpotDynamic">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_scenic_spot_dynamic
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="scenicSpotId != null">
         scenic_spot_id,
       </if>
@@ -122,9 +125,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="scenicSpotId != null">
         #{scenicSpotId,jdbcType=INTEGER},
       </if>

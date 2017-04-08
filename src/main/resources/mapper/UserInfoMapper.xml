@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mianbao.dao.UserInfoMapper">
   <resultMap id="BaseResultMap" type="com.mianbao.domain.UserInfo">
-    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_picutre" jdbcType="VARCHAR" property="userPicutre" />
+    <result column="user_picture" jdbcType="VARCHAR" property="userPicture" />
     <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
     <result column="user_mail" jdbcType="VARCHAR" property="userMail" />
     <result column="user_sex" jdbcType="CHAR" property="userSex" />
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    user_id, user_name, user_picutre, user_password, user_mail, user_sex, user_createTime
+    id, user_name, user_picture, user_password, user_mail, user_sex, user_createTime
   </sql>
   <select id="selectByExample" parameterType="com.mianbao.domain.UserInfoExample" resultMap="BaseResultMap">
     select
@@ -90,11 +90,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_user_info
-    where user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_user_info
-    where user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.mianbao.domain.UserInfoExample">
     delete from tb_user_info
@@ -103,24 +103,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.mianbao.domain.UserInfo">
-    insert into tb_user_info (user_id, user_name, user_picutre, 
-      user_password, user_mail, user_sex, 
-      user_createTime)
-    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPicutre,jdbcType=VARCHAR}, 
-      #{userPassword,jdbcType=VARCHAR}, #{userMail,jdbcType=VARCHAR}, #{userSex,jdbcType=CHAR}, 
-      #{userCreatetime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_user_info (user_name, user_picture, user_password, 
+      user_mail, user_sex, user_createTime
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{userPicture,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
+      #{userMail,jdbcType=VARCHAR}, #{userSex,jdbcType=CHAR}, #{userCreatetime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.UserInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        user_id,
-      </if>
       <if test="userName != null">
         user_name,
       </if>
-      <if test="userPicutre != null">
-        user_picutre,
+      <if test="userPicture != null">
+        user_picture,
       </if>
       <if test="userPassword != null">
         user_password,
@@ -136,14 +139,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="userPicutre != null">
-        #{userPicutre,jdbcType=VARCHAR},
+      <if test="userPicture != null">
+        #{userPicture,jdbcType=VARCHAR},
       </if>
       <if test="userPassword != null">
         #{userPassword,jdbcType=VARCHAR},
@@ -168,14 +168,14 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_user_info
     <set>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=INTEGER},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
-      <if test="record.userPicutre != null">
-        user_picutre = #{record.userPicutre,jdbcType=VARCHAR},
+      <if test="record.userPicture != null">
+        user_picture = #{record.userPicture,jdbcType=VARCHAR},
       </if>
       <if test="record.userPassword != null">
         user_password = #{record.userPassword,jdbcType=VARCHAR},
@@ -196,9 +196,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_user_info
-    set user_id = #{record.userId,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
-      user_picutre = #{record.userPicutre,jdbcType=VARCHAR},
+      user_picture = #{record.userPicture,jdbcType=VARCHAR},
       user_password = #{record.userPassword,jdbcType=VARCHAR},
       user_mail = #{record.userMail,jdbcType=VARCHAR},
       user_sex = #{record.userSex,jdbcType=CHAR},
@@ -213,8 +213,8 @@
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="userPicutre != null">
-        user_picutre = #{userPicutre,jdbcType=VARCHAR},
+      <if test="userPicture != null">
+        user_picture = #{userPicture,jdbcType=VARCHAR},
       </if>
       <if test="userPassword != null">
         user_password = #{userPassword,jdbcType=VARCHAR},
@@ -229,16 +229,16 @@
         user_createTime = #{userCreatetime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.mianbao.domain.UserInfo">
     update tb_user_info
     set user_name = #{userName,jdbcType=VARCHAR},
-      user_picutre = #{userPicutre,jdbcType=VARCHAR},
+      user_picture = #{userPicture,jdbcType=VARCHAR},
       user_password = #{userPassword,jdbcType=VARCHAR},
       user_mail = #{userMail,jdbcType=VARCHAR},
       user_sex = #{userSex,jdbcType=CHAR},
       user_createTime = #{userCreatetime,jdbcType=TIMESTAMP}
-    where user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

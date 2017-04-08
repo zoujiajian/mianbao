@@ -1,7 +1,7 @@
 package com.mianbao.controller;
 
-import com.mianbao.common.Result;
 import com.mianbao.domain.UserInfo;
+import com.mianbao.common.Result;
 import com.mianbao.enums.Response;
 import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.UserService;
@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by zoujiajian on 2017-4-7.
  */
-@RestController(value = "travel/user")
+@RestController
+@RequestMapping(value = "/mianbao/travel/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,7 +28,7 @@ public class UserController {
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Result login(@RequestBody UserLogin userLogin){
         if(StringUtils.isEmpty(userLogin.getUserName()) ||
-                StringUtils.isEmpty(userLogin.getPassword())){
+                StringUtils.isEmpty(userLogin.getUserPassword())){
             return Result.getDefaultError(Response.LOGIN_FAIL.getMsg());
         }
         Result result;
@@ -44,6 +45,9 @@ public class UserController {
     public Result refister(@RequestBody UserInfo userInfo){
         Result result;
         try{
+            if(userInfo.getId() != null){
+                return Result.getDefaultSuccess(Response.REGION_FAIL.getMsg());
+            }
             result = userService.register(userInfo);
         }catch (Exception e){
             logger.error("用户注册失败: ",e);

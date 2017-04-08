@@ -3,7 +3,7 @@ package com.mianbao.domain;
 import java.util.Date;
 
 public class UserDynamic {
-    private Integer dynamicId;
+    private Integer id;
 
     private Integer userId;
 
@@ -17,12 +17,12 @@ public class UserDynamic {
 
     private Date createtime;
 
-    public Integer getDynamicId() {
-        return dynamicId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setDynamicId(Integer dynamicId) {
-        this.dynamicId = dynamicId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {

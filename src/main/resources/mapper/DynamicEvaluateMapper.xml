@@ -101,17 +101,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.mianbao.domain.DynamicEvaluate">
-    insert into tb_dynamic_evaluate (id, dynamic_id, evaluate_content, 
-      evaluate_user, create_time)
-    values (#{id,jdbcType=INTEGER}, #{dynamicId,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR}, 
-      #{evaluateUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_dynamic_evaluate (dynamic_id, evaluate_content, evaluate_user, 
+      create_time)
+    values (#{dynamicId,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR}, #{evaluateUser,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.DynamicEvaluate">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_dynamic_evaluate
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="dynamicId != null">
         dynamic_id,
       </if>
@@ -126,9 +129,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="dynamicId != null">
         #{dynamicId,jdbcType=INTEGER},
       </if>

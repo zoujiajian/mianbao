@@ -10,10 +10,11 @@ import lombok.ToString;
 public enum Response {
 
     REGION_FAIL(100001,"注册失败"),
-    LOGIN_FAIL(100002,"登录失败，用户名或者密码错误"),
-    UPDATE_USER_INFO_FAIL(100003,"更新用户信息失败"),
-    UPDATE_PICTURE(100004,"更新用户照片失败"),
-    GET_USER_INFO(100005,"获取用户信息失败");
+    REGION_FAIL_USER_NAME(100002,"注册失败 该用户名已经被注册"),
+    LOGIN_FAIL(1000023,"登录失败，用户名或者密码错误"),
+    UPDATE_USER_INFO_FAIL(100004,"更新用户信息失败"),
+    UPDATE_PICTURE(100005,"更新用户照片失败"),
+    GET_USER_INFO(100006,"获取用户信息失败");
 
     private int code;
 

@@ -1,8 +1,10 @@
 package com.mianbao.dao;
 
+
+import java.util.List;
+
 import com.mianbao.domain.UserDynamic;
 import com.mianbao.domain.UserDynamicExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +14,7 @@ public interface UserDynamicMapper {
 
     int deleteByExample(UserDynamicExample example);
 
-    int deleteByPrimaryKey(Integer dynamicId);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(UserDynamic record);
 
@@ -20,7 +22,7 @@ public interface UserDynamicMapper {
 
     List<UserDynamic> selectByExample(UserDynamicExample example);
 
-    UserDynamic selectByPrimaryKey(Integer dynamicId);
+    UserDynamic selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") UserDynamic record, @Param("example") UserDynamicExample example);
 

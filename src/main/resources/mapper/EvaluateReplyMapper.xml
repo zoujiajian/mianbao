@@ -102,19 +102,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.mianbao.domain.EvaluateReply">
-    insert into tb_evaluate_reply (id, evaluate, reply_content, 
-      reply_user_id, exist_parent, create_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{evaluate,jdbcType=INTEGER}, #{replyContent,jdbcType=VARCHAR}, 
-      #{replyUserId,jdbcType=INTEGER}, #{existParent,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_evaluate_reply (evaluate, reply_content, reply_user_id, 
+      exist_parent, create_time)
+    values (#{evaluate,jdbcType=INTEGER}, #{replyContent,jdbcType=VARCHAR}, #{replyUserId,jdbcType=INTEGER}, 
+      #{existParent,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.EvaluateReply">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_evaluate_reply
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="evaluate != null">
         evaluate,
       </if>
@@ -132,9 +133,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="evaluate != null">
         #{evaluate,jdbcType=INTEGER},
       </if>
