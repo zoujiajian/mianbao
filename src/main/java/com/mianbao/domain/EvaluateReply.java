@@ -5,13 +5,15 @@ import java.util.Date;
 public class EvaluateReply {
     private Integer id;
 
+    private Integer replyId;
+
     private Integer evaluate;
 
     private String replyContent;
 
     private Integer replyUserId;
 
-    private Integer existParent;
+    private Integer toUserId;
 
     private Date createTime;
 
@@ -21,6 +23,14 @@ public class EvaluateReply {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Integer replyId) {
+        this.replyId = replyId;
     }
 
     public Integer getEvaluate() {
@@ -47,12 +57,12 @@ public class EvaluateReply {
         this.replyUserId = replyUserId;
     }
 
-    public Integer getExistParent() {
-        return existParent;
+    public Integer getToUserId() {
+        return toUserId;
     }
 
-    public void setExistParent(Integer existParent) {
-        this.existParent = existParent;
+    public void setToUserId(Integer toUserId) {
+        this.toUserId = toUserId;
     }
 
     public Date getCreateTime() {

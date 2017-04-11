@@ -165,6 +165,66 @@ public class EvaluateReplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andReplyIdIsNull() {
+            addCriterion("reply_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdIsNotNull() {
+            addCriterion("reply_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdEqualTo(Integer value) {
+            addCriterion("reply_id =", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotEqualTo(Integer value) {
+            addCriterion("reply_id <>", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdGreaterThan(Integer value) {
+            addCriterion("reply_id >", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("reply_id >=", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdLessThan(Integer value) {
+            addCriterion("reply_id <", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("reply_id <=", value, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdIn(List<Integer> values) {
+            addCriterion("reply_id in", values, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotIn(List<Integer> values) {
+            addCriterion("reply_id not in", values, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdBetween(Integer value1, Integer value2) {
+            addCriterion("reply_id between", value1, value2, "replyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("reply_id not between", value1, value2, "replyId");
+            return (Criteria) this;
+        }
+
         public Criteria andEvaluateIsNull() {
             addCriterion("evaluate is null");
             return (Criteria) this;
@@ -355,63 +415,63 @@ public class EvaluateReplyExample {
             return (Criteria) this;
         }
 
-        public Criteria andExistParentIsNull() {
-            addCriterion("exist_parent is null");
+        public Criteria andToUserIdIsNull() {
+            addCriterion("to_user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentIsNotNull() {
-            addCriterion("exist_parent is not null");
+        public Criteria andToUserIdIsNotNull() {
+            addCriterion("to_user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentEqualTo(Integer value) {
-            addCriterion("exist_parent =", value, "existParent");
+        public Criteria andToUserIdEqualTo(Integer value) {
+            addCriterion("to_user_id =", value, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentNotEqualTo(Integer value) {
-            addCriterion("exist_parent <>", value, "existParent");
+        public Criteria andToUserIdNotEqualTo(Integer value) {
+            addCriterion("to_user_id <>", value, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentGreaterThan(Integer value) {
-            addCriterion("exist_parent >", value, "existParent");
+        public Criteria andToUserIdGreaterThan(Integer value) {
+            addCriterion("to_user_id >", value, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentGreaterThanOrEqualTo(Integer value) {
-            addCriterion("exist_parent >=", value, "existParent");
+        public Criteria andToUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("to_user_id >=", value, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentLessThan(Integer value) {
-            addCriterion("exist_parent <", value, "existParent");
+        public Criteria andToUserIdLessThan(Integer value) {
+            addCriterion("to_user_id <", value, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentLessThanOrEqualTo(Integer value) {
-            addCriterion("exist_parent <=", value, "existParent");
+        public Criteria andToUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("to_user_id <=", value, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentIn(List<Integer> values) {
-            addCriterion("exist_parent in", values, "existParent");
+        public Criteria andToUserIdIn(List<Integer> values) {
+            addCriterion("to_user_id in", values, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentNotIn(List<Integer> values) {
-            addCriterion("exist_parent not in", values, "existParent");
+        public Criteria andToUserIdNotIn(List<Integer> values) {
+            addCriterion("to_user_id not in", values, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentBetween(Integer value1, Integer value2) {
-            addCriterion("exist_parent between", value1, value2, "existParent");
+        public Criteria andToUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("to_user_id between", value1, value2, "toUserId");
             return (Criteria) this;
         }
 
-        public Criteria andExistParentNotBetween(Integer value1, Integer value2) {
-            addCriterion("exist_parent not between", value1, value2, "existParent");
+        public Criteria andToUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("to_user_id not between", value1, value2, "toUserId");
             return (Criteria) this;
         }
 

@@ -3,10 +3,11 @@
 <mapper namespace="com.mianbao.dao.EvaluateReplyMapper">
   <resultMap id="BaseResultMap" type="com.mianbao.domain.EvaluateReply">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reply_id" jdbcType="INTEGER" property="replyId" />
     <result column="evaluate" jdbcType="INTEGER" property="evaluate" />
     <result column="reply_content" jdbcType="VARCHAR" property="replyContent" />
     <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId" />
-    <result column="exist_parent" jdbcType="INTEGER" property="existParent" />
+    <result column="to_user_id" jdbcType="INTEGER" property="toUserId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, evaluate, reply_content, reply_user_id, exist_parent, create_time
+    id, reply_id, evaluate, reply_content, reply_user_id, to_user_id, create_time
   </sql>
   <select id="selectByExample" parameterType="com.mianbao.domain.EvaluateReplyExample" resultMap="BaseResultMap">
     select
@@ -105,10 +106,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_evaluate_reply (evaluate, reply_content, reply_user_id, 
-      exist_parent, create_time)
-    values (#{evaluate,jdbcType=INTEGER}, #{replyContent,jdbcType=VARCHAR}, #{replyUserId,jdbcType=INTEGER}, 
-      #{existParent,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    insert into tb_evaluate_reply (reply_id, evaluate, reply_content, 
+      reply_user_id, to_user_id, create_time
+      )
+    values (#{replyId,jdbcType=INTEGER}, #{evaluate,jdbcType=INTEGER}, #{replyContent,jdbcType=VARCHAR}, 
+      #{replyUserId,jdbcType=INTEGER}, #{toUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.EvaluateReply">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -116,6 +119,9 @@
     </selectKey>
     insert into tb_evaluate_reply
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="replyId != null">
+        reply_id,
+      </if>
       <if test="evaluate != null">
         evaluate,
       </if>
@@ -125,14 +131,17 @@
       <if test="replyUserId != null">
         reply_user_id,
       </if>
-      <if test="existParent != null">
-        exist_parent,
+      <if test="toUserId != null">
+        to_user_id,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="replyId != null">
+        #{replyId,jdbcType=INTEGER},
+      </if>
       <if test="evaluate != null">
         #{evaluate,jdbcType=INTEGER},
       </if>
@@ -142,8 +151,8 @@
       <if test="replyUserId != null">
         #{replyUserId,jdbcType=INTEGER},
       </if>
-      <if test="existParent != null">
-        #{existParent,jdbcType=INTEGER},
+      <if test="toUserId != null">
+        #{toUserId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -162,6 +171,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.replyId != null">
+        reply_id = #{record.replyId,jdbcType=INTEGER},
+      </if>
       <if test="record.evaluate != null">
         evaluate = #{record.evaluate,jdbcType=INTEGER},
       </if>
@@ -171,8 +183,8 @@
       <if test="record.replyUserId != null">
         reply_user_id = #{record.replyUserId,jdbcType=INTEGER},
       </if>
-      <if test="record.existParent != null">
-        exist_parent = #{record.existParent,jdbcType=INTEGER},
+      <if test="record.toUserId != null">
+        to_user_id = #{record.toUserId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -185,10 +197,11 @@
   <update id="updateByExample" parameterType="map">
     update tb_evaluate_reply
     set id = #{record.id,jdbcType=INTEGER},
+      reply_id = #{record.replyId,jdbcType=INTEGER},
       evaluate = #{record.evaluate,jdbcType=INTEGER},
       reply_content = #{record.replyContent,jdbcType=VARCHAR},
       reply_user_id = #{record.replyUserId,jdbcType=INTEGER},
-      exist_parent = #{record.existParent,jdbcType=INTEGER},
+      to_user_id = #{record.toUserId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -197,6 +210,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.mianbao.domain.EvaluateReply">
     update tb_evaluate_reply
     <set>
+      <if test="replyId != null">
+        reply_id = #{replyId,jdbcType=INTEGER},
+      </if>
       <if test="evaluate != null">
         evaluate = #{evaluate,jdbcType=INTEGER},
       </if>
@@ -206,8 +222,8 @@
       <if test="replyUserId != null">
         reply_user_id = #{replyUserId,jdbcType=INTEGER},
       </if>
-      <if test="existParent != null">
-        exist_parent = #{existParent,jdbcType=INTEGER},
+      <if test="toUserId != null">
+        to_user_id = #{toUserId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -217,10 +233,11 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.mianbao.domain.EvaluateReply">
     update tb_evaluate_reply
-    set evaluate = #{evaluate,jdbcType=INTEGER},
+    set reply_id = #{replyId,jdbcType=INTEGER},
+      evaluate = #{evaluate,jdbcType=INTEGER},
       reply_content = #{replyContent,jdbcType=VARCHAR},
       reply_user_id = #{replyUserId,jdbcType=INTEGER},
-      exist_parent = #{existParent,jdbcType=INTEGER},
+      to_user_id = #{toUserId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -1,10 +1,8 @@
 package com.mianbao.dao;
 
-
-import java.util.List;
-
 import com.mianbao.domain.EvaluateReply;
 import com.mianbao.domain.EvaluateReplyExample;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
