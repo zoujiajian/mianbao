@@ -13,7 +13,7 @@ import com.mianbao.facade.UserInfoFacade;
 import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.UserService;
 import com.mianbao.service.RedisService;
-import com.mianbao.util.FileLoadUtil;
+import com.mianbao.service.FileLoadService;
 import com.mianbao.util.Md5Util;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result updateUserPicture(HttpServletRequest request) {
-        String picture = FileLoadUtil.load(request);
+        String picture = FileLoadService.load(request);
         if(StringUtils.isEmpty(picture)){
             return Result.getDefaultError(Response.UPDATE_PICTURE.getMsg());
         }
