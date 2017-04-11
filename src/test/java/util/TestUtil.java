@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.mianbao.dao.DynamicEvaluateMapper;
 import com.mianbao.domain.DynamicEvaluate;
 import com.mianbao.domain.DynamicEvaluateExample;
+import com.mianbao.service.PictureService;
 import com.mianbao.service.RedisService;
 import com.mianbao.util.DbConnectionUtil;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,6 +30,9 @@ public class TestUtil {
 
     @Resource
     private DynamicEvaluateMapper dynamicEvaluateMapper;
+
+    @Resource
+    private PictureService pictureService;
 
     @Test
     public void testRedis() throws SQLException {
@@ -64,5 +69,16 @@ public class TestUtil {
                 System.out.println(b);
             }
         }).start();
+    }
+
+    @Test
+    public void testUploadFile(){
+        try {
+          String url =   pictureService.uploadFile("C:"+ File.separator + "Users"+File.separator + "" +
+                  "Administrator"+File.separator + "CnRgzljqaHGAdukXAAAYKMIXiWc886.jpg","jpg");
+          System.out.println("url = "+ url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -52,7 +52,6 @@ public class RedisCacheParse {
         Method[] methods = clazz.getDeclaredMethods();
         Object[] argument = joinPoint.getArgs();
         Long startTime,endTime;
-        top(argument,methodName);
 
         for(Method method : methods){
             if(method.getName().equals(methodName)){
@@ -158,15 +157,5 @@ public class RedisCacheParse {
         logAround.setCache(cache);
 
         logger.info(JSON.toJSONString(logAround));
-    }
-
-    private void top(Object[] arguments , String methodName){
-        if(TopMethodUtil.containsMethodName(methodName)){
-            worker.recordAccess(getMemberByArgument(arguments));
-        }
-    }
-
-    private String getMemberByArgument(Object[] arguments){
-        return null;
     }
 }

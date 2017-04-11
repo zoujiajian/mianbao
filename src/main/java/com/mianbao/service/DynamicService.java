@@ -37,4 +37,12 @@ public interface DynamicService {
      * @return
      */
     Result dynamicLike(int userId,int dynamicId);
+
+
+    /**
+     * 获取动态的点赞信息 和点赞量
+     * @param dynamicId
+     * @return
+     */
+    Result getDynamicLikeInfoList(int dynamicId);
 }

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `tb_scenic_spot`(
 	id int(5) auto_increment comment'景点id',
 	scenic_spot_name varchar(20) not null comment '景点名称',
 	scenic_spot_info varchar(100) not null comment '景点简介',
-	scenic_spot_picutre varchar(100) not null comment '景点图片地址',
+	scenic_spot_picture varchar(100) not null comment '景点图片地址',
 	scenic_createTime timestamp not null default current_timestamp() comment '创建时间',
 	create_user int(5) not null comment '创建人',
 	primary key(id),
@@ -41,13 +41,14 @@ CREATE TABLE IF NOT EXISTS `tb_dynamic_evaluate`(
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户个人动态评价'
 
 CREATE TABLE IF NOT EXISTS `tb_evaluate_reply`(
-	id int(10) auto_increment comment '回复id',
-	evaluate int(10) not null comment'评价id',
-	reply_content varchar(50) not null comment '回复内容',
-	reply_user_id int(5) not null comment '回复人',
-	exist_parent int(5) not null comment '上级回复id',
-	create_time timestamp not null default current_timestamp() comment '创建时间',
-	primary key(id)
+    id int(10) auto_increment comment 'id',
+    reply_id int(01) comment '回复目标id',
+    evaluate int(10) not null comment'评价id',
+    reply_content varchar(50) not null comment '回复内容',
+    reply_user_id int(5) not null comment '回复人id',
+    to_user_id int(5) not null comment '回复目标id',
+    create_time timestamp not null default current_timestamp() comment '创建时间',
+    primary key(id)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='动态回复'
 
 CREATE TABLE IF NOT EXISTS `tb_user_like`(

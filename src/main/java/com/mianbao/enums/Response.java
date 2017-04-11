@@ -17,7 +17,8 @@ public enum Response {
     GET_USER_INFO(100006,"获取用户信息失败"),
     RELEASE_DYNAMIC_FAIL(100007,"发布动态消息失败"),
     USER_NOT_CONTAINS(100008,"用户不存在"),
-    DYNAMIC_NOT_CONTAINS(100009,"动态不存在");
+    DYNAMIC_NOT_CONTAINS(100009,"动态不存在"),
+    LIKE_DYNAMIC_FAIL(100010,"点赞动态失败");
 
     private int code;
 

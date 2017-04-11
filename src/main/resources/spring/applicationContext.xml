@@ -21,6 +21,17 @@
     <!--自动包扫描-->
     <context:component-scan base-package="com.mianbao"/>
 
+    <!--restTemplate-->
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg>
+            <bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+                <property name="readTimeout" value="60000"/>
+                <property name="connectTimeout" value="80000"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
     <!-- aop-->
     <aop:aspectj-autoproxy proxy-target-class="true">
     </aop:aspectj-autoproxy>
