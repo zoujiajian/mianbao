@@ -41,6 +41,11 @@ public class CacheKey {
      */
     public static final String TOP_DYNAMIC_INFO = "real_time_top";
 
+    /**
+     * 景点信息的key
+     */
+    public static final String SCENIC_SPOT_INFO_PREFIX = "scenic_spot_info_prefix";
+
     public static final int DEFAULT_EXPIRE = 1000 * 60 * 60 * 24;
 
     private CacheKey(){

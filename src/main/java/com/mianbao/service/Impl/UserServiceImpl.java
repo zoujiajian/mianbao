@@ -38,6 +38,9 @@ public class UserServiceImpl implements UserService {
     @Resource
     private RedisService redisService;
 
+    @Resource
+    private FileLoadService fileLoadService;
+
     @Override
     public Result register(UserInfo userInfo) {
 
@@ -113,15 +116,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result updateUserPicture(HttpServletRequest request) {
-        String picture = FileLoadService.load(request);
-        if(StringUtils.isEmpty(picture)){
+        List<String> picture = fileLoadService.load(request);
+        if(CollectionUtils.isEmpty(picture)){
             return Result.getDefaultError(Response.UPDATE_PICTURE.getMsg());
         }
 
         String userId = request.getParameter("userId");
         UserInfo userInfo = new UserInfo();
         userInfo.setId(Integer.valueOf(userId));
-        userInfo.setUserPicture(picture);
+        userInfo.setUserPicture(picture.get(0));
         int count = userInfoMapper.updateByPrimaryKey(userInfo);
         if(count > 0){
             String cacheKey = CacheKey.USER_PICTURE_PREFIX + "_" + userInfo.getId();

@@ -11,10 +11,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class DynamicInfoAndReplyVo extends DynamicInfoVo{
+public class DynamicInfoAndReplyVo{
 
     //评价
     private Evaluate evaluate;
+
+    //点赞信息
+    private DynamicInfoVo dynamicInfoVo;
 
     @Getter
     @Setter

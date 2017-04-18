@@ -17,14 +17,14 @@ public interface DynamicService {
     Result releaseDynamic(UserDynamic dynamic);
 
     /**
-     * 查看动态信息 包括评价 回复 点赞量 浏览量 等
+     * 查看动态信息 包括评价 回复 点赞量 等
      * @param dynamicId
      * @return
      */
     Result getDynamicInfo(int dynamicId);
 
     /**
-     * 获取用户所有的动态信息  包括评价 回复 点赞量 浏览量 等
+     * 获取用户所有的动态信息  只显示到点赞量 和点赞用户信息
      * @param userId
      * @return
      */

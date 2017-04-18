@@ -18,7 +18,9 @@ public enum Response {
     RELEASE_DYNAMIC_FAIL(100007,"发布动态消息失败"),
     USER_NOT_CONTAINS(100008,"用户不存在"),
     DYNAMIC_NOT_CONTAINS(100009,"动态不存在"),
-    LIKE_DYNAMIC_FAIL(100010,"点赞动态失败");
+    LIKE_DYNAMIC_FAIL(100010,"点赞动态失败"),
+    UPLOAD_PICTURE_FAIL(100011,"图片上传失败"),
+    UPLOAD_PICTURE_SUCCESS(100012,"图片上传成功");
 
     private int code;
 

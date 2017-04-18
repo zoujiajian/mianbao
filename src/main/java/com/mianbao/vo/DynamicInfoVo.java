@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by zoujiajian on 2017-4-9.
  * 动态基本展示信息
@@ -23,11 +26,14 @@ public class DynamicInfoVo {
     private String dynamicContent;
 
     //动态图片
-    private String dynamicPicture;
+    private List<String> dynamicPicture;
 
-    //关联景点
-    private String scenicSpot;
+    //关联景点名称
+    private String scenicSpotName;
+
+    //关联景点id
+    private Integer scenicSpotId;
 
     //发布时间
-    private String createTime;
+    private Date createTime;
 }
