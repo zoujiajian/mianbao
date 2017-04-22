@@ -3,6 +3,10 @@ package com.mianbao.vo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.joda.time.DateTime;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zoujiajian on 2017-4-9.
@@ -14,30 +18,34 @@ import lombok.ToString;
 public class DynamicInfoAndReplyVo{
 
     //评价
-    private Evaluate evaluate;
+    private List<Evaluate> evaluate;
 
-    //点赞信息
+    //动态基本信息
     private DynamicInfoVo dynamicInfoVo;
 
     @Getter
     @Setter
     @ToString
-    private static class Evaluate{
+    public static class Evaluate{
+
         //评价内容
         private String evaluateContent;
 
         //评价人
         private String evaluateUser;
 
+        //评价时间
+        private Date date;
+
         //评价的回复
-        private Reply reply;
+        private List<Reply> reply;
     }
 
 
     @Getter
     @Setter
     @ToString
-    private static class Reply{
+    public static class Reply{
 
         //回复内容
         private String replyContent;
@@ -48,7 +56,7 @@ public class DynamicInfoAndReplyVo{
         //回复目标用户
         private String replyToUser;
 
-        //针对这条回复的下一个回复
-        private Reply nextReply;
+        //回复时间
+        private Date dateTime;
     }
 }

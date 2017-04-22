@@ -5,15 +5,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mianbao.common.CacheKey;
 import com.mianbao.common.Result;
-import com.mianbao.dao.ScenicSpotDynamicMapper;
-import com.mianbao.dao.ScenicSpotMapper;
-import com.mianbao.dao.UserDynamicMapper;
-import com.mianbao.dao.UserInfoMapper;
+import com.mianbao.dao.*;
 import com.mianbao.domain.*;
 import com.mianbao.enums.Response;
 import com.mianbao.exception.BusinessException;
 import com.mianbao.facade.UserInfoFacade;
 import com.mianbao.pojo.user.UserSimpleInfo;
+import com.mianbao.service.DynamicEvaluateService;
 import com.mianbao.service.DynamicService;
 import com.mianbao.service.RedisService;
 import com.mianbao.vo.DynamicInfoAndReplyVo;
@@ -57,6 +55,9 @@ public class DynamicServiceImpl implements DynamicService{
     @Resource
     private ScenicSpotMapper scenicSpotMapper;
 
+    @Resource
+    private DynamicEvaluateService dynamicEvaluateService;
+
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public Result releaseDynamic(UserDynamic dynamic) {
@@ -86,6 +87,7 @@ public class DynamicServiceImpl implements DynamicService{
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Result getDynamicInfo(int dynamicId) {
         if(dynamicId < 0){
             throw new BusinessException(Response.DYNAMIC_NOT_CONTAINS.getMsg(),Response.DYNAMIC_NOT_CONTAINS.getCode());
@@ -95,7 +97,7 @@ public class DynamicServiceImpl implements DynamicService{
         if(userDynamic == null){
             return Result.getDefaultError(Response.DYNAMIC_NOT_CONTAINS.getMsg());
         }
-        DynamicInfoAndReplyVo dynamicInfoAndReplyVo = new DynamicInfoAndReplyVo();
+
         DynamicInfoVo dynamicInfoVo = getDynamicInfo(userDynamic);
         if(StringUtils.isEmpty(dynamicInfoVo.getScenicSpotName())){
             ScenicSpot scenicSpot = scenicSpotMapper.selectByPrimaryKey(userDynamic.getScenicSpot());
@@ -105,8 +107,17 @@ public class DynamicServiceImpl implements DynamicService{
             redisService.addByKey(scenicSpotKey, JSON.toJSONString(scenicSpotKey));
         }
 
+        Result result = dynamicEvaluateService.getDynamicEvaluateInfo(dynamicId);
+        List<DynamicInfoAndReplyVo.Evaluate> evaluateList = Lists.newArrayList();
+        if(result.isSuccess() && result.getData() != null){
+            evaluateList = (List<DynamicInfoAndReplyVo.Evaluate>)result.getData();
+        }
+
+        DynamicInfoAndReplyVo dynamicInfoAndReplyVo = new DynamicInfoAndReplyVo();
         dynamicInfoAndReplyVo.setDynamicInfoVo(dynamicInfoVo);
-        return null;
+        dynamicInfoAndReplyVo.setEvaluate(evaluateList);
+
+        return Result.getDefaultSuccess(dynamicInfoAndReplyVo);
     }
 
     @Override
