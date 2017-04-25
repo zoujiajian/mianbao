@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public Result refister(@RequestBody UserInfo userInfo){
+    public Result register(@RequestBody UserInfo userInfo){
         Result result;
         try{
             if(userInfo.getId() != null){

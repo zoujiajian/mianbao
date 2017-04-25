@@ -25,10 +25,15 @@ public class FileLoadService {
     @Resource
     private PictureService pictureService;
 
+
     public List<String> load(HttpServletRequest request){
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
-                request.getSession().getServletContext()
-        );
+
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().
+                getServletContext());
+        multipartResolver.setDefaultEncoding("utf-8");
+        multipartResolver.setMaxInMemorySize(10960);
+        multipartResolver.setMaxUploadSize(10485760000L);
+
         List<String> picture = Lists.newArrayList();
         //检测是否包含文件
         if(multipartResolver.isMultipart(request)){

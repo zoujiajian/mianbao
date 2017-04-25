@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>图片上传</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"  media="all" />
+    <script th:src="@{/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:inline="javascript">
+        $(function(){
+            var url = "/mianbao/travel/picture/uploadPicture";
+            preview();
+
+            $("#upload").click(function(){
+                upload(function(data){
+                    if(data.success){
+                        alter("图片上传成功");
+                    }
+                },url);
+            });
+
+        });
+    </script>
+</head>
+    <body>
+       <form id="uploadForm" enctype="multipart/form-data">
+           <label>请选择一个图像文件：</label>
+           <input type="file" id="file_input" multiple="multiple"/>
+           <input type="button" id="upload" value="上传"/>
+       </form>
+    </body>
+</html>

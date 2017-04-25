@@ -48,10 +48,10 @@ public class UserLoginInterceptor implements Filter{
                 String cacheKey = CacheKey.USER_LOGIN_PREFIX + "_" + userName;
                 String cacheValue = redisService.getByKey(cacheKey);
                 if(StringUtils.isEmpty(cacheValue)){
-                    request.getRequestDispatcher("index.html").forward(request,response);
+                    request.getRequestDispatcher("sys/index.html").forward(request,response);
                 }
             }else{
-                request.getRequestDispatcher("index.html").forward(request,response);
+                request.getRequestDispatcher("sys/index.html").forward(request,response);
             }
         }
         filterChain.doFilter(request, response);

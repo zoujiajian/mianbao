@@ -27,7 +27,7 @@ public class PictureController {
     private FileLoadService fileLoadService;
 
     @LogAround
-    @RequestMapping(value = "/uploadPicture",method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadPicture", method = RequestMethod.POST)
     public Result uploadPicture(HttpServletRequest request){
         try{
             List<String> pictures = fileLoadService.load(request);

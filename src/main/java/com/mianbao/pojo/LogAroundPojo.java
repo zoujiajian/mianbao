@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class LogAround extends BasePojo implements Serializable{
+public class LogAroundPojo extends BasePojo implements Serializable{
 
     private String methodName;
 
@@ -27,4 +27,5 @@ public class LogAround extends BasePojo implements Serializable{
 
     private boolean isCache;
 
+    private boolean success;
 }
