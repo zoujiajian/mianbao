@@ -1,13 +1,15 @@
-##ignore this file##
 /target/
 .classpath
 .ignore
+*.class
 .settings/
 .idea/
 .project
-mianbao.iml
+mianBao.iml
 /logdir_IS_UNDEFINED/
 
-##class file##
-*.class  
-*.dll  
+
+
+
+
+
