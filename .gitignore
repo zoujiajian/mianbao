@@ -1,0 +1,9 @@
+//过滤文件夹
+/target/
+.classpath
+.ignore
+.settings/
+.idea/
+.project
+autoreport.iml
+/logdir_IS_UNDEFINED/
