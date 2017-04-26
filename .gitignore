@@ -1,4 +1,4 @@
-//过滤文件夹
+##ignore this file##
 /target/
 .classpath
 .ignore
@@ -7,3 +7,7 @@
 .project
 mianbao.iml
 /logdir_IS_UNDEFINED/
+
+##class file##
+*.class  
+*.dll  
