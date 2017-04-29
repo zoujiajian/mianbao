@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>图片上传</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"  media="all" />
+    <script th:src="@{/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:inline="javascript">
+        $(function(){
+            var url = "/mianbao/travel/scenic/addScenicSpot";
+            preview();
+
+            $("#upload").click(function(){
+                upload(function(data){
+                    if(data.success){
+                        window.location.href="/mianbao/travel/index.html";
+                    }else{
+                        window.alter("上传失败!");
+                    }
+                },url);
+            });
+        });
+    </script>
+</head>
+<body>
+<form id="release" method="post" name="release">
+    <label>景点信息:</label>
+    景点名称:<input type="text" name="scenicSpotName" placeholder="景点名称"/><br/>
+    景点介绍:<input type="text"  name="scenicSpotInfo" placeholder="景点介绍"/><br/>
+</form>
+<h3>图片</h3>
+<label>请选择一个图像文件：</label>
+<input type="file" id="file_input" multiple="multiple"/>
+<input type="button" id="upload" value="上传"/>
+</body>
+</html>

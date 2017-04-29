@@ -39,7 +39,8 @@ function upload(fun,url){
         result.innerHTML = "抱歉，你的浏览器不支持 FileReader";
         input.setAttribute('disabled','disabled');
     }
-    var formData = new FormData();
+    //将release的信息放入表单
+    var formData = new FormData($("#release")[0]);
     for(var i=0;i<input.files.length;i++){
         var reader = new FileReader();
         reader.readAsDataURL(input.files[i]);
@@ -137,6 +138,58 @@ function getFileName(obj){
     //get
     function get(url,data,fun){
     	operation(url,data,"get",fun);
+    }
+
+    function search(url){
+         var xhr=null;
+         $('input[name="keyword"]').keyup(function() {
+             if(xhr){
+                  xhr.abort();//如果存在ajax的请求，就放弃请求
+             }
+            var inputText= $.trim(this.value);
+            console.log(url);
+            console.log(inputText);
+            if(inputText!=""){//检测键盘输入的内容是否为空，为空就不发出请求
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data:encodeURI("scenicName=" + inputText),
+                    cache:false,//不从浏览器缓存中加载请求信息
+                    dataType: 'json',//服务器返回数据的类型为json
+                    contentType: "charset=utf-8",
+                    success: function (data) {
+                        if(data.success){
+                            var arrayData = data.data;
+                            if (arrayData.length != 0) {//检测返回的结果是否为空
+                                  $('#tags').tagsInput();
+                                  $("#tags").removeAttr("hidden");
+
+                                  var scenicSpotIds = arrayData[0].id;
+                                  var lists = "<ul>";
+                                  for(var i =0;i<arrayData.length;i++){
+                                      if(i > 0){
+                                          scenicSpotIds = "," + arrayData[i].id;
+                                      }
+                                      $('#tags').addTag(arrayData[i].scenicSpotName);
+                                      lists += "<li>"+arrayData[i].scenicSpotName+"</li>";//遍历出每一条返回的数据
+                                  }
+                                  lists +="</ul>";
+                                  $("#scenicIds").val(scenicSpotIds);
+
+                                  $("#searchBox").html(lists);//将搜索到的结果展示出来
+                                  $("#searchBox").show();
+
+                            } else {
+                                  $("#searchBox").hide();
+                            }
+                        }
+                    }});
+            }else{
+                $("#searchBox").hide();//没有查询结果就隐藏搜索框
+            }
+        }).blur(function(){
+            $("#searchBox").hide();//输入框失去焦点的时候就隐藏搜索框
+        });
     }
 
     var baseUrl = "/mianbao";

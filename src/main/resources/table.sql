@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS `tb_user_dynamic`(
 	user_id int(5) not null comment '用户id',
 	dynamic_title varchar(20) not null comment '动态简介',
 	dynamic_content varchar(500) not null comment '动态内容',
-	dynamic_picutre varchar(50) comment '动态图片',
-	scenic_spot int(5) not null comment '关联景点',
+	dynamic_picture varchar(50) comment '动态图片',
+	scenic_spot_ids varchar(20) not null comment '关联景点',
 	createTime timestamp not null default current_timestamp() comment '创建时间',
 	primary key(id)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户个人动态'
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `tb_scenic_spot_evaluate`(
 	id int(10) auto_increment comment '评价id',
 	user_id int(5) not null comment '评价人',
 	evaluate_content varchar(50) not null comment '评价内容',
-	evaluate_picutre varchar(50) not null comment '评价图片',
+	evaluate_picture varchar(50) not null comment '评价图片',
 	create_time timestamp not null default current_timestamp() comment '创建时间',
 	evaluate_star tinyint not null comment '星级',
 	primary key(id)

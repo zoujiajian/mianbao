@@ -22,6 +22,8 @@ public interface ScenicSpotMapper {
 
     List<ScenicSpot> selectByExample(ScenicSpotExample example);
 
+    List<ScenicSpot> getAllScenicSpot();
+
     ScenicSpot selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") ScenicSpot record, @Param("example") ScenicSpotExample example);

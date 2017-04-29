@@ -20,7 +20,11 @@ public enum Response {
     DYNAMIC_NOT_CONTAINS(100009,"动态不存在"),
     LIKE_DYNAMIC_FAIL(100010,"点赞动态失败"),
     UPLOAD_PICTURE_FAIL(100011,"图片上传失败"),
-    UPLOAD_PICTURE_SUCCESS(100012,"图片上传成功");
+    UPLOAD_PICTURE_SUCCESS(100012,"图片上传成功"),
+    USER_LOGIN_TIMEOUT(100013,"用户过期"),
+    ADD_SCENIC_SPOT_FAIL(100014,"新增景点失败"),
+    USER_NOT_LOGIN(100015,"用户尚未登录"),
+    SCENIC_SPOT_NOT_CONTAINS(100016,"景点不存在");
 
     private int code;
 

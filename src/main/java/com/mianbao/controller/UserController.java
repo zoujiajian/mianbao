@@ -1,17 +1,22 @@
 package com.mianbao.controller;
 
+import com.mianbao.common.CacheKey;
 import com.mianbao.domain.UserInfo;
 import com.mianbao.common.Result;
 import com.mianbao.enums.Response;
 import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.UserService;
+import com.mianbao.util.Md5Util;
+import com.mianbao.util.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by zoujiajian on 2017-4-7.
@@ -34,9 +39,13 @@ public class UserController {
         Result result;
         try{
             result = userService.login(userLogin);
+            if(result.isSuccess()){
+               //返回token
+               return Result.getDefaultSuccess(TokenUtil.userInfoToToken(userLogin));
+            }
         }catch (Exception e){
             logger.error("用户登录错误: ",e);
-            return Result.getDefaultSuccess(Response.LOGIN_FAIL.getMsg());
+            return Result.getDefaultError(Response.LOGIN_FAIL.getMsg());
         }
         return result;
     }

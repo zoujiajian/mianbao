@@ -1,6 +1,6 @@
 package com.mianbao.service;
 
-import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Iterator;
-import java.util.List;
+
+import java.util.*;
 
 /**
  * Created by zoujiajian on 2017-3-10.
@@ -25,8 +25,7 @@ public class FileLoadService {
     @Resource
     private PictureService pictureService;
 
-
-    public List<String> load(HttpServletRequest request){
+    public String uploadFile(HttpServletRequest request){
 
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().
                 getServletContext());
@@ -34,11 +33,12 @@ public class FileLoadService {
         multipartResolver.setMaxInMemorySize(10960);
         multipartResolver.setMaxUploadSize(10485760000L);
 
-        List<String> picture = Lists.newArrayList();
+        StringBuilder picture = new StringBuilder();
         //检测是否包含文件
         if(multipartResolver.isMultipart(request)){
             //将request 转换为多个request 保存多个文件
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+            //获取文件字段
             Iterator<String> fileNames = multiRequest.getFileNames();
             while(fileNames.hasNext()){
                 String fileName = fileNames.next();
@@ -47,12 +47,27 @@ public class FileLoadService {
                 MultipartFile file = multiRequest.getFile(fileName);
                 try {
                     String pictureAddress = pictureService.uploadPicture(file.getBytes(),fileExtName);
-                    picture.add(pictureAddress);
+                    picture.append(",").append(pictureAddress);
                 } catch (Exception e) {
                     logger.error("upload picture error",e);
                 }
             }
         }
-        return picture;
+
+        return  picture.toString().replaceFirst(",","");
+    }
+
+    /**
+     * 是否包含图片
+     * @param request
+     * @return
+     */
+    public boolean isContainsFile(HttpServletRequest request){
+        if(request != null){
+            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().
+                    getServletContext());
+            return multipartResolver.isMultipart(request);
+        }
+        return false;
     }
 }

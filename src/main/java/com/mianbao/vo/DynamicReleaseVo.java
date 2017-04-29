@@ -8,16 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by zoujiajian on 2017-4-9.
- * 动态基本展示信息
+ * Created by zoujiajian on 2017-4-26.
  */
-@Setter
 @Getter
+@Setter
 @ToString
-public class DynamicInfoVo {
+public class DynamicReleaseVo {
 
-    //点赞信息
-    private DynamicLikeVo dynamicLikeVo;
+    //用户id
+    private int userId;
 
     //动态标题
     private String dynamicTitle;
@@ -28,12 +27,10 @@ public class DynamicInfoVo {
     //动态图片
     private List<String> dynamicPicture;
 
-    //关联景点名称
-    private List<String> scenicSpotName;
-
     //关联景点id
-    private List<Integer> scenicSpotIds;
+    private String scenicIds;
 
     //发布时间
     private Date createTime;
+
 }

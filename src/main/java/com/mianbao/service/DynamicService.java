@@ -3,6 +3,8 @@ package com.mianbao.service;
 import com.mianbao.common.Result;
 import com.mianbao.domain.UserDynamic;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * Created by zoujiajian on 2017-4-8.
@@ -11,10 +13,11 @@ public interface DynamicService {
 
     /**
      * 用户发布动态
-     * @param dynamic
+     * @param request
      * @return
      */
-    Result releaseDynamic(UserDynamic dynamic);
+    Result releaseDynamic(HttpServletRequest request);
+
 
     /**
      * 查看动态信息 包括评价 回复 点赞量 等

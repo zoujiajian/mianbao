@@ -4,16 +4,24 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"  media="all" />
 		<script th:src="@{/js/jquery-1.8.3.min.js}"></script>
+		<script th:src="@{/js/jquery.cookie.js}"></script>
 		<script th:src="@{/js/common.js}"></script>
 		<script th:inline="javascript">
 			$(function(){
+				var userName = $.cookie("user");
+			    if(userName != ""){
+			        if(typeof(userName) != "undefined"){
+			    		$("#status").html('<a th:href="@{/mianbao/travel/user/userInfo}">欢迎您: ' + userName +"</a>");
+			        }
+			    }
+
 				$("#register").click(function(){
 						var jsonObject = JSON.stringify($("#registerData").serializeObject());
 						post(baseUrl+"/travel/user/register",jsonObject,function(data){
 						if(data.success){
-							window.location.href="index.html";
+							window.location.href="/mianbao/travel/index.html";
 						}else{
-							alert(data.errorMsg);
+							window.alert(data.errorMsg);
 						}
 					});
 				});
@@ -28,11 +36,13 @@
 				</div>
 				<div class="top-nav">
 					<ul>
-						<li><a href="index.html">首页</a></li>
+
+						<li><a href="/mianbao/travel/index.html">首页</a></li>
 						<li><a id="userCenter" href="javascript:void(0)">个人中心</a></li>
 						<li><a id="scenicSpot" href="javascript:void(0)">景点中心</a></li>
 						<li><a id="about" href="javascript:void(0)">关于</a></li>
-						<li class="active"><a id="userRegister" href="javascript:void(0)">注册</a></li>
+						<li><a th:href="@{/mianbao/travel/user/register}">注册</a></li>
+						<li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
 					</ul>
 				</div>
 				<div class="clear"> </div>
@@ -137,7 +147,6 @@
 		<div class="copy-right">
 			<p>Copyright &copy; 2017.Company name 稻草人</p>
 		</div>
-	
 </body>
 </html>
 

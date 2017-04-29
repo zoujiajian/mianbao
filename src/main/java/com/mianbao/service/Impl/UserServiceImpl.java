@@ -15,6 +15,7 @@ import com.mianbao.service.UserService;
 import com.mianbao.service.RedisService;
 import com.mianbao.service.FileLoadService;
 import com.mianbao.util.Md5Util;
+import com.mianbao.util.TokenUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 /**
  * Created by zoujiajian on 2017-3-21.
@@ -71,11 +73,16 @@ public class UserServiceImpl implements UserService {
            throw new BusinessException(Response.LOGIN_FAIL.getMsg(),Response.LOGIN_FAIL.getCode());
         }
         userLogin.setUserPassword(Md5Util.getMD5Key(userLogin.getUserPassword()));
-        String cacheKey = CacheKey.USER_LOGIN_PREFIX + "_" + userLogin.getUserName();
-        String userLoginInfo = redisService.getByKey(cacheKey);
+        String cacheKeyWithName = CacheKey.USER_LOGIN_PREFIX_NAME + "_" + userLogin.getUserName();
+        String userLoginInfo = redisService.getByKey(cacheKeyWithName);
+
+        //token 信息缓存2小时
+        String token = TokenUtil.userInfoToToken(userLogin);
         if(StringUtils.isNotEmpty(userLoginInfo)){
             UserLogin login = JSON.parseObject(userLoginInfo,UserLogin.class);
             if(login.getUserPassword().equals(userLogin.getUserPassword())){
+
+                redisService.addByKeyWithExpire(CacheKey.USER_TOKEN + "_" + token, JSON.toJSONString(login),CacheKey.SERVER_TOKEN_DEFAULT_EXPIRE);
                 return Result.getDefaultSuccess(null);
             }
         }
@@ -87,7 +94,10 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = login.get(0);
         UserLogin loginInfo = UserInfoFacade.userInfoToUserLogin(userInfo);
         if(userInfo != null){
-            redisService.addByKeyWithExpire(cacheKey,JSON.toJSONString(loginInfo),CacheKey.DEFAULT_EXPIRE);
+            String cacheKeyWithId = CacheKey.USER_LOGIN_PREFIX_ID + "_" + userInfo.getId();
+            redisService.addByKeyWithExpire(cacheKeyWithName,JSON.toJSONString(loginInfo),CacheKey.DEFAULT_EXPIRE);
+            redisService.addByKeyWithExpire(cacheKeyWithId,JSON.toJSONString(loginInfo),CacheKey.DEFAULT_EXPIRE);
+
             return Result.getDefaultSuccess(null);
         }
         return Result.getDefaultError(Response.LOGIN_FAIL.getMsg());
@@ -116,7 +126,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result updateUserPicture(HttpServletRequest request) {
-        List<String> picture = fileLoadService.load(request);
+//        List<String> picture = fileLoadService.load(request);
+        List<String> picture = Collections.emptyList();
         if(CollectionUtils.isEmpty(picture)){
             return Result.getDefaultError(Response.UPDATE_PICTURE.getMsg());
         }
@@ -160,7 +171,7 @@ public class UserServiceImpl implements UserService {
      */
     private boolean userNameIsRegister(String userName){
 
-        String cacheKey = CacheKey.USER_LOGIN_PREFIX + "_" + userName;
+        String cacheKey = CacheKey.USER_LOGIN_PREFIX_NAME + "_" + userName;
         String cacheUser = redisService.getByKey(cacheKey);
         if(StringUtils.isNotEmpty(cacheUser)){
             logger.info("缓存命中 用户名已经存在: {}", userName);

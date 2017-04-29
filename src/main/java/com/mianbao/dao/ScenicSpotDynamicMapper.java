@@ -31,4 +31,6 @@ public interface ScenicSpotDynamicMapper {
     int updateByPrimaryKeySelective(ScenicSpotDynamic record);
 
     int updateByPrimaryKey(ScenicSpotDynamic record);
+
+    int insertScenicDynamicList(List<ScenicSpotDynamic> scenicSpotDynamicList);
 }

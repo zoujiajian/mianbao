@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 /**
  * Created by zoujiajian on 2017-4-13.
  */
@@ -28,16 +27,11 @@ public class PictureController {
 
     @LogAround
     @RequestMapping(value = "/uploadPicture", method = RequestMethod.POST)
+    @SuppressWarnings("unchecked")
     public Result uploadPicture(HttpServletRequest request){
         try{
-            List<String> pictures = fileLoadService.load(request);
-            StringBuilder pictureAddress = new StringBuilder();
-            if(CollectionUtils.isNotEmpty(pictures)){
-                for(String picture : pictures){
-                    pictureAddress.append(",").append(picture);
-                }
-            }
-            return Result.getDefaultSuccess(pictureAddress.toString().replaceFirst(",",""));
+            String address = fileLoadService.uploadFile(request);
+            return Result.getDefaultSuccess(address);
         }catch (Exception e){
             logger.error("图片上传失败",e);
         }

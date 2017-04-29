@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.mianbao.dao.DynamicEvaluateMapper;
 import com.mianbao.domain.DynamicEvaluate;
 import com.mianbao.domain.DynamicEvaluateExample;
+import com.mianbao.service.DynamicService;
 import com.mianbao.service.PictureService;
 import com.mianbao.service.RedisService;
 import com.mianbao.util.DbConnectionUtil;
@@ -33,6 +34,9 @@ public class TestUtil {
 
     @Resource
     private PictureService pictureService;
+
+    @Resource
+    private DynamicService dynamicService;
 
     @Test
     public void testRedis() throws SQLException {
@@ -80,5 +84,10 @@ public class TestUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testDynamicAll(){
+        System.out.println(JSON.toJSONString(dynamicService.getUserAllDynamic(1)));
     }
 }

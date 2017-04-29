@@ -19,7 +19,12 @@ public class CacheKey {
     /**
      * 用户登录信息前缀
      */
-    public static final String USER_LOGIN_PREFIX = "user_login_prefix";
+    public static final String USER_LOGIN_PREFIX_NAME = "user_login_prefix_name";
+
+    /**
+     * 用户登录信息前缀
+     */
+    public static final String USER_LOGIN_PREFIX_ID = "user_login_prefix_id";
 
     /**
      * 用户详细信息前缀
@@ -46,7 +51,18 @@ public class CacheKey {
      */
     public static final String SCENIC_SPOT_INFO_PREFIX = "scenic_spot_info_prefix";
 
+    /**
+     * 用户token信息
+     */
+    public static final String USER_TOKEN  = "user_token";
+
     public static final int DEFAULT_EXPIRE = 1000 * 60 * 60 * 24;
+
+    //服务端 token过期时间 单位毫秒
+    public static final int SERVER_TOKEN_DEFAULT_EXPIRE = 1000 * 60 * 2;
+
+    //客户端token过期时间 单位秒
+    public static final int CLIENT_TOKEN_DEFUALT_EXPIRE = 365 * 24 * 60 * 60;
 
     private CacheKey(){
 
