@@ -11,9 +11,9 @@ public class UserDynamic {
 
     private String dynamicContent;
 
-    private String dynamicPicutre;
+    private String dynamicPicture;
 
-    private Integer scenicSpot;
+    private String scenicSpotIds;
 
     private Date createtime;
 
@@ -49,20 +49,20 @@ public class UserDynamic {
         this.dynamicContent = dynamicContent == null ? null : dynamicContent.trim();
     }
 
-    public String getDynamicPicutre() {
-        return dynamicPicutre;
+    public String getDynamicPicture() {
+        return dynamicPicture;
     }
 
-    public void setDynamicPicutre(String dynamicPicutre) {
-        this.dynamicPicutre = dynamicPicutre == null ? null : dynamicPicutre.trim();
+    public void setDynamicPicture(String dynamicPicture) {
+        this.dynamicPicture = dynamicPicture == null ? null : dynamicPicture.trim();
     }
 
-    public Integer getScenicSpot() {
-        return scenicSpot;
+    public String getScenicSpotIds() {
+        return scenicSpotIds;
     }
 
-    public void setScenicSpot(Integer scenicSpot) {
-        this.scenicSpot = scenicSpot;
+    public void setScenicSpotIds(String scenicSpotIds) {
+        this.scenicSpotIds = scenicSpotIds == null ? null : scenicSpotIds.trim();
     }
 
     public Date getCreatetime() {

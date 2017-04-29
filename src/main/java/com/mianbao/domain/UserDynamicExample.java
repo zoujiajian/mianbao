@@ -365,133 +365,143 @@ public class UserDynamicExample {
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreIsNull() {
-            addCriterion("dynamic_picutre is null");
+        public Criteria andDynamicPictureIsNull() {
+            addCriterion("dynamic_picture is null");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreIsNotNull() {
-            addCriterion("dynamic_picutre is not null");
+        public Criteria andDynamicPictureIsNotNull() {
+            addCriterion("dynamic_picture is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreEqualTo(String value) {
-            addCriterion("dynamic_picutre =", value, "dynamicPicutre");
+        public Criteria andDynamicPictureEqualTo(String value) {
+            addCriterion("dynamic_picture =", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreNotEqualTo(String value) {
-            addCriterion("dynamic_picutre <>", value, "dynamicPicutre");
+        public Criteria andDynamicPictureNotEqualTo(String value) {
+            addCriterion("dynamic_picture <>", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreGreaterThan(String value) {
-            addCriterion("dynamic_picutre >", value, "dynamicPicutre");
+        public Criteria andDynamicPictureGreaterThan(String value) {
+            addCriterion("dynamic_picture >", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreGreaterThanOrEqualTo(String value) {
-            addCriterion("dynamic_picutre >=", value, "dynamicPicutre");
+        public Criteria andDynamicPictureGreaterThanOrEqualTo(String value) {
+            addCriterion("dynamic_picture >=", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreLessThan(String value) {
-            addCriterion("dynamic_picutre <", value, "dynamicPicutre");
+        public Criteria andDynamicPictureLessThan(String value) {
+            addCriterion("dynamic_picture <", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreLessThanOrEqualTo(String value) {
-            addCriterion("dynamic_picutre <=", value, "dynamicPicutre");
+        public Criteria andDynamicPictureLessThanOrEqualTo(String value) {
+            addCriterion("dynamic_picture <=", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreLike(String value) {
-            addCriterion("dynamic_picutre like", value, "dynamicPicutre");
+        public Criteria andDynamicPictureLike(String value) {
+            addCriterion("dynamic_picture like", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreNotLike(String value) {
-            addCriterion("dynamic_picutre not like", value, "dynamicPicutre");
+        public Criteria andDynamicPictureNotLike(String value) {
+            addCriterion("dynamic_picture not like", value, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreIn(List<String> values) {
-            addCriterion("dynamic_picutre in", values, "dynamicPicutre");
+        public Criteria andDynamicPictureIn(List<String> values) {
+            addCriterion("dynamic_picture in", values, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreNotIn(List<String> values) {
-            addCriterion("dynamic_picutre not in", values, "dynamicPicutre");
+        public Criteria andDynamicPictureNotIn(List<String> values) {
+            addCriterion("dynamic_picture not in", values, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreBetween(String value1, String value2) {
-            addCriterion("dynamic_picutre between", value1, value2, "dynamicPicutre");
+        public Criteria andDynamicPictureBetween(String value1, String value2) {
+            addCriterion("dynamic_picture between", value1, value2, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicPicutreNotBetween(String value1, String value2) {
-            addCriterion("dynamic_picutre not between", value1, value2, "dynamicPicutre");
+        public Criteria andDynamicPictureNotBetween(String value1, String value2) {
+            addCriterion("dynamic_picture not between", value1, value2, "dynamicPicture");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIsNull() {
-            addCriterion("scenic_spot is null");
+        public Criteria andScenicSpotIdsIsNull() {
+            addCriterion("scenic_spot_ids is null");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIsNotNull() {
-            addCriterion("scenic_spot is not null");
+        public Criteria andScenicSpotIdsIsNotNull() {
+            addCriterion("scenic_spot_ids is not null");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotEqualTo(Integer value) {
-            addCriterion("scenic_spot =", value, "scenicSpot");
+        public Criteria andScenicSpotIdsEqualTo(String value) {
+            addCriterion("scenic_spot_ids =", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotNotEqualTo(Integer value) {
-            addCriterion("scenic_spot <>", value, "scenicSpot");
+        public Criteria andScenicSpotIdsNotEqualTo(String value) {
+            addCriterion("scenic_spot_ids <>", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotGreaterThan(Integer value) {
-            addCriterion("scenic_spot >", value, "scenicSpot");
+        public Criteria andScenicSpotIdsGreaterThan(String value) {
+            addCriterion("scenic_spot_ids >", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotGreaterThanOrEqualTo(Integer value) {
-            addCriterion("scenic_spot >=", value, "scenicSpot");
+        public Criteria andScenicSpotIdsGreaterThanOrEqualTo(String value) {
+            addCriterion("scenic_spot_ids >=", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotLessThan(Integer value) {
-            addCriterion("scenic_spot <", value, "scenicSpot");
+        public Criteria andScenicSpotIdsLessThan(String value) {
+            addCriterion("scenic_spot_ids <", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotLessThanOrEqualTo(Integer value) {
-            addCriterion("scenic_spot <=", value, "scenicSpot");
+        public Criteria andScenicSpotIdsLessThanOrEqualTo(String value) {
+            addCriterion("scenic_spot_ids <=", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotIn(List<Integer> values) {
-            addCriterion("scenic_spot in", values, "scenicSpot");
+        public Criteria andScenicSpotIdsLike(String value) {
+            addCriterion("scenic_spot_ids like", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotNotIn(List<Integer> values) {
-            addCriterion("scenic_spot not in", values, "scenicSpot");
+        public Criteria andScenicSpotIdsNotLike(String value) {
+            addCriterion("scenic_spot_ids not like", value, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotBetween(Integer value1, Integer value2) {
-            addCriterion("scenic_spot between", value1, value2, "scenicSpot");
+        public Criteria andScenicSpotIdsIn(List<String> values) {
+            addCriterion("scenic_spot_ids in", values, "scenicSpotIds");
             return (Criteria) this;
         }
 
-        public Criteria andScenicSpotNotBetween(Integer value1, Integer value2) {
-            addCriterion("scenic_spot not between", value1, value2, "scenicSpot");
+        public Criteria andScenicSpotIdsNotIn(List<String> values) {
+            addCriterion("scenic_spot_ids not in", values, "scenicSpotIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicSpotIdsBetween(String value1, String value2) {
+            addCriterion("scenic_spot_ids between", value1, value2, "scenicSpotIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicSpotIdsNotBetween(String value1, String value2) {
+            addCriterion("scenic_spot_ids not between", value1, value2, "scenicSpotIds");
             return (Criteria) this;
         }
 
