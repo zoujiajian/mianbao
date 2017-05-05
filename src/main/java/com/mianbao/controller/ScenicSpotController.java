@@ -1,5 +1,6 @@
 package com.mianbao.controller;
 
+import com.google.common.collect.Maps;
 import com.mianbao.common.Page;
 import com.mianbao.common.Result;
 import com.mianbao.enums.Response;
@@ -7,6 +8,7 @@ import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.ScenicSpotService;
 import com.mianbao.service.TokenParseService;
 import com.mianbao.vo.ScenicSpotVo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * Created by zoujiajian on 2017-4-28.
@@ -130,10 +133,22 @@ public class ScenicSpotController {
     @RequestMapping(value = "center",method = RequestMethod.GET)
     public String center( @RequestParam(name = "pageNo") int pageNo,
                           @RequestParam(name = "pageSize") int pageSize,
-                          @RequestParam(name = "condition") String condition,
+                          @RequestParam(name = "condition",required = false) String condition,
                           Model model){
+        Map<String,Object> params = Maps.newHashMap();
+        params.put("pageNo",pageNo);
+        params.put("pageSize",pageSize);
+        if(StringUtils.isNotEmpty(condition)){
+            params.put("condition",condition);
+        }
 
-        return null;
+        Result result = scenicSpotService.selectAllScenicInfo(params);
+        if(result.isSuccess()){
+            model.addAttribute("data",result.getData());
+        }else{
+            model.addAttribute("data",null);
+        }
+        return "scenicSpotCenter";
     }
 
     @RequestMapping(value = "revoke",method = RequestMethod.GET)

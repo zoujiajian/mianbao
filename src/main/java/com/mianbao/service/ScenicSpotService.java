@@ -3,6 +3,7 @@ package com.mianbao.service;
 import com.mianbao.common.Result;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created by zoujiajian on 2017-4-28.
@@ -36,4 +37,7 @@ public interface ScenicSpotService {
 
     //取消收藏
     Result revoke(int userId,int scenicId);
+
+    //分页查询所有的景点信息
+    Result selectAllScenicInfo(Map<String,Object> params);
 }

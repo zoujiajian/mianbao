@@ -29,7 +29,8 @@ public enum Response {
     SCENIC_SPOT_CONTAINS_COLLECTION(100018,"景点已经收藏"),
     SELECT_SCENIC_SPOT_LIST_FAIL(100019,"查询收藏列表失败"),
     SEARCH_SCENIC_SPOT_FAIL(100020,"搜索景点失败"),
-    REVOKE_COLLECTION_FAIL(100021,"取消收藏失败");
+    REVOKE_COLLECTION_FAIL(100021,"取消收藏失败"),
+    SELECT_SCENIC_SPOT_INFO_FAIL(100022,"查询景点信息失败");
 
     private int code;
 

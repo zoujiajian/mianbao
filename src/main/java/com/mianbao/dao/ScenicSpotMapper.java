@@ -36,4 +36,8 @@ public interface ScenicSpotMapper {
     int updateByPrimaryKey(ScenicSpot record);
 
     List<ScenicSpot> selectTopScenicSpot(@Param("limit") Integer limit,@Param("offset") Integer offset);
+
+    List<ScenicSpot> selectTopScenicSpotWithCondition(@Param("condition") String condition,@Param("limit") Integer limit,@Param("offset") Integer offset);
+
+    long countAll();
 }

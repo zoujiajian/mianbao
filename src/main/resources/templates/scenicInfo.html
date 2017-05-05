@@ -143,7 +143,7 @@
                         <h4 class="widget-title">景点相关动态</h4>
                     </div>
                 </div>
-                <div class="row projects-holder">
+                <div class="row projects-holder" th:if="${data != null}">
                     <div class="col-md-4 col-sm-6" th:each="dynamic:${data.page.rows}">
                         <div class="project-item">
                             <img th:src="${dynamic.dynamicPicture}" alt="" width="290px" height="220px"/>

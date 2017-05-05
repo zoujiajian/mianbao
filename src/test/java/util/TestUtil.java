@@ -1,6 +1,8 @@
 package util;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
+import com.mianbao.common.Result;
 import com.mianbao.dao.DynamicEvaluateMapper;
 import com.mianbao.domain.DynamicEvaluate;
 import com.mianbao.domain.DynamicEvaluateExample;
@@ -19,6 +21,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zoujiajian on 2017-3-18.
@@ -97,6 +100,10 @@ public class TestUtil {
 
     @Test
     public void testScenicInfo(){
-        System.out.println(JSON.toJSONString(scenicSpotService.collectionSearch("景点",1,1,10)));
+        Map<String,Object> params = Maps.newHashMap();
+        params.put("pageNo",1);
+        params.put("pageSize",10);
+
+        System.out.println(JSON.toJSONString(scenicSpotService.selectAllScenicInfo(params)));
     }
 }

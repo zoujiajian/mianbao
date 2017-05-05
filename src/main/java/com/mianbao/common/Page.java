@@ -26,7 +26,7 @@ public class Page<T> {
 
     private Integer pageSize=20;		//每页显示条数
 
-    private List<T> rows = Lists.newArrayList();				//数据
+    private List<T> rows;				//数据
 
     public Integer getPage() {
         return page;
@@ -93,7 +93,7 @@ public class Page<T> {
 
 
     public void setRows(List<T> rows) {
-        this.rows.addAll(rows);
+        this.rows=rows;
     }
 
 

@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>收藏景点</title>
+    <title>景点中心</title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width"/>
 
@@ -31,7 +31,7 @@
                             <a th:href="@{/mianbao/travel/index}">首页</a>
                         </li>
                         <li>
-                            <a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=3)}">景点中心</a>
+                            <a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}">景点中心</a>
                         </li>
                         <li>
                             <a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}">个人中心</a>
@@ -49,10 +49,10 @@
             </div>
 
             <div class="clean-searchbox">
-                <form action="/mianbao/travel/scenic/collectionInfoSearch" method="get" accept-charset="utf-8">
+                <form action="/mianbao/travel/scenic/center" method="get" accept-charset="utf-8">
                     <input class="searchfield" name="condition" type="text" placeholder="Search"/>
                     <input type="hidden" name="pageNo" value="1"/>
-                    <input type="hidden" name="pageSize" value="10"/>
+                    <input type="hidden" name="pageSize" value="6"/>
                     <button class="searchbutton" type="submit"  id="searchbox">
                         <i class="fa fa-search"></i>
                     </button>
@@ -66,7 +66,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 blog-main">
-                <div class="row">
+                <div class="row" th:if="${data != null}">
                     <div class="col-md-6 col-sm-6" th:each="scenic:${data.rows}">
                         <article class=" blog-teaser">
                             <header>
@@ -78,20 +78,20 @@
                         </article>
                     </div>
                 </div>
-                <div class="paging">
+                <div class="paging" th:if="${data != null}">
                     <div align="center" style="" th:if="${not (data.pagerNum eq 0)}">
-                        <a th:if="${not (data.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/collectionInfo'}(pageNo=${data.page -1},pageSize=${data.pageSize})}">前一页</a>
+                        <a th:if="${not (data.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${data.page -1},pageSize=${data.pageSize})}">前一页</a>
                         <a th:if="${data.page eq 1}" href="javascript:void(0);">前一页</a>
                         <p th:each="pageNo : ${#numbers.sequence(1, data.pagerNum)}">
                             <a th:if="${data.page eq pageNo}" href="javascript:void(0);">
                                 <span th:text="${pageNo}"></span>
                             </a>
 
-                            <a th:if="${not (data.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/collectionInfo'}(pageNo=${pageNo},pageSize=${data.pageSize})}">
+                            <a th:if="${not (data.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${pageNo},pageSize=${data.pageSize})}">
                                 <span th:text="${pageNo}"></span>
                             </a>
                         </p>
-                        <a th:if="${not (data.page eq data.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/collectionInfo'}(pageNo=${data.page+1},size=${data.pageSize})}">下一页</a>
+                        <a th:if="${not (data.page eq data.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${data.page+1},size=${data.pageSize})}">下一页</a>
                         <a th:if="${data.page eq data.pagerNum}" href="javascript:void(0);">下一页</a>
                     </div>
                 </div>

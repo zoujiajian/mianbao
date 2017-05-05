@@ -345,6 +345,49 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
         return Result.getDefaultError(Response.REVOKE_COLLECTION_FAIL.getMsg());
     }
 
+    @Override
+    public Result selectAllScenicInfo(Map<String, Object> params) {
+
+        if(params == null){
+            return Result.getDefaultError(Response.SELECT_SCENIC_SPOT_INFO_FAIL.getMsg());
+        }
+
+        Page<ScenicSpotSimpleVo> page = new Page<>();
+        page.setPage(Integer.valueOf(params.get("pageNo").toString()));
+        page.setPageSize(Integer.valueOf(params.get("pageSize").toString()));
+
+        long count;
+        List<ScenicSpot> scenicSpotList;
+        if(params.containsKey("condition")){
+
+            String condition = params.get("condition").toString();
+            ScenicSpotExample scenicSpotExample = new ScenicSpotExample();
+            String likeScenicSpotName = "%" + condition + "%";
+            scenicSpotExample.createCriteria().andScenicSpotNameLike(likeScenicSpotName);
+
+            count = scenicSpotMapper.countByExample(scenicSpotExample);
+            if(count == 0){
+                return Result.getDefaultSuccess(null);
+            }
+            scenicSpotList = scenicSpotMapper.selectTopScenicSpotWithCondition(likeScenicSpotName,
+                    page.getStartRecord(),page.getPageSize());
+
+        }else{
+            count = scenicSpotMapper.countAll();
+            if(count == 0){
+                return Result.getDefaultSuccess(null);
+            }
+            scenicSpotList = scenicSpotMapper.selectTopScenicSpot(page.getStartRecord(),page.getPageSize());
+        }
+
+        List<ScenicSpotSimpleVo> spotSimpleVoList = scenicSpotToScenicSimpleVo(scenicSpotList);
+        page.setRows(spotSimpleVoList);
+        page.setRecords(count);
+
+        return Result.getDefaultSuccess(page);
+    }
+
+
     private List<String> getScenicSpotAllPicture(ScenicSpot scenicSpot){
         List<String> picture = Lists.newArrayList();
         String[] pictureAddress = scenicSpot.getScenicSpotPicutre().split(",");
@@ -352,5 +395,21 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
             picture.add(PictureUtil.addHttpHost(address));
         }
         return picture;
+    }
+
+    private List<ScenicSpotSimpleVo> scenicSpotToScenicSimpleVo(List<ScenicSpot> scenicSpotList){
+
+        List<ScenicSpotSimpleVo> spotSimpleVoList = Lists.newArrayList();
+        if(CollectionUtils.isNotEmpty(scenicSpotList)){
+            for(ScenicSpot scenicSpot : scenicSpotList){
+                ScenicSpotSimpleVo scenicSpotSimpleVo = new ScenicSpotSimpleVo();
+
+                BeanUtils.copyProperties(scenicSpot,scenicSpotSimpleVo);
+                scenicSpotSimpleVo.setScenicSpotPicture(getScenicSpotAllPicture(scenicSpot).get(0));
+                spotSimpleVoList.add(scenicSpotSimpleVo);
+            }
+        }
+
+        return spotSimpleVoList;
     }
 }
