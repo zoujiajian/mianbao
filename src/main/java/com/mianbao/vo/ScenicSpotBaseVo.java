@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * Created by zoujiajian on 2017-4-29.
  */
@@ -18,6 +20,6 @@ public class ScenicSpotBaseVo {
 
     private String scenicSpotInfo;
 
-    private String scenicSpotPicutre;
+    private List<String> scenicSpotPicture;
 
 }

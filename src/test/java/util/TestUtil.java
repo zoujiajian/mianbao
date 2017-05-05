@@ -7,6 +7,7 @@ import com.mianbao.domain.DynamicEvaluateExample;
 import com.mianbao.service.DynamicService;
 import com.mianbao.service.PictureService;
 import com.mianbao.service.RedisService;
+import com.mianbao.service.ScenicSpotService;
 import com.mianbao.util.DbConnectionUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +38,9 @@ public class TestUtil {
 
     @Resource
     private DynamicService dynamicService;
+
+    @Resource
+    private ScenicSpotService scenicSpotService;
 
     @Test
     public void testRedis() throws SQLException {
@@ -88,6 +92,11 @@ public class TestUtil {
 
     @Test
     public void testDynamicAll(){
-        System.out.println(JSON.toJSONString(dynamicService.getUserAllDynamic(1)));
+        System.out.println(JSON.toJSONString(dynamicService.getUserAllDynamic(1,2,3)));
+    }
+
+    @Test
+    public void testScenicInfo(){
+        System.out.println(JSON.toJSONString(scenicSpotService.collectionSearch("景点",1,1,10)));
     }
 }

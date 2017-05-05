@@ -241,4 +241,22 @@
       createTime = #{createtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectDynamicLimit" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_user_dynamic
+    where user_id = #{userId} order by createTime desc limit #{limit},#{offset}
+  </select>
+
+  <select id="selectAllDynamicCount" resultType="java.lang.Long">
+      select count(1) from tb_user_dynamic;
+  </select>
+
+  <select id="selectAllDynamicLimit" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_user_dynamic order by createTime desc
+    limit #{limit},#{offset}
+  </select>
 </mapper>

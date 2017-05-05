@@ -16,6 +16,8 @@ import java.util.List;
 @ToString
 public class DynamicInfoVo {
 
+    private Integer id;
+
     //点赞信息
     private DynamicLikeVo dynamicLikeVo;
 

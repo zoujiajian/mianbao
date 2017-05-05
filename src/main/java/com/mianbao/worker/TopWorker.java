@@ -45,7 +45,7 @@ public class TopWorker {
     }
 
     //每小时定时清除排行榜capacity之后的数据
-    @Scheduled(cron = "0 0 * * * ? ")
+//    @Scheduled(cron = "0 0 * * * ? ")
     public void work(){
         executors.submit(new Runnable() {
             @Override

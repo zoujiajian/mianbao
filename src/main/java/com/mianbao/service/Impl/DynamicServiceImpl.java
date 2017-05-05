@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mianbao.common.CacheKey;
+import com.mianbao.common.Page;
 import com.mianbao.common.Result;
 import com.mianbao.dao.*;
 import com.mianbao.domain.*;
@@ -20,10 +21,7 @@ import com.mianbao.service.RedisService;
 import com.mianbao.util.BeanUtil;
 import com.mianbao.util.CookieUtil;
 import com.mianbao.util.PictureUtil;
-import com.mianbao.vo.DynamicInfoAndReplyVo;
-import com.mianbao.vo.DynamicInfoVo;
-import com.mianbao.vo.DynamicLikeVo;
-import com.mianbao.vo.DynamicReleaseVo;
+import com.mianbao.vo.*;
 import com.mianbao.worker.TopWorker;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -157,20 +155,6 @@ public class DynamicServiceImpl implements DynamicService{
 
         DynamicInfoVo dynamicInfoVo = getDynamicInfo(userDynamic);
 
-        if(CollectionUtils.isEmpty(dynamicInfoVo.getScenicSpotName())){
-            ScenicSpotExample scenicSpotExample = new ScenicSpotExample();
-            scenicSpotExample.createCriteria().andIdIn(dynamicInfoVo.getScenicSpotIds());
-
-            List<ScenicSpot> scenicSpot = scenicSpotMapper.selectByExample(scenicSpotExample);
-
-            for(ScenicSpot scenic : scenicSpot){
-//                dynamicInfoVo.setScenicSpotName(scenic.getScenicSpotName());
-
-                String scenicSpotKey = CacheKey.SCENIC_SPOT_INFO_PREFIX + "_" + scenic.getId();
-                redisService.addByKey(scenicSpotKey, JSON.toJSONString(scenicSpotKey));
-            }
-        }
-
         Result result = dynamicEvaluateService.getDynamicEvaluateInfo(dynamicId);
         List<DynamicInfoAndReplyVo.Evaluate> evaluateList = Lists.newArrayList();
         if(result.isSuccess() && result.getData() != null){
@@ -185,24 +169,44 @@ public class DynamicServiceImpl implements DynamicService{
     }
 
     @Override
-    public Result getUserAllDynamic(int userId) {
-        if (userId < 0) {
+    public Result getUserAllDynamic(int userId, int pageNo ,int pageSize) {
+        if (userId < 0 || pageNo < 0 || pageSize < 0) {
             throw new BusinessException(Response.USER_NOT_CONTAINS.getMsg(), Response.USER_NOT_CONTAINS.getCode());
         }
 
+        Page<DynamicSimpleVo> page = new Page<>();
         UserDynamicExample userDynamicExample = new UserDynamicExample();
         userDynamicExample.createCriteria().andUserIdEqualTo(userId);
-        List<UserDynamic> userDynamicList = userDynamicMapper.selectByExample(userDynamicExample);
-        List<DynamicInfoVo> resultDynamicList = Lists.newArrayList();
+
+        long count = userDynamicMapper.countByExample(userDynamicExample);
+        page.setRecords(count);
+        page.setPage(pageNo);
+        page.setPageSize(pageSize);
+        List<UserDynamic> userDynamicList = userDynamicMapper.selectDynamicLimit(userId,page.getStartRecord(),page.getPageSize());
+        List<DynamicSimpleVo> resultDynamicList = Lists.newArrayList();
 
         for (UserDynamic userDynamic : userDynamicList) {
-            resultDynamicList.add(getDynamicInfo(userDynamic));
+            resultDynamicList.add(transSimpleVo(getDynamicInfo(userDynamic)));
         }
 
-        return Result.getDefaultSuccess(resultDynamicList);
+        page.setRows(resultDynamicList);
+
+        return Result.getDefaultSuccess(page);
     }
 
-    private DynamicInfoVo getDynamicInfo(UserDynamic userDynamic){
+    public static DynamicSimpleVo transSimpleVo(DynamicInfoVo dynamicInfoVo){
+
+        DynamicSimpleVo dynamicSimpleVo = new DynamicSimpleVo();
+        dynamicSimpleVo.setId(dynamicInfoVo.getId());
+        dynamicSimpleVo.setDynamicTitle(dynamicInfoVo.getDynamicTitle());
+        dynamicSimpleVo.setDynamicContent(dynamicInfoVo.getDynamicContent());
+        dynamicSimpleVo.setDynamicPicture(dynamicInfoVo.getDynamicPicture().get(0));
+
+        return dynamicSimpleVo;
+    }
+
+
+    public DynamicInfoVo getDynamicInfo(UserDynamic userDynamic){
 
         String scenicIds = userDynamic.getScenicSpotIds();
         String[] array = scenicIds.split(",");
@@ -308,5 +312,45 @@ public class DynamicServiceImpl implements DynamicService{
         dynamicLikeVo.setTotalCount(likeUserList.size());
 
         return Result.getDefaultSuccess(dynamicLikeVo);
+    }
+
+    @Override
+    public Result getAllDynamicSimpleInfo(int pageNo, int pageSize) {
+
+        if(pageNo < 0 || pageSize < 0){
+            throw new BusinessException(Response.USER_NOT_CONTAINS.getMsg(), Response.USER_NOT_CONTAINS.getCode());
+        }
+
+        Page<DynamicSimpleVo> page = new Page<>();
+
+        long count = userDynamicMapper.selectAllDynamicCount();
+        page.setRecords(count);
+        page.setPage(pageNo);
+        page.setPageSize(pageSize);
+
+        List<UserDynamic> userDynamicList = userDynamicMapper.selectAllDynamicLimit(page.getStartRecord(),page.getPageSize());
+        List<DynamicSimpleVo> resultDynamicList = Lists.newArrayList();
+
+        for (UserDynamic userDynamic : userDynamicList) {
+            resultDynamicList.add(transSimpleVo(getDynamicInfo(userDynamic)));
+        }
+
+        page.setRows(resultDynamicList);
+
+        return Result.getDefaultSuccess(page);
+    }
+
+    @Override
+    public Result indexSimpleInfo() {
+
+        List<UserDynamic> userDynamicList = userDynamicMapper.selectAllDynamicLimit(0,3);
+
+        List<DynamicSimpleVo> resultDynamicList = Lists.newArrayList();
+
+        for (UserDynamic userDynamic : userDynamicList) {
+            resultDynamicList.add(transSimpleVo(getDynamicInfo(userDynamic)));
+        }
+
+        return Result.getDefaultSuccess(resultDynamicList);
     }
 }

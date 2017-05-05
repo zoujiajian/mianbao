@@ -194,4 +194,28 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectScenicSpotWithLimit" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_user_like
+    where user_id = #{userId}
+    order by create_time desc
+    limit #{limit},#{offset}
+  </select>
+
+  <select id="selectScenicSpotWithLimitAndCondi" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_user_like
+    where user_id = #{userId}
+    <if test="scenicIds != null">
+      and scenic_spot_id in
+      <foreach close=")" collection="scenicIds" item="id" open="(" separator=",">
+        #{id}
+      </foreach>
+    </if>
+    order by create_time desc
+    limit #{limit},#{offset}
+  </select>
 </mapper>

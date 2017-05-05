@@ -206,4 +206,13 @@
     </foreach>
   </insert>
 
+  <select id="selectWithLimit" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_scenic_spot_dynamic
+    where scenic_spot_id=#{scenicId}
+    order by create_time desc
+    limit #{limit},#{offset}
+  </select>
+
 </mapper>

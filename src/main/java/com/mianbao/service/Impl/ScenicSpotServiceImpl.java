@@ -3,18 +3,20 @@ package com.mianbao.service.Impl;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mianbao.common.CacheKey;
+import com.mianbao.common.Page;
 import com.mianbao.common.Result;
-import com.mianbao.dao.ScenicSpotMapper;
-import com.mianbao.domain.ScenicSpot;
-import com.mianbao.domain.ScenicSpotExample;
+import com.mianbao.dao.*;
+import com.mianbao.domain.*;
 import com.mianbao.enums.Response;
 import com.mianbao.pojo.user.UserLogin;
-import com.mianbao.service.FileLoadService;
-import com.mianbao.service.RedisService;
-import com.mianbao.service.ScenicSpotService;
+import com.mianbao.service.*;
 import com.mianbao.util.BeanUtil;
+import com.mianbao.util.PictureUtil;
+import com.mianbao.vo.DynamicSimpleVo;
 import com.mianbao.vo.ScenicSpotBaseVo;
+import com.mianbao.vo.ScenicSpotSimpleVo;
 import com.mianbao.vo.ScenicSpotVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * Created by zoujiajian on 2017-4-28.
  */
@@ -36,7 +40,22 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
     private static final Logger logger = LoggerFactory.getLogger(ScenicSpotServiceImpl.class);
 
     @Resource
+    private DynamicService dynamicService;
+
+    @Resource
     private ScenicSpotMapper scenicSpotMapper;
+
+    @Resource
+    private ScenicSpotDynamicMapper dynamicMapper;
+
+    @Resource
+    private UserDynamicMapper userDynamicMapper;
+
+    @Resource
+    private UserInfoMapper userInfoMapper;
+
+    @Resource
+    private UserLikeMapper userLikeMapper;
 
     @Resource
     private FileLoadService fileLoadService;
@@ -115,5 +134,223 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
         }
 
         return Result.getDefaultSuccess(baseVoLists);
+    }
+
+    @Override
+    public Result indexScenicSpot() {
+
+        List<ScenicSpot> scenicSpotList = scenicSpotMapper.selectTopScenicSpot(0,3);
+        List<ScenicSpotSimpleVo> spotSimpleVoList = Lists.newArrayList();
+
+        if(CollectionUtils.isNotEmpty(scenicSpotList)){
+            for(ScenicSpot scenicSpot : scenicSpotList){
+               ScenicSpotSimpleVo scenicSpotSimpleVo = new ScenicSpotSimpleVo();
+
+               BeanUtils.copyProperties(scenicSpot,scenicSpotSimpleVo);
+               scenicSpotSimpleVo.setScenicSpotPicture(getScenicSpotAllPicture(scenicSpot).get(0));
+               spotSimpleVoList.add(scenicSpotSimpleVo);
+            }
+        }
+        return Result.getDefaultSuccess(spotSimpleVoList);
+    }
+
+    @Override
+    public Result getScenicSpotInfoWithDynamic(int scenicId,int pageNo,int pageSize) {
+
+        if(scenicId < 0){
+            return Result.getDefaultError(Response.SCENIC_SPOT_NOT_CONTAINS.getMsg());
+        }
+        ScenicSpot scenicSpot = scenicSpotMapper.selectByPrimaryKey(scenicId);
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(scenicSpot.getCreateUser());
+
+        ScenicSpotDynamicExample dynamicExample = new ScenicSpotDynamicExample();
+        dynamicExample.createCriteria().andScenicSpotIdEqualTo(scenicId);
+        long count = dynamicMapper.countByExample(dynamicExample);
+
+        Page<DynamicSimpleVo> page = new Page<>();
+        page.setPage(pageNo);
+        page.setPageSize(pageSize);
+        page.setRecords(count);
+
+        List<ScenicSpotDynamic> scenicSpotDynamicList = dynamicMapper.selectWithLimit(scenicId,page.getStartRecord(),page.getPageSize());
+        List<Integer> dynamicIds = Lists.newArrayList();
+        for(ScenicSpotDynamic dynamic :scenicSpotDynamicList){
+            dynamicIds.add(dynamic.getDynamicId());
+        }
+        UserDynamicExample userDynamicExample = new UserDynamicExample();
+        userDynamicExample.createCriteria().andIdIn(dynamicIds);
+        List<UserDynamic> userDynamicList = userDynamicMapper.selectByExample(userDynamicExample);
+
+        List<DynamicSimpleVo> resultDynamicList = Lists.newArrayList();
+        for(UserDynamic userDynamic : userDynamicList){
+            resultDynamicList.add(DynamicServiceImpl.transSimpleVo(dynamicService.getDynamicInfo(userDynamic)));
+        }
+        page.setRows(resultDynamicList);
+
+        List<String> address = getScenicSpotAllPicture(scenicSpot);
+        ScenicSpotVo scenicSpotVo = new ScenicSpotVo();
+        scenicSpotVo.setId(scenicSpot.getId());
+        scenicSpotVo.setScenicSpotName(scenicSpot.getScenicSpotName());
+        scenicSpotVo.setScenicSpotInfo(scenicSpot.getScenicSpotInfo());
+        scenicSpotVo.setScenicCreateTime(scenicSpot.getScenicCreatetime());
+        scenicSpotVo.setScenicSpotPicture(address);
+        scenicSpotVo.setCreateUser(userInfo.getUserName());
+        scenicSpotVo.setPage(page);
+
+        return Result.getDefaultSuccess(scenicSpotVo);
+    }
+
+    @Override
+    public Result collectionScenicSpot(int scenicId, int userId) {
+        if(scenicId < 0 || userId < 0){
+            return Result.getDefaultError(Response.SCENIC_SPOT_COLLECTION.getMsg());
+        }
+
+        UserLikeExample userLikeExample = new UserLikeExample();
+        userLikeExample.createCriteria().andScenicSpotIdEqualTo(scenicId).andUserIdEqualTo(userId);
+        List<UserLike> userLikes = userLikeMapper.selectByExample(userLikeExample);
+        if(CollectionUtils.isNotEmpty(userLikes)){
+            return Result.getDefaultError(Response.SCENIC_SPOT_CONTAINS_COLLECTION.getMsg());
+        }
+
+        UserLike userLike = new UserLike();
+        userLike.setScenicSpotId(scenicId);
+        userLike.setUserId(userId);
+        int record = userLikeMapper.insert(userLike);
+        if(record > 0){
+            return Result.getDefaultSuccess(null);
+        }
+
+        return Result.getDefaultError(Response.SCENIC_SPOT_COLLECTION.getMsg());
+    }
+
+    @Override
+    public Result collectionWithLimit(int userId, int pageNo, int pageSize) {
+        if(userId < 0|| pageNo <0 || pageSize < 0){
+            return Result.getDefaultError(Response.SELECT_SCENIC_SPOT_LIST_FAIL.getMsg());
+        }
+
+        UserLikeExample userLikeExample = new UserLikeExample();
+        userLikeExample.createCriteria().andUserIdEqualTo(userId);
+        long count = userLikeMapper.countByExample(userLikeExample);
+        if(count <= 0){
+            return Result.getDefaultSuccess(null);
+        }
+
+        Page<ScenicSpotSimpleVo> page = new Page<>();
+        page.setRecords(count);
+        page.setPageSize(pageSize);
+        page.setPage(pageNo);
+        List<UserLike> userLikeList = userLikeMapper.selectScenicSpotWithLimit(userId,page.getStartRecord(),pageSize);
+        List<Integer> scenicIds = Lists.newArrayList();
+        for(UserLike userLike : userLikeList){
+            scenicIds.add(userLike.getScenicSpotId());
+        }
+
+        ScenicSpotExample scenicSpotExample = new ScenicSpotExample();
+        scenicSpotExample.createCriteria().andIdIn(scenicIds);
+        List<ScenicSpot>  scenicSpotList = scenicSpotMapper.selectByExample(scenicSpotExample);
+        if(CollectionUtils.isEmpty(scenicSpotList)){
+            return Result.getDefaultSuccess(null);
+        }
+
+        List<ScenicSpotSimpleVo> spotSimpleVoList = Lists.newArrayList();
+        if(CollectionUtils.isNotEmpty(scenicSpotList)){
+            for(ScenicSpot scenicSpot : scenicSpotList){
+                ScenicSpotSimpleVo scenicSpotSimpleVo = new ScenicSpotSimpleVo();
+
+                BeanUtils.copyProperties(scenicSpot,scenicSpotSimpleVo);
+                scenicSpotSimpleVo.setScenicSpotPicture(getScenicSpotAllPicture(scenicSpot).get(0));
+                spotSimpleVoList.add(scenicSpotSimpleVo);
+            }
+        }
+        page.setRows(spotSimpleVoList);
+
+        return Result.getDefaultSuccess(page);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Result collectionSearch(String condition, int userId, int pageNo, int pageSize) {
+        if(userId < 0|| pageNo <0 || pageSize < 0 || StringUtils.isEmpty(condition)){
+            return Result.getDefaultError(Response.SEARCH_SCENIC_SPOT_FAIL.getMsg());
+        }
+
+        Result result = findByName(condition);
+        if(!result.isSuccess()){
+            return Result.getDefaultError(result.getErrorMsg());
+        }
+        List<ScenicSpotBaseVo> list = (List<ScenicSpotBaseVo>)result.getData();
+        List<Integer> scenicIds = Lists.newArrayList();
+        for(ScenicSpotBaseVo scenicSpotBaseVo : list){
+            scenicIds.add(scenicSpotBaseVo.getId());
+        }
+
+        UserLikeExample userLikeExample = new UserLikeExample();
+        userLikeExample.createCriteria().andUserIdEqualTo(userId).andScenicSpotIdIn(scenicIds);
+        long count = userLikeMapper.countByExample(userLikeExample);
+        if(count <=0){
+            return Result.getDefaultSuccess(null);
+        }
+
+        Page<ScenicSpotSimpleVo> page = new Page<>();
+        page.setRecords(count);
+        page.setPageSize(pageSize);
+        page.setPage(pageNo);
+        List<Integer> ids = Lists.newArrayList();
+        List<UserLike> userLikeList = userLikeMapper.selectScenicSpotWithLimitAndCondi(scenicIds,userId,page.getStartRecord(),pageSize);
+        if(CollectionUtils.isEmpty(userLikeList)){
+            return Result.getDefaultSuccess(null);
+        }
+
+        for(UserLike userLike : userLikeList){
+            ids.add(userLike.getScenicSpotId());
+        }
+        ScenicSpotExample scenicSpotExample = new ScenicSpotExample();
+        scenicSpotExample.createCriteria().andIdIn(ids);
+        List<ScenicSpot>  scenicSpotList = scenicSpotMapper.selectByExample(scenicSpotExample);
+        if(CollectionUtils.isEmpty(scenicSpotList)){
+            return Result.getDefaultSuccess(null);
+        }
+        List<ScenicSpotSimpleVo> spotSimpleVoList = Lists.newArrayList();
+        if(CollectionUtils.isNotEmpty(scenicSpotList)){
+            for(ScenicSpot scenicSpot : scenicSpotList){
+                ScenicSpotSimpleVo scenicSpotSimpleVo = new ScenicSpotSimpleVo();
+
+                BeanUtils.copyProperties(scenicSpot,scenicSpotSimpleVo);
+                scenicSpotSimpleVo.setScenicSpotPicture(getScenicSpotAllPicture(scenicSpot).get(0));
+                spotSimpleVoList.add(scenicSpotSimpleVo);
+            }
+        }
+        page.setRows(spotSimpleVoList);
+
+        return Result.getDefaultSuccess(page);
+    }
+
+    @Override
+    public Result revoke(int userId, int scenicId) {
+
+        if(userId < 0 || scenicId <0){
+            return Result.getDefaultError(Response.REVOKE_COLLECTION_FAIL.getMsg());
+        }
+
+        UserLikeExample userLikeExample = new UserLikeExample();
+        userLikeExample.createCriteria().andUserIdEqualTo(userId).andScenicSpotIdEqualTo(scenicId);
+
+        int record = userLikeMapper.deleteByExample(userLikeExample);
+        if(record > 0){
+            return Result.getDefaultSuccess(null);
+        }
+
+        return Result.getDefaultError(Response.REVOKE_COLLECTION_FAIL.getMsg());
+    }
+
+    private List<String> getScenicSpotAllPicture(ScenicSpot scenicSpot){
+        List<String> picture = Lists.newArrayList();
+        String[] pictureAddress = scenicSpot.getScenicSpotPicutre().split(",");
+        for(String address : pictureAddress){
+            picture.add(PictureUtil.addHttpHost(address));
+        }
+        return picture;
     }
 }

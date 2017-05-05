@@ -8,55 +8,48 @@
 	<script th:src="@{/js/jquery.cookie.js}"></script>
 	<script th:src="@{/js/common.js}"></script>
 	<script th:src="@{/js/responsiveslides.min.js}"></script>
-	<script>
+	<script th:inline="javascript">
 		$(function(){
-			var url = "/mianbao/travel/dynamic/release";
-			get(url,null,function(data){
-				if(data.success){
 
+			var userName = $.cookie("user");
+			if(userName != ""){
+				if(typeof(userName) != "undefined"){
+					$("#status").html('<a th:href="@{/mianbao/travel/user/userInfo}">欢迎您: ' + userName +"</a>");
 				}
-			});
+			}
 		});
 	</script>
 </head>
 	<body>
-		<!---start-wrap---->
-			<!---start-header---->
 			<div class="header">
 				<div class="wrap">
-				<!---start-logo---->
 				<div class="logo">
-					<a href="index.html"><img src="images/logo.png" title="logo" /></a>
+					<a href="index.html"><img th:src="@{/images/logo.png}" title="logo" /></a>
 				</div>
-				<!---End-logo---->
-				<!---start-top-nav---->
 				<div class="top-nav">
 					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li class="active"><a href="about.html">About</a></li>
-						<li><a href="services.html">Services</a></li>
-						<li><a href="plans.html">plans</a></li>
-						<li><a href="contact.html">Contact</a></li>
+						<li><a th:href="@{/mianbao/travel/index}">首页</a></li>
+						<li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}">个人中心</a></li>
+						<li><a th:href="@{/mianbao/travel/scenicSopt/center(pageNo=1,pageSize=3)}">景点中心</a></li>
+						<li><a th:href="@{/mianbao/travel/user/release}">发表动态</a></li>
+						<li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
+						<a th:href="@{/mianbao/travel/user/login}">修改密码</a>
 					</ul>
 				</div>
 				<div class="clear"> </div>
-				<!---End-top-nav---->
 			</div>
-			<!---End-header---->
 		</div>
-		<!---End-wrap---->
 		<div class="clear"> </div>
-		<!---start-content---->
 		<div class="content">
 			<div class="wrap">
 				<div class="about-us">
 					<div class="about-header">
-						<h5> </h5><h3>About us</h3><h5> </h5>
+						<h5> </h5><h3>关于旅行</h3><h5> </h5>
 						<div class="clear"> </div>
 					</div>
 					<div class="about-info">
-						<a href="#">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus.</a>
-						<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris dictum magna. Sed laoreet aliquam leo. Ut tellus dolor, dapibus eget, vel, cursus eleifend, elit. Aenean auctor wisi et urna. Aliquam erat volutpat. Duis ac turpis. Integer rutrum ante eu lacus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris fermentum dictum magna. Sed laoreet aliquam leo. Ut tellus dolor, dapibus eget, elementum vel, cursus eleifend, elit. Aenean auctor wisi et urna. Aliquam erat volutpat. Duis ac turpis. Integer rutrum ante eu lacus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Aenean nonummy hendrerit mauris. Phasellus porta. Fusce suscipit varius mi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Praesent vestibulum molestie lacus. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna. Donec accumsan male</p>
+						<a href="#">旅行不是为了换个地方，而是为了改变思想 - H. Taine</a>
+						<p>旅行的意义，在于让你看到这个世界是何等的大.在你未知的角落，总有人正以你从未想像的方式在过活.有些富足，内心却一贫如洗。有些窘迫，倒也甘之如饴,生活向来是冷暖自知的事情，而我要我的生活分分秒秒地在路上,每一天的我，要比昨天辽阔</p>
 					</div>
 				</div>
 			<div class="clear"> </div>
@@ -67,84 +60,42 @@
 					</div>
 					<div class="clear"> </div>
 					<div class="specials-grids">
-						<div class="special-grid">
-							<img src="images/grids-img1.jpg" title="image-name" />
-							<a href="#">Latest Plans</a>
-							<p>Lorem ipsum dolor sit amet consectetur adiing elit. In volutpat luctus eros ac placerat. Quisque erat metus facilisis non feu,aliquam hendrerit quam. Donec ut lectus vel dolor adipiscing tincnt.</p>
+						<div class="special-grid spe-grid" th:each="dynamic:${page.rows}">
+							<img th:src="${dynamic.dynamicPicture}" title="image-name" style="width:300px;height:400px"/>
+							<a th:href="@{/mianbao/travel/dynamic/dynamicInfo(id=${dynamic.id})}" th:text="${dynamic.dynamicTitle}">游记标题</a>
+							<p th:text="${dynamic.dynamicContent}">游记内容</p>
 						</div>
-						<div class="special-grid">
-							<img src="images/grids-img2.jpg" title="image-name" />
-							<a href="#">Pre Plans</a>
-							<p>Lorem ipsum dolor sit amet consectetur adiing elit. In volutpat luctus eros ac placerat. Quisque erat metus facilisis non feu,aliquam hendrerit quam. Donec ut lectus vel dolor adipiscing tincnt.</p>
-						</div>
-						<div class="special-grid spe-grid">
-							<img src="images/grids-img3.jpg" title="image-name" />
-							<a href="#">Free Plans</a>
-							<p>Lorem ipsum dolor sit amet consectetur adiing elit. In volutpat luctus eros ac placerat. Quisque erat metus facilisis non feu,aliquam hendrerit quam. Donec ut lectus vel dolor adipiscing tincnt.</p>
-						</div>
-						<div class="clear"> </div>
 					</div>
 					<div class="clear"> </div>
 			</div>
-			</div>	
+			</div>
 			<div class="clear"> </div>
 			<div class="testmonials">
 				<div class="wrap">
-					<div class="testmonial-grid">
-						<h3>TESTIMONIALS :</h3>
-						<p>&#34; Lorem ipsum dolor sit amet, consectetur adipiscing elit. In volutpat luctus eros ac placerat. Quisque erat metus, facilisis non felis eu, aliquam hendrrit quam. Donec ut lectus vel dolor adipiscing tincidunt. Ut auctor diam at est iaculis, vitae interdum magna sagittis.&#34;</p>
-						<a href="#"> - Lorem ipsum</a>
+					<div th:if="${not (page.pagerNum eq 0)}">
+						<a th:if="${not (page.page eq 1)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${page.page -1},pageSize=${page.pageSize})}">前一页</a>
+						<a th:if="${page.page eq 1}" href="javascript:void(0);">前一页</a>
+						<p th:each="pageNo : ${#numbers.sequence(1, page.pagerNum)}">
+							<a th:if="${page.page eq pageNo}" href="javascript:void(0);">
+								<span th:text="${pageNo}"></span>
+							</a>
+
+							<a th:if="${not (page.page eq pageNo)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${pageNo},pageSize=${page.pageSize})}">
+								<span th:text="${pageNo}"></span>
+							</a>
+						</p>
+						<a th:if="${not (page.page eq page.pagerNum)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${page.page+1},pageSize=${page.pageSize})}">下一页</a>
+						<a th:if="${page.page eq page.pagerNum}" href="javascript:void(0);">下一页</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!---End-content---->
 		<div class="clear"> </div>
-		<!---start-footer---->
-		<div class="footer">
-			<div class="wrap">
-			<div class="footer-grids">
-				<div class="footer-grid">
-					<h3>EXTRAS</h3>
-					<p>Ut rutrum neque a mollis laoreet diam enim feuiat dui nec ulacoper quam felis id diam. Nunc ut tortor ligula eu petiu risus. Pelleesque conquat dignissim lacus quis altrcies.</p>
-				</div>
-				<div class="footer-grid">
-					<h3>RECENT POSTS</h3>
-					<ul>
-						<li><a href="#">Vestibulum felis</a></li>
-						<li><a href="#">Mauris at tellus</a></li>
-						<li><a href="#">Donec ut lectus</a></li>
-						<li><a href="#">vitae interdum</a></li>
-					</ul>
-				</div>
-				<div class="footer-grid">
-					<h3>USEFUL INFO</h3>
-					<ul>
-						<li><a href="#">Hendrerit quam</a></li>
-						<li><a href="#">Amet consectetur </a></li>
-						<li><a href="#">Iquam hendrerit</a></li>
-						<li><a href="#">Donec ut lectus </a></li>
-					</ul>
-				</div>
-				<div class="footer-grid footer-lastgrid">
-					<h3>CONTACT US</h3>
-					<p>Pelleesque conquat dignissim lacus quis altrcies.</p>
-					<div class="footer-grid-address">
-						<p>Tel.800-255-9999</p>
-						<p>Fax: 1234 568</p>
-						<p>Email:<a class="email-link" href="#">Eaxmplesite@Demo.com</a></p>
-					</div>
-				</div>
-				<div class="clear"> </div>
-			</div>
-			</div>
-		</div>
-		<!---End-footer---->
 		<div class="clear"> </div>
 		<div class="copy-right">
-			<p>Copyright &copy; 2014.Company name All rights reserved.<a target="_blank" href="http://www.aspku.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+			<p>Copyright &copy; 2017.Company name 稻草人</p>
 		</div>
-	
+
 </body>
 </html>
 

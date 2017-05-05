@@ -29,4 +29,13 @@ public interface UserDynamicMapper {
     int updateByPrimaryKeySelective(UserDynamic record);
 
     int updateByPrimaryKey(UserDynamic record);
+
+    long selectAllCount(Integer userId);
+
+    List<UserDynamic> selectDynamicLimit(@Param("userId") Integer userId, @Param("limit") Integer limit,@Param("offset") Integer offset);
+
+    long selectAllDynamicCount();
+
+    List<UserDynamic> selectAllDynamicLimit(@Param("limit") Integer limit,@Param("offset") Integer offset);
+
 }

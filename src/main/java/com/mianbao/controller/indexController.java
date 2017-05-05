@@ -1,8 +1,15 @@
 package com.mianbao.controller;
 
+import com.mianbao.common.Result;
+import com.mianbao.service.DynamicService;
+import com.mianbao.service.ScenicSpotService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.annotation.Resource;
 
 /**
  * Created by zoujiajian on 2017-3-20.
@@ -11,8 +18,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class IndexController {
 
+    @Resource
+    private DynamicService dynamicService;
+
+    @Resource
+    private ScenicSpotService scenicSpotService;
+
     @RequestMapping(value = "/index",method = RequestMethod.GET)
-    public String index() {
+    public String index(Model model) {
+        Result result = dynamicService.indexSimpleInfo();
+        if(result.isSuccess()){
+            model.addAttribute("dynamicData",result.getData());
+        }
+        Result scenicSpot = scenicSpotService.indexScenicSpot();
+        if(scenicSpot.isSuccess()){
+            model.addAttribute("scenicData",scenicSpot.getData());
+        }
         return "sys/index";
     }
 
@@ -35,6 +56,4 @@ public class IndexController {
     @RequestMapping(value = "/scenic/addScenicSpot",method = RequestMethod.GET)
     public String addScenicSpot(){return "addScenicSpot";}
 
-    @RequestMapping(value = "/user/center",method = RequestMethod.GET)
-    public String center(){return "center";}
 }

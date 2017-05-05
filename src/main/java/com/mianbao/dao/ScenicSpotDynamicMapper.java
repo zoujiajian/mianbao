@@ -33,4 +33,6 @@ public interface ScenicSpotDynamicMapper {
     int updateByPrimaryKey(ScenicSpotDynamic record);
 
     int insertScenicDynamicList(List<ScenicSpotDynamic> scenicSpotDynamicList);
+
+    List<ScenicSpotDynamic> selectWithLimit(@Param("scenicId") int scenicId, @Param("limit") int limit, @Param("offset") int offset);
 }

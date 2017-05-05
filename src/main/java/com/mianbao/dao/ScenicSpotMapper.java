@@ -7,6 +7,7 @@ import com.mianbao.domain.ScenicSpot;
 import com.mianbao.domain.ScenicSpotExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
 public interface ScenicSpotMapper {
@@ -33,4 +34,6 @@ public interface ScenicSpotMapper {
     int updateByPrimaryKeySelective(ScenicSpot record);
 
     int updateByPrimaryKey(ScenicSpot record);
+
+    List<ScenicSpot> selectTopScenicSpot(@Param("limit") Integer limit,@Param("offset") Integer offset);
 }

@@ -224,4 +224,11 @@
       create_user = #{createUser,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectTopScenicSpot" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_scenic_spot order by scenic_createTime desc
+    limit #{limit},#{offset}
+  </select>
 </mapper>

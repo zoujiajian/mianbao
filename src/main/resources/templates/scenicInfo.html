@@ -1,0 +1,207 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Volton - Responsive Mobile Template</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet"  th:href="@{/css/normalize.css}"/>
+    <link rel="stylesheet"  th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet"  th:href="@{/css/templatemo-style.css}"/>
+    <script th:src="@{/js/vendor/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/js/jquery.cookie.js}"></script>
+    <script th:src="@{/js/min/plugins.min.js}"></script>
+    <script th:src="@{/js/min/main.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/vendor/modernizr-2.6.2.min.js}"></script>
+    <script th:inline="javascript">
+        $(function () {
+            var userName = $.cookie("user");
+            if(userName != ""){
+                if(typeof(userName) != "undefined"){
+                    $("#status").attr("text",userName);
+                }
+            }
+             //预览
+            preview();
+            //图片上传
+            $("#upload").click(function(){
+                var url = "/mianbao/travel/dynamic/release";
+                upload(function(data){
+                    if(data.success){
+                        window.location.href="/mianbao/travel/index.html";
+                    }else{
+                        window.alter("上传失败!");
+                    }
+                },url);
+            });
+
+            $("#collection").click(function(){
+                var url = "/mianbao/travel/scenic/collection";
+                var data = {"id":$("#scenicIds").val()};
+                get(url,data,function(data){
+                    if(data.success){
+                        window.alert("收藏成功");
+                    }else{
+                        window.alert(data.errorMsg);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+
+<div class="responsive-header visible-xs visible-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="top-section">
+                    <div class="profile-image">
+                        <img th:src="@{/images/profile.jpg}" alt="Volton"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="toggle-menu"><i class="fa fa-bars"></i></a>
+        <div class="main-navigation responsive-menu">
+            <ul class="navigation">
+                <li><a th:href="@{/mianbao/travel/index}"><i class="fa fa-home"></i>首页</a></li>
+                <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}"><i class="fa fa-user"></i>个人中心</a></li>
+                <li><a th:href="@{/mianbao/travel/scenicSopt/center(pageNo=1,pageSize=3)}"><i class="fa fa-newspaper-o"></i>景点中心</a></li>
+                <li><a href="#contact"><i class="fa fa-envelope"></i>关于</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar-menu hidden-xs hidden-sm">
+    <div class="top-section">
+        <div class="profile-image">
+            <img th:src="@{/images/profile.jpg}" alt="Volton"/>
+        </div>
+        <h3 class="profile-title" id="status">Volton</h3>
+    </div> <!-- top-section -->
+    <div class="main-navigation">
+        <ul class="navigation">
+            <li><a th:href="@{/mianbao/travel/index}"><i class="fa fa-globe"></i>首页</a></li>
+            <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}"><i class="fa fa-pencil"></i>个人中心</a></li>
+            <li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=3)}"><i class="fa fa-paperclip"></i>景点中心</a></li>
+            <li><a th:href="@{/mianbao/travel/scenic/collectionInfo(pageNo=1,pageSize=6)}"><i class="fa fa-link"></i>收藏的景点</a></li>
+        </ul>
+    </div> <!-- .main-navigation -->
+    <div class="social-icons">
+        <ul>
+            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="#"><i class="fa fa-rss"></i></a></li>
+        </ul>
+    </div> <!-- .social-icons -->
+</div> <!-- .sidebar-menu -->
+
+
+<div class="banner-bg" id="top">
+    <div class="banner-overlay"></div>
+    <div class="welcome-text">
+        <h2 th:text="${data.scenicSpotName}">景点名称</h2>
+        <h5 th:text="${data.scenicSpotInfo}"> 景点介绍</h5>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <div class="fluid-container">
+
+        <div class="content-wrapper">
+
+            <!-- ABOUT -->
+            <div class="page-section" id="about">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="widget-title">景点图片</h4>
+                        <div class="about-image" th:each="picture:${data.scenicSpotPicture}">
+                            <img th:src="${picture}" alt="about me" width="290px" height="220px"/>
+                        </div>
+                        <p th:text="${data.scenicSpotInfo}">景点介绍</p>
+                        <a href="#" id="collection">收藏景点</a>
+                        <hr/>
+                    </div>
+                </div> <!-- #about -->
+            </div>
+
+            <!-- PROJECTS -->
+            <div class="page-section" id="projects">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="widget-title">景点相关动态</h4>
+                    </div>
+                </div>
+                <div class="row projects-holder">
+                    <div class="col-md-4 col-sm-6" th:each="dynamic:${data.page.rows}">
+                        <div class="project-item">
+                            <img th:src="${dynamic.dynamicPicture}" alt="" width="290px" height="220px"/>
+                            <div class="project-hover">
+                                <div class="inside">
+                                    <h5><a th:href="@{/mianbao/travel/dynamic/dynamicInfo(id=${dynamic.id})}"><p th:text="${dynamic.dynamicTitle}">游记标题</p></a></h5>
+                                    <p th:text="${dynamic.dynamicContent}">游记内容</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <hr/>
+             <div align="center" style="" th:if="${not (data.page.pagerNum eq 0)}">
+                 <nobr>
+                     <a th:if="${not (data.page.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${data.page.page -1},pageSize=${data.page.pageSize})}">前一页</a>
+                     <a th:if="${data.page.page eq 1}" href="javascript:void(0);">前一页</a>
+                     <p th:each="pageNo : ${#numbers.sequence(1, data.page.pagerNum)}">
+                         <a th:if="${data.page.page eq pageNo}" href="javascript:void(0);">
+                             <span th:text="${pageNo}"></span>
+                         </a>
+
+                         <a th:if="${not (data.page.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${pageNo},pageSize=${data.page.pageSize})}">
+                             <span th:text="${pageNo}"></span>
+                         </a>
+                     </p>
+                     <a th:if="${not (data.page.page eq data.page.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${data.page.page+1},size=${data.page.pageSize})}">下一页</a>
+                     <a th:if="${data.page.page eq data.page.pagerNum}" href="javascript:void(0);">下一页</a>
+                 </nobr>
+             </div>
+            <!-- CONTACT -->
+            <div class="page-section" id="contact">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="widget-title">发表评论</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <form action="#" method="post" class="contact-form"  id="release">
+                        <fieldset class="col-md-4 col-sm-6">
+                            <input type="text" name="dynamicTitle" placeholder="标题..."/>
+                        </fieldset>
+                        <fieldset class="col-md-12 col-sm-12">
+                            <textarea name="dynamicContent" id="message" cols="30" rows="6" placeholder="内容..."></textarea>
+                        </fieldset>
+                        <input name="scenicIds" id="scenicIds" value="" th:value="${data.id}" hidden="hidden"/>
+                        <fieldset class="col-md-12 col-sm-12">
+                            <input type="button" class="button big default" id="upload" value="提交"/>
+                        </fieldset>
+                    </form>
+
+                    <input type="file" id="file_input" multiple="multiple"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</body>
+</html>

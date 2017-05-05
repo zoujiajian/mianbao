@@ -2,6 +2,7 @@ package com.mianbao.service;
 
 import com.mianbao.common.Result;
 import com.mianbao.domain.UserDynamic;
+import com.mianbao.vo.DynamicInfoVo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,7 +32,7 @@ public interface DynamicService {
      * @param userId
      * @return
      */
-    Result getUserAllDynamic(int userId);
+    Result getUserAllDynamic(int userId,int pageNo,int pageSize);
 
     /**
      * 点赞动态
@@ -48,4 +49,19 @@ public interface DynamicService {
      * @return
      */
     Result getDynamicLikeInfoList(int dynamicId);
+
+
+    /**
+     * 分页需要展示的动态信息
+     * @return
+     */
+    Result getAllDynamicSimpleInfo(int pageNo,int pageSize);
+
+    /**
+     * 获取首页展示的信息
+     * @return
+     */
+    Result indexSimpleInfo();
+
+    DynamicInfoVo getDynamicInfo(UserDynamic userDynamic);
 }

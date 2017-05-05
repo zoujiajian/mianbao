@@ -7,6 +7,7 @@ import com.mianbao.domain.UserLike;
 import com.mianbao.domain.UserLikeExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
 public interface UserLikeMapper {
@@ -31,4 +32,8 @@ public interface UserLikeMapper {
     int updateByPrimaryKeySelective(UserLike record);
 
     int updateByPrimaryKey(UserLike record);
+
+    List<UserLike> selectScenicSpotWithLimit(@Param("userId") int userId, @Param("limit") int limit, @Param("offset") int offset);
+
+    List<UserLike> selectScenicSpotWithLimitAndCondi(@Param("scenicIds") List<Integer> scenicIds, @Param("userId") int userId, @Param("limit") int limit, @Param("offset") int offset);
 }

@@ -31,28 +31,89 @@
     </script>
 
 </head>
-    <body>
-        <form id="release" method="post" name="release">
-            <label>动态消息</label><br/>
-            动态标题:<input type="text" name="dynamicTitle" placeholder="动态标题"/><br/>
-            动态内容:<input type="text"  name="dynamicContent" placeholder="动态内容"/><br/>
+<body>
+<div class="header">
+    <div class="wrap">
+        <div class="logo">
+            <a href="index.html"><img th:src="@{/images/logo.png}" title="logo" /></a>
+        </div>
+        <div class="top-nav">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a th:href="@{/mianbao/travel/user/center}">个人中心</a></li>
+                <li><a id="scenicSpot" href="javascript:void(0)">景点中心</a></li>
+                <li><a th:href="@{/mianbao/travel/user/release}">发表动态</a></li>
+                <li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
+                <a th:href="@{/mianbao/travel/user/login}">修改密码</a>
+            </ul>
+        </div>
+        <div class="clear"> </div>
+    </div>
+</div>
 
-            关联景点:
-                <div id = "search">
-                    <input type="text" id="keyword" name="keyword" />
-                    <div id="searchBox" hidden="hidden">
-                        <ul>
-                        </ul>
+<div class="clear"> </div>
+<div class="content">
+    <div class="wrap">
+        <div class="section group">
+            <div class="col span_1_of_3">
+                <div class="contact_info">
+                    <h3>Find Us Here</h3>
+                    <div class="map">
+                        <iframe width="100%" height="175" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.co.in/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Lighthouse+Point,+FL,+United+States&amp;aq=4&amp;oq=light&amp;sll=26.275636,-80.087265&amp;sspn=0.04941,0.104628&amp;ie=UTF8&amp;hq=&amp;hnear=Lighthouse+Point,+Broward,+Florida,+United+States&amp;t=m&amp;z=14&amp;ll=26.275636,-80.087265&amp;output=embed"></iframe><br/><small><a href="https://maps.google.co.in/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Lighthouse+Point,+FL,+United+States&amp;aq=4&amp;oq=light&amp;sll=26.275636,-80.087265&amp;sspn=0.04941,0.104628&amp;ie=UTF8&amp;hq=&amp;hnear=Lighthouse+Point,+Broward,+Florida,+United+States&amp;t=m&amp;z=14&amp;ll=26.275636,-80.087265" style="color:#666;text-align:left;font-size:12px">View Larger Map</a></small>
                     </div>
                 </div>
+                <div class="company_address">
+                    <h3>稻 草 人 :</h3>
+                    <p>身未动,心远行</p>
+                    <p>因为有梦,所以勇敢出发</p>
+                    <p>选择出发，便只顾风雨兼程</p>
+                    <p>梦想</p>
+                    <p>并不奢侈</p>
+                    <p>up Email: <span>zoujiajian@lianjia.com</span></p>
+                    <p>分享: <span>Facebook</span>, <span>Twitter</span></p>
+                </div>
+            </div>
+            <div class="col span_2_of_3">
+                <div class="contact-form">
+                    <h3>发表游记</h3>
+                    <form id="release" method="post" name="release">
+                        <div>
+                            <span><label>游记标题</label></span>
+                            <span><input type="text" name="dynamicTitle" placeholder="游记标题"/></span>
+                        </div>
+                        <div>
+                            <span><label>游记内容</label></span>
+                            <span><textarea name="dynamicContent" placeholder="游记内容"> </textarea></span>
+                        </div>
+                        <div>
+                            <span><input type="button" id="upload" value="上传"/></span>
+                        </div>
+                        <input name="scenicIds" id="scenicIds" value="" hidden="hidden"/>
+                    </form>
+                    <div class="specials-heading">
+                        <h5> </h5><h3>我的足迹走过的景点</h3><h5> </h5>
+                        <div id = "search">
+                            <input type="text" id="keyword" name="keyword" />
+                            <div id="searchBox" hidden="hidden">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                        <input name="tags" id="tags" value="" hidden="hidden" />
+                        <div class="clear"> </div>
 
-            <input name="tags" id="tags" value="" hidden="hidden" />
-            <input name="scenicIds" id="scenicIds" value="" hidden="hidden"/>
-        </form><br/>
-        <hr/>
-        <h3>图片</h3>
-        <label>请选择一个图像文件：</label>
-        <input type="file" id="file_input" multiple="multiple"/>
-        <input type="button" id="upload" value="上传"/>
-    </body>
+                        <h5> </h5><h3>随行图片</h3><h5> </h5>
+                        <input type="file" id="file_input" multiple="multiple"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"> </div>
+</div>
+<div class="clear"> </div>
+<div class="copy-right">
+    <p>Copyright &copy; 2017.Company name 稻草人</p>
+</div>
+</body>
 </html>
