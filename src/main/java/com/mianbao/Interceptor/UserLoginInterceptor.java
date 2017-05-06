@@ -48,7 +48,7 @@ public class UserLoginInterceptor implements Filter{
                 String cacheValue = redisService.getByKey(tokenKey);
 
                 if(StringUtils.isNotEmpty(cacheValue)){
-                    response.sendRedirect("http://localhost:8080/mianbao/travel/index");
+                    filterChain.doFilter(request, response);
                 }else{
                     response.sendRedirect("http://localhost:8080/mianbao/travel/index");
                 }
