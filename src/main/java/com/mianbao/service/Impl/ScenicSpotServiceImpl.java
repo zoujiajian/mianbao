@@ -173,19 +173,21 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
         page.setRecords(count);
 
         List<ScenicSpotDynamic> scenicSpotDynamicList = dynamicMapper.selectWithLimit(scenicId,page.getStartRecord(),page.getPageSize());
-        List<Integer> dynamicIds = Lists.newArrayList();
-        for(ScenicSpotDynamic dynamic :scenicSpotDynamicList){
-            dynamicIds.add(dynamic.getDynamicId());
-        }
-        UserDynamicExample userDynamicExample = new UserDynamicExample();
-        userDynamicExample.createCriteria().andIdIn(dynamicIds);
-        List<UserDynamic> userDynamicList = userDynamicMapper.selectByExample(userDynamicExample);
+        if(CollectionUtils.isNotEmpty(scenicSpotDynamicList)){
+            List<Integer> dynamicIds = Lists.newArrayList();
+            for(ScenicSpotDynamic dynamic :scenicSpotDynamicList){
+                dynamicIds.add(dynamic.getDynamicId());
+            }
+            UserDynamicExample userDynamicExample = new UserDynamicExample();
+            userDynamicExample.createCriteria().andIdIn(dynamicIds);
+            List<UserDynamic> userDynamicList = userDynamicMapper.selectByExample(userDynamicExample);
 
-        List<DynamicSimpleVo> resultDynamicList = Lists.newArrayList();
-        for(UserDynamic userDynamic : userDynamicList){
-            resultDynamicList.add(DynamicServiceImpl.transSimpleVo(dynamicService.getDynamicInfo(userDynamic)));
+            List<DynamicSimpleVo> resultDynamicList = Lists.newArrayList();
+            for(UserDynamic userDynamic : userDynamicList){
+                resultDynamicList.add(DynamicServiceImpl.transSimpleVo(dynamicService.getDynamicInfo(userDynamic)));
+            }
+            page.setRows(resultDynamicList);
         }
-        page.setRows(resultDynamicList);
 
         List<String> address = getScenicSpotAllPicture(scenicSpot);
         ScenicSpotVo scenicSpotVo = new ScenicSpotVo();
