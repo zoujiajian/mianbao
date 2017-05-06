@@ -8,6 +8,7 @@
     <script th:src="@{/js/jquery.cookie.js}"></script>
     <script th:src="@{/js/responsiveslides.min.js}"></script>
     <script th:src="@{/js/index.js}" type="text/javascript"></script>
+    <script th:src="@{/js/common.js}" type="text/javascript"></script>
     <script th:inline="javascript">
 
 			    $(function () {
@@ -22,6 +23,14 @@
 			            maxwidth: 2500,
 			            speed: 600
 			        });
+
+			        //注销
+                    $("#cancel").click(function(){
+                        debugger;
+                        $.cookie("token", "", { expires: -1 , path: '/'}); // 删除 tooken
+                        $.cookie("user", "", { expires: -1, path: '/' }); // 删除 user
+                         window.location.href="/mianbao/travel/index.html";
+                    });
 			});
     </script>
 </head>
@@ -37,7 +46,7 @@
                 <li><a th:href="@{/mianbao/travel/index}">首页</a></li>
                 <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}">个人中心</a></li>
                 <li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}">景点中心</a></li>
-                <li><a id="about" href="javascript:void(0)">关于</a></li>
+                <li><a id="cancel" href="javascript:void(0)">注销登录</a></li>
                 <li><a th:href="@{/mianbao/travel/user/register}">注册</a></li>
                 <li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
             </ul>

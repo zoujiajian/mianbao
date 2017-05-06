@@ -20,7 +20,7 @@ function preview(){
             var reader = new FileReader();
             reader.readAsDataURL(this.files[i]);
             reader.onload = function(e){
-                result = '<div align="center" id="result"><img src="'+this.result+'" alt=""/></div>';
+                result = '<div align="center" id="result"><img src="'+this.result+'" alt="" style="width:300px;height:250px"/></div>';
                 div = document.createElement('div');
                 div.innerHTML = result;
                 $("body").append(div);  　　//插入dom树

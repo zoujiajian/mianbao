@@ -6,7 +6,6 @@
 	<link th:href="@{/css/responsiveslides.css}" rel="stylesheet"/>
 	<script th:src="@{/js/jquery-1.8.3.min.js}"></script>
 	<script th:src="@{/js/jquery.cookie.js}"></script>
-	<script th:src="@{/js/common.js}"></script>
 	<script th:src="@{/js/responsiveslides.min.js}"></script>
 	<script th:inline="javascript">
 		$(function(){
@@ -17,6 +16,14 @@
 					$("#status").html('<a th:href="@{/mianbao/travel/user/userInfo}">欢迎您: ' + userName +"</a>");
 				}
 			}
+
+			//注销
+			$("#cancel").click(function(){
+				debugger;
+				$.cookie("token", "", { expires: -1 , path: '/'}); // 删除 tooken
+				$.cookie("user", "", { expires: -1, path: '/' }); // 删除 user
+				 window.location.href="/mianbao/travel/index.html";
+			});
 		});
 	</script>
 </head>
@@ -30,7 +37,8 @@
 					<ul>
 						<li><a th:href="@{/mianbao/travel/index}">首页</a></li>
 						<li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}">个人中心</a></li>
-						<li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=3)}">景点中心</a></li>
+						<li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}">景点中心</a></li>
+						<li><a id="cancel" href="javascript:void(0)">注销登录</a></li>
 						<li><a th:href="@{/mianbao/travel/user/release}">发表动态</a></li>
 						<li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
 					</ul>
@@ -70,7 +78,7 @@
 			</div>
 			<div class="clear"> </div>
 			<div class="testmonials">
-				<div class="wrap">
+				<div class="wrap" align="center">
 					<div th:if="${not (page.pagerNum eq 0)}">
 						<a th:if="${not (page.page eq 1)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${page.page -1},pageSize=${page.pageSize})}">前一页</a>
 						<a th:if="${page.page eq 1}" href="javascript:void(0);">前一页</a>

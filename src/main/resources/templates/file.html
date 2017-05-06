@@ -39,9 +39,9 @@
         </div>
         <div class="top-nav">
             <ul>
-                <li><a href="index.html">首页</a></li>
-                <li><a th:href="@{/mianbao/travel/user/center}">个人中心</a></li>
-                <li><a id="scenicSpot" href="javascript:void(0)">景点中心</a></li>
+                <li><a href="/mianbao/travel/index.html">首页</a></li>
+                <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}">个人中心</a></li>
+                <li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}">景点中心</a></li>
                 <li><a th:href="@{/mianbao/travel/user/release}">发表动态</a></li>
                 <li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
                 <a th:href="@{/mianbao/travel/user/login}">修改密码</a>

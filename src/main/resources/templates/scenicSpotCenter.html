@@ -94,7 +94,7 @@
                                 <span th:text="${pageNo}"></span>
                             </a>
                         </span>
-                        <a th:if="${not (data.page eq data.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${data.page+1},size=${data.pageSize})}">下一页</a>
+                        <a th:if="${not (data.page eq data.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${data.page+1},pageSize=${data.pageSize})}">下一页</a>
                         <a th:if="${data.page eq data.pagerNum}" href="javascript:void(0);">下一页</a>
                     </div>
                 </div>

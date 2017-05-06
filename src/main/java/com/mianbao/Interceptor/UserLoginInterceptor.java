@@ -29,20 +29,6 @@ public class UserLoginInterceptor implements Filter{
     @Resource
     private RedisService redisService;
 
-    private static final Map<String,Set<String>> SOURCE = Maps.newHashMap();
-
-    static {
-
-        Set<String> var1 = Sets.newHashSet();
-        var1.add("login");
-        var1.add("register");
-        SOURCE.put("user",var1);
-
-        Set<String> var2 = Sets.newHashSet();
-        var2.add("getAllScenicList");
-        SOURCE.put("scenic",var2);
-    }
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -52,23 +38,25 @@ public class UserLoginInterceptor implements Filter{
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        /*String url = request.getRequestURI();
+        String url = request.getRequestURI();
         if(filter(url)){
             Cookie cookie = CookieUtil.getTokenCookie(request);
             if(cookie == null){
-                request.getRequestDispatcher("index.html").forward(request,response);
+                response.sendRedirect("http://localhost:8080/mianbao/travel/index");
             }else{
                 String tokenKey = CacheKey.USER_TOKEN + "_" + cookie.getValue();
                 String cacheValue = redisService.getByKey(tokenKey);
 
                 if(StringUtils.isNotEmpty(cacheValue)){
-                    request.getRequestDispatcher("index.html").forward(request,response);
+                    response.sendRedirect("http://localhost:8080/mianbao/travel/index");
                 }else{
-                    request.getRequestDispatcher("index.html").forward(request,response);
+                    response.sendRedirect("http://localhost:8080/mianbao/travel/index");
                 }
             }
-        }*/
-        filterChain.doFilter(request, response);
+        }else{
+            filterChain.doFilter(request, response);
+        }
+
     }
 
     @Override
@@ -84,15 +72,8 @@ public class UserLoginInterceptor implements Filter{
         if(!url.contains("mianbao")){
             return false;
         }
-        String[] sources = url.split("\\.");
-        String sourceSuffix = sources[sources.length - 1];
-        if(sourceSuffix.equals("css") || sourceSuffix.equals("js") || sourceSuffix.equals("ico")){
-           return false;
-        }
-        //只拦截针对user路径的访问
-        String[] source = url.split("/");
-        if(SOURCE.containsKey(source[3])){
-            return SOURCE.get(source[3]).contains(source[4]);
+        if(url.contains("dynamic/center")){
+            return true;
         }
         return false;
     }
