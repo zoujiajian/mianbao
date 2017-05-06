@@ -72,7 +72,16 @@ public class UserLoginInterceptor implements Filter{
         if(!url.contains("mianbao")){
             return false;
         }
+        //个人中心
         if(url.contains("dynamic/center")){
+            return true;
+        }
+        //收藏景点
+        if(url.contains("scenic/collectionInfo")){
+            return true;
+        }
+        //添加景点信息
+        if(url.contains("scenic/addScenicSpot")){
             return true;
         }
         return false;
