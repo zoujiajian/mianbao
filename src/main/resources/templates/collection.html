@@ -103,7 +103,7 @@
                     <div align="center" style="" th:if="${not (data.pagerNum eq 0)}">
                         <a th:if="${not (data.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/collectionInfo'}(pageNo=${data.page -1},pageSize=${data.pageSize})}">前一页</a>
                         <a th:if="${data.page eq 1}" href="javascript:void(0);">前一页</a>
-                        <p th:each="pageNo : ${#numbers.sequence(1, data.pagerNum)}">
+                        <span th:each="pageNo : ${#numbers.sequence(1, data.pagerNum)}">
                             <a th:if="${data.page eq pageNo}" href="javascript:void(0);">
                                 <span th:text="${pageNo}"></span>
                             </a>
@@ -111,7 +111,7 @@
                             <a th:if="${not (data.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/collectionInfo'}(pageNo=${pageNo},pageSize=${data.pageSize})}">
                                 <span th:text="${pageNo}"></span>
                             </a>
-                        </p>
+                        </span>
                         <a th:if="${not (data.page eq data.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/collectionInfo'}(pageNo=${data.page+1},size=${data.pageSize})}">下一页</a>
                         <a th:if="${data.page eq data.pagerNum}" href="javascript:void(0);">下一页</a>
                     </div>

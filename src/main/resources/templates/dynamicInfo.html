@@ -1,0 +1,71 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <title>动态评论功能</title>
+    <link rel="stylesheet" th:href="@{/css/dynamic/style.css}" type="text/css"/>
+    <script th:src="@{/js/vendor/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/js/jquery.cookie.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dynamic/index.js}"></script>
+    <script th:inline="javascript">
+        $(function(){
+            $("#like").click(function(){
+                var url = "/mianbao/travel/dynamic/like";
+                var data = {"id":$("#dynamicId").val()};
+                get(url,data,function(data){
+                    if(data.success){
+                        $("#likeStatus").val(1);
+                        window.alert("点赞成功");
+                    }else{
+                        window.alert("点赞失败");
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+<div id="list">
+    <div class="box clearfix">
+        <a class="close" href="javascript:;">×</a>
+        <input type="hidden" id="dynamicId" th:value="${data.dynamicId}" value=""/>
+        <input type="hidden" id="likeStatus" value="0"/>
+        <img class="head" th:src="@{/images/dynamic/1.jpg}" />
+        <div class="content">
+            <div class="main">
+                <p class="txt">
+                    <span class="user" th:text="${data.userName}">发表人</span>
+                    <p th:text="${data.dynamicInfoVo.dynamicTitle}">发表标题</p>
+                    <p th:text="${data.dynamicInfoVo.dynamicContent}">发表内容</p>
+                </p>
+                <div class="about-image" th:each="picture:${data.dynamicInfoVo.dynamicPicture}">
+                    <img th:src="${picture}" class="pic"/>
+                </div>
+            </div>
+            <div class="info clearfix">
+                <span class="time" th:text="${data.date}">发表时间</span>
+                <a class="praise" href="javascript:;" id="like">赞</a>
+            </div>
+            <div class="praises-total" id ="total" th:value="${data.dynamicInfoVo.dynamicLikeVo.totalCount}" style="display:block"><span th:text="${data.dynamicInfoVo.dynamicLikeVo.totalCount}"></span>个人觉得很赞&nbsp;&nbsp;&nbsp;<a style="color:blue" href="javascript:;" id="selectLikeInfo">查看点赞详细</a></div>
+            <div class="commentList" th:if="${data.evaluate != null}">
+                <div class="comment-box clearfix" user="self" th:each="evaluate:${data.evaluate}">
+                    <img class="myhead" th:src="@{/images/dynamic/my.jpg}" />
+                    <div class="comment-content">
+                        <p class="comment-text"><span class="user"><span th:text="${evaluate.evaluateUser}">评价人</span>：</span><span th:text="${evaluate.evaluateContent}">评价内容</span></p>
+                        <p class="comment-time"><p th:text="${evaluate.date}"></p>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-box">
+                <textarea class="comment" autocomplete="off" id="content">评论...</textarea>
+                <button class="btn" id="comment">回复</button>
+                <span class="word"><span class="length">0</span>/140</span>
+            </div>
+            <div id="likeList" class="commentList" style="margin-top:50px;">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

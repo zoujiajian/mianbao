@@ -77,7 +77,7 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
             return Result.getDefaultError(Response.UPLOAD_PICTURE_FAIL.getMsg());
         }
 
-        ScenicSpotVo scenicSpotVo = BeanUtil.requestParse(request, ScenicSpotVo.class);
+        ScenicSpotBaseVo scenicSpotVo = BeanUtil.requestParse(request, ScenicSpotBaseVo.class);
         UserLogin userLogin = JSON.parseObject(cacheValue,UserLogin.class);
 
         ScenicSpot scenicSpot = new ScenicSpot();

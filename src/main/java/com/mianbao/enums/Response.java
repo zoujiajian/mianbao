@@ -30,7 +30,8 @@ public enum Response {
     SELECT_SCENIC_SPOT_LIST_FAIL(100019,"查询收藏列表失败"),
     SEARCH_SCENIC_SPOT_FAIL(100020,"搜索景点失败"),
     REVOKE_COLLECTION_FAIL(100021,"取消收藏失败"),
-    SELECT_SCENIC_SPOT_INFO_FAIL(100022,"查询景点信息失败");
+    SELECT_SCENIC_SPOT_INFO_FAIL(100022,"查询景点信息失败"),
+    COMMENT_DYNAMIC_FAIL(100023,"动态评论失败");
 
     private int code;
 

@@ -33,7 +33,6 @@
 						<li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=3)}">景点中心</a></li>
 						<li><a th:href="@{/mianbao/travel/user/release}">发表动态</a></li>
 						<li id ="status"><a th:href="@{/mianbao/travel/user/login}">登录</a></li>
-						<a th:href="@{/mianbao/travel/user/login}">修改密码</a>
 					</ul>
 				</div>
 				<div class="clear"> </div>
@@ -75,7 +74,7 @@
 					<div th:if="${not (page.pagerNum eq 0)}">
 						<a th:if="${not (page.page eq 1)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${page.page -1},pageSize=${page.pageSize})}">前一页</a>
 						<a th:if="${page.page eq 1}" href="javascript:void(0);">前一页</a>
-						<p th:each="pageNo : ${#numbers.sequence(1, page.pagerNum)}">
+						<span th:each="pageNo : ${#numbers.sequence(1, page.pagerNum)}">
 							<a th:if="${page.page eq pageNo}" href="javascript:void(0);">
 								<span th:text="${pageNo}"></span>
 							</a>
@@ -83,7 +82,7 @@
 							<a th:if="${not (page.page eq pageNo)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${pageNo},pageSize=${page.pageSize})}">
 								<span th:text="${pageNo}"></span>
 							</a>
-						</p>
+						</span>
 						<a th:if="${not (page.page eq page.pagerNum)}" th:href="@{${'/mianbao/travel/dynamic/center'}(pageNo=${page.page+1},pageSize=${page.pageSize})}">下一页</a>
 						<a th:if="${page.page eq page.pagerNum}" href="javascript:void(0);">下一页</a>
 					</div>
@@ -95,7 +94,6 @@
 		<div class="copy-right">
 			<p>Copyright &copy; 2017.Company name 稻草人</p>
 		</div>
-
 </body>
 </html>
 

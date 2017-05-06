@@ -36,6 +36,9 @@
                         <li>
                             <a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}">个人中心</a>
                         </li>
+                        <li>
+                            <a th:href="@{/mianbao/travel/scenic/addScenicSpot}">添加景点信息</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -70,7 +73,7 @@
                     <div class="col-md-6 col-sm-6" th:each="scenic:${data.rows}">
                         <article class=" blog-teaser">
                             <header>
-                                <img th:src="${scenic.scenicSpotPicture}" alt=""/>
+                                <img th:src="${scenic.scenicSpotPicture}" alt="" style="width:350px;height:300px"/>
                                 <h3><a th:href="@{/mianbao/travel/scenic/scenicInfo(id=${scenic.id},pageNo=1,pageSize=6)}"><p th:text="${scenic.scenicSpotName}">景点名称</p></a></h3>
                                 <span class="meta"><p th:text="${scenic.scenicSpotInfo}">景点介绍</p></span>
                                 <hr/>
@@ -82,7 +85,7 @@
                     <div align="center" style="" th:if="${not (data.pagerNum eq 0)}">
                         <a th:if="${not (data.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${data.page -1},pageSize=${data.pageSize})}">前一页</a>
                         <a th:if="${data.page eq 1}" href="javascript:void(0);">前一页</a>
-                        <p th:each="pageNo : ${#numbers.sequence(1, data.pagerNum)}">
+                        <span th:each="pageNo : ${#numbers.sequence(1, data.pagerNum)}">
                             <a th:if="${data.page eq pageNo}" href="javascript:void(0);">
                                 <span th:text="${pageNo}"></span>
                             </a>
@@ -90,7 +93,7 @@
                             <a th:if="${not (data.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${pageNo},pageSize=${data.pageSize})}">
                                 <span th:text="${pageNo}"></span>
                             </a>
-                        </p>
+                        </span>
                         <a th:if="${not (data.page eq data.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/center'}(pageNo=${data.page+1},size=${data.pageSize})}">下一页</a>
                         <a th:if="${data.page eq data.pagerNum}" href="javascript:void(0);">下一页</a>
                     </div>

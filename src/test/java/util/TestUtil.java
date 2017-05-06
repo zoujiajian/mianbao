@@ -20,6 +20,8 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -105,5 +107,11 @@ public class TestUtil {
         params.put("pageSize",10);
 
         System.out.println(JSON.toJSONString(scenicSpotService.selectAllScenicInfo(params)));
+    }
+
+    @Test
+    public void dynamicInfo(){
+        System.out.println(JSON.toJSONString(dynamicService.getDynamicLikeInfoList(5)));
+//        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
     }
 }

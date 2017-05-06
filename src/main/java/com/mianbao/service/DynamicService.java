@@ -64,4 +64,13 @@ public interface DynamicService {
     Result indexSimpleInfo();
 
     DynamicInfoVo getDynamicInfo(UserDynamic userDynamic);
+
+    /**
+     * 评价动态
+     * @param userId
+     * @param id
+     * @param content
+     * @return
+     */
+    Result commentDynamic(int userId, int id, String content);
 }

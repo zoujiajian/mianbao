@@ -1,16 +1,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>图片上传</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css"  media="all" />
-    <script th:src="@{/js/jquery-1.8.3.min.js}"></script>
-    <script th:src="@{/js/common.js}"></script>
-    <script th:inline="javascript">
-        $(function(){
-            var url = "/mianbao/travel/scenic/addScenicSpot";
-            preview();
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>景点详细信息</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+    <link rel="stylesheet"  th:href="@{/css/normalize.css}"/>
+    <link rel="stylesheet"  th:href="@{/css/font-awesome.css}"/>
+    <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet"  th:href="@{/css/templatemo-style.css}"/>
+    <script th:src="@{/js/vendor/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/js/jquery.cookie.js}"></script>
+    <script th:src="@{/js/min/plugins.min.js}"></script>
+    <script th:src="@{/js/min/main.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/vendor/modernizr-2.6.2.min.js}"></script>
+    <script th:inline="javascript">
+        $(function () {
+             //预览
+            preview();
+            //图片上传
             $("#upload").click(function(){
+                var url = "/mianbao/travel/scenic/addScenicSpot";
                 upload(function(data){
                     if(data.success){
                         window.location.href="/mianbao/travel/index.html";
@@ -23,14 +35,99 @@
     </script>
 </head>
 <body>
-<form id="release" method="post" name="release">
-    <label>景点信息:</label>
-    景点名称:<input type="text" name="scenicSpotName" placeholder="景点名称"/><br/>
-    景点介绍:<input type="text"  name="scenicSpotInfo" placeholder="景点介绍"/><br/>
-</form>
-<h3>图片</h3>
-<label>请选择一个图像文件：</label>
-<input type="file" id="file_input" multiple="multiple"/>
-<input type="button" id="upload" value="上传"/>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+
+<div class="responsive-header visible-xs visible-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="top-section">
+                    <div class="profile-image">
+                        <img th:src="@{/images/profile.jpg}" alt="Volton"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="toggle-menu"><i class="fa fa-bars"></i></a>
+        <div class="main-navigation responsive-menu">
+            <ul class="navigation">
+                <li><a th:href="@{/mianbao/travel/index}"><i class="fa fa-home"></i>首页</a></li>
+                <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}"><i class="fa fa-user"></i>个人中心</a></li>
+                <li><a th:href="@{/mianbao/travel/scenicSopt/center(pageNo=1,pageSize=3)}"><i class="fa fa-newspaper-o"></i>景点中心</a></li>
+                <li><a href="#contact"><i class="fa fa-envelope"></i>关于</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar-menu hidden-xs hidden-sm">
+    <div class="top-section">
+        <div class="profile-image">
+            <img th:src="@{/images/profile.jpg}" alt="Volton"/>
+        </div>
+        <h3 class="profile-title" id="status">Volton</h3>
+    </div> <!-- top-section -->
+    <div class="main-navigation">
+        <ul class="navigation">
+            <li><a th:href="@{/mianbao/travel/index}"><i class="fa fa-globe"></i>首页</a></li>
+            <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}"><i class="fa fa-pencil"></i>个人中心</a></li>
+            <li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=3)}"><i class="fa fa-paperclip"></i>景点中心</a></li>
+            <li><a th:href="@{/mianbao/travel/scenic/collectionInfo(pageNo=1,pageSize=6)}"><i class="fa fa-link"></i>收藏的景点</a></li>
+        </ul>
+    </div> <!-- .main-navigation -->
+    <div class="social-icons">
+        <ul>
+            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="#"><i class="fa fa-rss"></i></a></li>
+        </ul>
+    </div> <!-- .social-icons -->
+</div> <!-- .sidebar-menu -->
+
+
+<div class="banner-bg" id="top">
+    <div class="banner-overlay"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <div class="fluid-container">
+
+        <div class="content-wrapper">
+            <!-- PROJECTS -->
+            <div class="page-section" id="projects">
+                <hr/>
+                <!-- CONTACT -->
+                <div class="page-section" id="contact">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="widget-title">添加景点信息</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form action="#" method="post" class="contact-form"  id="release">
+                            <fieldset class="col-md-4 col-sm-6">
+                                <input type="text" name="scenicSpotName" placeholder="景点名称..."/>
+                            </fieldset>
+                            <fieldset class="col-md-12 col-sm-12">
+                                <textarea name="scenicSpotInfo" id="message" cols="30" rows="6" placeholder="景点内容..."></textarea>
+                            </fieldset>
+                            <fieldset class="col-md-12 col-sm-12">
+                                <input type="button" class="button big default" id="upload" value="提交"/>
+                            </fieldset>
+                        </form>
+
+                        <input type="file" id="file_input" multiple="multiple"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

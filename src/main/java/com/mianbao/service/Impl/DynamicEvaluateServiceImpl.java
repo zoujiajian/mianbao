@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -51,10 +52,13 @@ public class DynamicEvaluateServiceImpl implements DynamicEvaluateService{
             return Result.getDefaultError(Response.DYNAMIC_NOT_CONTAINS.getMsg());
         }
         String cacheKey = CacheKey.USER_DYNAMIC_LIKE_LIST + "_" + dynamicId;
-        String cacheValue = redisService.getByKey(cacheKey);
+        Set<String> cacheValue = redisService.getSetByKey(cacheKey);
         List<UserSimpleInfo> userSimpleInfoList = Lists.newArrayList();
-        if(StringUtils.isNotEmpty(cacheValue)){
-            userSimpleInfoList = JSON.parseArray(cacheValue,UserSimpleInfo.class);
+        if(CollectionUtils.isNotEmpty(cacheValue)){
+            for(String k : cacheValue){
+                UserSimpleInfo userSimpleInfo = JSON.parseObject(k,UserSimpleInfo.class);
+                userSimpleInfoList.add(userSimpleInfo);
+            }
         }
         DynamicEvaluateExample example = new DynamicEvaluateExample();
         example.createCriteria().andDynamicIdEqualTo(dynamicId);
@@ -71,7 +75,7 @@ public class DynamicEvaluateServiceImpl implements DynamicEvaluateService{
         EvaluateReplyExample evaluateReplyExample = new EvaluateReplyExample();
         evaluateReplyExample.createCriteria().andEvaluateIn(evaluateId);
         List<EvaluateReply> evaluateReplyList = evaluateReplyMapper.selectByExample(evaluateReplyExample);
-        Map<Integer,String> userSimpleInfo = getUserSimpleInfo(evaluateReplyList, userSimpleInfoList);
+        Map<Integer,String> userSimpleInfo = getUserSimpleInfo(evaluateReplyList,evaluateList, userSimpleInfoList);
         Map<Integer, List<DynamicInfoAndReplyVo.Reply>> evaluateGroup = groupByDynamic(evaluateReplyList,userSimpleInfo);
         List<DynamicInfoAndReplyVo.Evaluate> evaluates = dataTransfer(evaluateGroup,evaluateList,userSimpleInfo);
 
@@ -93,7 +97,7 @@ public class DynamicEvaluateServiceImpl implements DynamicEvaluateService{
         for(EvaluateReply evaluateReply : evaluateReplyList){
 
             DynamicInfoAndReplyVo.Reply reply = new DynamicInfoAndReplyVo.Reply();
-            reply.setDateTime(evaluateReply.getCreateTime());
+            reply.setDateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(evaluateReply.getCreateTime()));
             reply.setReplyContent(evaluateReply.getReplyContent());
             reply.setReplyToUser(userSimpleInfoMap.get(evaluateReply.getToUserId()));
             reply.setReplyUserName(userSimpleInfoMap.get(evaluateReply.getReplyUserId()));
@@ -124,12 +128,21 @@ public class DynamicEvaluateServiceImpl implements DynamicEvaluateService{
      * @param evaluateReplyList
      * @return
      */
-    private Map<Integer,String> getUserSimpleInfo(List<EvaluateReply> evaluateReplyList, List<UserSimpleInfo> userSimpleInfoList){
+    private Map<Integer,String> getUserSimpleInfo(List<EvaluateReply> evaluateReplyList,List<DynamicEvaluate> evaluateList, List<UserSimpleInfo> userSimpleInfoList){
+
+
         Map<Integer,String> userSimpleInfoMap = Maps.newHashMap();
         Set<Integer> userIds = Sets.newHashSet();
-        for(EvaluateReply evaluateReply : evaluateReplyList){
-            userIds.add(evaluateReply.getToUserId());
-            userIds.add(evaluateReply.getReplyUserId());
+        if(CollectionUtils.isNotEmpty(evaluateReplyList)){
+            for(EvaluateReply evaluateReply : evaluateReplyList){
+                userIds.add(evaluateReply.getToUserId());
+                userIds.add(evaluateReply.getReplyUserId());
+            }
+        }
+        if(CollectionUtils.isEmpty(evaluateReplyList)){
+            for(DynamicEvaluate dynamicEvaluate : evaluateList){
+                userIds.add(dynamicEvaluate.getEvaluateUser());
+            }
         }
         // 移除缓存中已经存在的user
         for(UserSimpleInfo userSimpleInfo :userSimpleInfoList){
@@ -139,12 +152,14 @@ public class DynamicEvaluateServiceImpl implements DynamicEvaluateService{
                 userIds.remove(userId);
             }
         }
-        //TODO 是否需要设置动态关联的用户的简单信息缓存
-        UserInfoExample userInfoExample = new UserInfoExample();
-        userInfoExample.createCriteria().andIdIn(Lists.newArrayList(userIds));
-        List<UserInfo> userInfos = userInfoMapper.selectByExample(userInfoExample);
-        for(UserInfo userInfo : userInfos){
-            userSimpleInfoMap.put(userInfo.getId(),userInfo.getUserName());
+        if(CollectionUtils.isNotEmpty(userIds)){
+            //TODO 是否需要设置动态关联的用户的简单信息缓存
+            UserInfoExample userInfoExample = new UserInfoExample();
+            userInfoExample.createCriteria().andIdIn(Lists.newArrayList(userIds));
+            List<UserInfo> userInfos = userInfoMapper.selectByExample(userInfoExample);
+            for(UserInfo userInfo : userInfos){
+                userSimpleInfoMap.put(userInfo.getId(),userInfo.getUserName());
+            }
         }
 
         return userSimpleInfoMap;
@@ -153,19 +168,19 @@ public class DynamicEvaluateServiceImpl implements DynamicEvaluateService{
 
     private List<DynamicInfoAndReplyVo.Evaluate> dataTransfer(Map<Integer,List<DynamicInfoAndReplyVo.Reply>> replyGroupInfo ,
                                                                        List<DynamicEvaluate> dynamicEvaluateList, Map<Integer,String> userSimpleInfo ){
-        if(replyGroupInfo.size() == 0){
-            throw new IllegalArgumentException();
-        }
+
         List<DynamicInfoAndReplyVo.Evaluate> evaluates = Lists.newArrayList();
         for(DynamicEvaluate dynamicEvaluate : dynamicEvaluateList){
 
             DynamicInfoAndReplyVo.Evaluate evaluate = new DynamicInfoAndReplyVo.Evaluate();
-            evaluate.setDate(dynamicEvaluate.getCreateTime());
+            evaluate.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dynamicEvaluate.getCreateTime()));
             evaluate.setEvaluateContent(dynamicEvaluate.getEvaluateContent());
             evaluate.setEvaluateUser(userSimpleInfo.get(dynamicEvaluate.getEvaluateUser()));
 
-            List<DynamicInfoAndReplyVo.Reply> replyList = replyGroupInfo.get(dynamicEvaluate.getId());
-            evaluate.setReply(replyList);
+            if(replyGroupInfo != null && replyGroupInfo.size() != 0){
+                List<DynamicInfoAndReplyVo.Reply> replyList = replyGroupInfo.get(dynamicEvaluate.getId());
+                evaluate.setReply(replyList);
+            }
 
             evaluates.add(evaluate);
         }

@@ -34,6 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,6 +68,9 @@ public class DynamicServiceImpl implements DynamicService{
 
     @Resource
     private DynamicEvaluateService dynamicEvaluateService;
+
+    @Resource
+    private DynamicEvaluateMapper dynamicEvaluateMapper;
 
     @Resource
     private FileLoadService fileLoadService;
@@ -153,8 +158,8 @@ public class DynamicServiceImpl implements DynamicService{
             return Result.getDefaultError(Response.DYNAMIC_NOT_CONTAINS.getMsg());
         }
 
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userDynamic.getUserId());
         DynamicInfoVo dynamicInfoVo = getDynamicInfo(userDynamic);
-
         Result result = dynamicEvaluateService.getDynamicEvaluateInfo(dynamicId);
         List<DynamicInfoAndReplyVo.Evaluate> evaluateList = Lists.newArrayList();
         if(result.isSuccess() && result.getData() != null){
@@ -164,6 +169,10 @@ public class DynamicServiceImpl implements DynamicService{
         DynamicInfoAndReplyVo dynamicInfoAndReplyVo = new DynamicInfoAndReplyVo();
         dynamicInfoAndReplyVo.setDynamicInfoVo(dynamicInfoVo);
         dynamicInfoAndReplyVo.setEvaluate(evaluateList);
+        dynamicInfoAndReplyVo.setUserId(userInfo.getId());
+        dynamicInfoAndReplyVo.setUserName(userInfo.getUserName());
+        dynamicInfoAndReplyVo.setDynamicId(dynamicId);
+        dynamicInfoAndReplyVo.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(userDynamic.getCreatetime()));
 
         return Result.getDefaultSuccess(dynamicInfoAndReplyVo);
     }
@@ -236,6 +245,22 @@ public class DynamicServiceImpl implements DynamicService{
         DynamicLikeVo dynamicLikeVo = getDynamicLikeInfo(userDynamic.getId());
         dynamicInfoVo.setDynamicLikeVo(dynamicLikeVo);
         return dynamicInfoVo;
+    }
+
+    @Override
+    public Result commentDynamic(int userId, int id, String content) {
+
+        DynamicEvaluate dynamicEvaluate = new DynamicEvaluate();
+        dynamicEvaluate.setDynamicId(id);
+        dynamicEvaluate.setEvaluateUser(userId);
+        dynamicEvaluate.setEvaluateContent(content);
+
+        int record = dynamicEvaluateMapper.insert(dynamicEvaluate);
+        if(record > 0){
+            return Result.getDefaultSuccess(null);
+        }
+
+        return Result.getDefaultError(Response.COMMENT_DYNAMIC_FAIL.getMsg());
     }
 
 

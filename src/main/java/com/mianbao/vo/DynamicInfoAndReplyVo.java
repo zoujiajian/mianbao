@@ -17,6 +17,18 @@ import java.util.List;
 @ToString
 public class DynamicInfoAndReplyVo{
 
+    //发表人id
+    private int userId;
+
+    //发表人
+    private String userName;
+
+    //动态id
+    private int dynamicId;
+
+    //发表时间
+    private String date;
+
     //评价
     private List<Evaluate> evaluate;
 
@@ -35,7 +47,7 @@ public class DynamicInfoAndReplyVo{
         private String evaluateUser;
 
         //评价时间
-        private Date date;
+        private String date;
 
         //评价的回复
         private List<Reply> reply;
@@ -57,6 +69,6 @@ public class DynamicInfoAndReplyVo{
         private String replyToUser;
 
         //回复时间
-        private Date dateTime;
+        private String dateTime;
     }
 }

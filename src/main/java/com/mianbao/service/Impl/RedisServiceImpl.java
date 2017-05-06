@@ -32,6 +32,9 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
         if(jedis != null){
             try{
                 value = jedis.get(key);
+                if(value.equals("null")){
+                    return null;
+                }
             }catch (Exception e){
                 logger.error("get key exception : {}",e);
             }finally {
@@ -230,7 +233,7 @@ public class RedisServiceImpl extends RedisConfig implements RedisService {
         if(jedis != null){
             try{
                 Long record = jedis.sadd(key,value);
-                if(record > 1){
+                if(record >= 1){
                     success = true;
                 }
             }catch (Exception e){
