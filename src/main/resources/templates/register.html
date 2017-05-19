@@ -16,14 +16,27 @@
 			    }
 
 				$("#register").click(function(){
-						var jsonObject = JSON.stringify($("#registerData").serializeObject());
-						post(baseUrl+"/travel/user/register",jsonObject,function(data){
-						if(data.success){
-							window.location.href="/mianbao/travel/index.html";
+					var userName= $("#userName").val();
+					var userEmail= $("#userMail").val();
+					var password = $("#password").val();
+					var val=$('input:radio[name="userSex"]:checked').val();
+
+					if(val == "" || val == null){
+						window.alert("性别必须勾选");
+					}else{
+						 if(userName == "" || userEmail == "" || password == ""){
+							window.alert("用户名,密码 ,邮箱不能为空!");
 						}else{
-							window.alert(data.errorMsg);
+							var jsonObject = JSON.stringify($("#registerData").serializeObject());
+							post(baseUrl+"/travel/user/register",jsonObject,function(data){
+								if(data.success){
+									window.alert("注册成功");
+								}else{
+									window.alert(data.errorMsg);
+								}
+							});
 						}
-					});
+					}
 				});
 			});
 		</script>
@@ -75,11 +88,11 @@
 					    <form id="registerData" action="" method="post">
 					    	<div>
 						    	<span><label>用户名</label></span>
-						    	<span><input name="userName" type="text" class="textbox" placeholder="user name"/></span>
+						    	<span><input name="userName" value="" type="text" class="textbox" placeholder="user name" id="userName" /></span>
 						    </div>
 						    <div>
 						    	<span><label>邮箱</label></span>
-						    	<span><input name="userMail" type="email" class="textbox" placeholder="user mail"/></span>
+						    	<span><input name="userMail" type="email"  value="" class="textbox" placeholder="user mail" id="userMail"/></span>
 						    </div>
 						    <div>
 						     	<span><label>性别</label></span>
@@ -90,7 +103,7 @@
 						    </div>
 							<div>
 								<span><label>密码</label></span>
-								<span><input name="userPassword" type="password" class="textbox" placeholder="password"/></span>
+								<span><input name="userPassword" type="password" id="password" value="" class="textbox" placeholder="password"/></span>
 						    </div>
 						   <div>
 						   		<span><input id="register" type="button" value="Submit"/></span>

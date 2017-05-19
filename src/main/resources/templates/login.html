@@ -16,22 +16,29 @@
 			    }
 
 				$("#login").click(function(){
-						var jsonObject = JSON.stringify($("#loginData").serializeObject());
-						post(baseUrl+"/travel/user/login",jsonObject,function(data){
-						if(data.success){
-						    //token 过期时间为7天
-						    $.cookie("token", data.data, { expires: 7, path: '/' });
+                    debugger;
+                    var userName = $("#userName").val();
+                    var password = $("#password").val();
+                    if(userName == "" || password == ""){
+                        window.alert("用户名或者密码为空");
+                    }else{
+                        var jsonObject = JSON.stringify($("#loginData").serializeObject());
+                        post(baseUrl+"/travel/user/login",jsonObject,function(data){
+                            if(data.success){
+                                //token 过期时间为7天
+                                $.cookie("token", data.data, { expires: 7, path: '/' });
 
-                            //登录过期时间为2小时
-						    var expireTime = new Date();
-						    expireTime.setTime(expireTime.getTime() + (60 * 60 * 1000 * 2));
-						    $.cookie("user",$("#userName").val(), {expires: expireTime, path: '/'});
-							window.location.href="/mianbao/travel/index.html";
-						}else{
-							window.alert(data.errorMsg);
-						}
-					});
-				});
+                                //登录过期时间为2小时
+                                var expireTime = new Date();
+                                expireTime.setTime(expireTime.getTime() + (60 * 60 * 1000 * 2));
+                                $.cookie("user",$("#userName").val(), {expires: expireTime, path: '/'});
+                                window.location.href="/mianbao/travel/index.html";
+                            }else{
+                                window.alert(data.errorMsg);
+                            }
+                         });
+                     }
+                });
 			});
 		</script>
 </head>
@@ -81,11 +88,11 @@
                     <form id="loginData" action="" method="post">
                         <div>
                             <span><label>用户名</label></span>
-                            <span><input id= "userName" name="userName" type="text" class="textbox" placeholder="user name"/></span>
+                            <span><input id= "userName" name="userName" value="" type="text" class="textbox" placeholder="user name"/></span>
                         </div>
                         <div>
                             <span><label>密码</label></span>
-                            <span><input name="userPassword" type="text" class="textbox" placeholder="password"/></span>
+                            <span><input id="password" name="userPassword" value="" type="password" class="textbox" placeholder="password"/></span>
                         </div>
                         <div>
                             <span><input id="login" type="button" value="登录"/></span>
