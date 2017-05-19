@@ -22,6 +22,14 @@
             //preview();
             //图片上传
             $("#upload").click(function(){
+                var scenicSpotName = $("#scenicSpotName").val();
+                var message = $("#message").val();
+                var file_input = $("#file_input").val();
+                if(scenicSpotName == "" || message == "" || file_input == null || file_input == ""){
+                    window.alert("景点名称,内容不能为空,必须勾选图片");
+                    return ;
+                }
+
                 var url = "/mianbao/travel/scenic/addScenicSpot";
                 upload(function(data){
                     if(data.success){
@@ -109,7 +117,7 @@
                     <div class="row">
                         <form action="#" method="post" class="contact-form"  id="release">
                             <fieldset class="col-md-4 col-sm-6">
-                                <input type="text" name="scenicSpotName" placeholder="景点名称..."/>
+                                <input type="text" name="scenicSpotName" placeholder="景点名称..." id="scenicSpotName"/>
                             </fieldset>
                             <fieldset class="col-md-12 col-sm-12">
                                 <textarea name="scenicSpotInfo" id="message" cols="30" rows="6" placeholder="景点内容..."></textarea>
