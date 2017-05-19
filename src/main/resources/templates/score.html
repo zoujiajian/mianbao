@@ -1,0 +1,208 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>景点评价</title>
+
+    <link rel="stylesheet" th:href="@{/css/scenic/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/scenic/font-awesome/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/scenic/style.css}" id="theme-styles"/>
+    <script th:src="@{/js/vendor/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/js/jquery.cookie.js}"></script>
+    <script th:src="@{/js/min/plugins.min.js}"></script>
+    <script th:src="@{/js/min/main.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/score/startScore.js}"></script>
+    <script th:src="@{/js/respond.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/modernizr.js}"></script>
+    <script th:inline="javascript">
+         $(function(){
+            var userName = $.cookie("user");
+            if(userName != ""){
+                if(typeof(userName) != "undefined"){
+                    $("#status").html('<a th:href="@{/mianbao/travel/user/userInfo}">欢迎您: ' + userName +"</a>");
+                }
+            }
+
+            $("#evaluate").click(function(){
+                var score = $("#fenshu").text();
+                $("#score").val(score);
+                var data = $("#comment").serializeObject();
+                var jsonData = JSON.stringify(data);
+                var url = "/mianbao/travel/scenic/score";
+                var userName = $.cookie("user");
+                if(userName == null){
+                    window.alert("只有登录之后才可以进行评价哦");
+                }else{
+                    post(url,jsonData,function(data){
+                    if(data.success){
+                       window.location.reload();
+                    }else{
+                        window.alter("评价失败!");
+                    }
+                });
+              }
+            });
+        });
+        </script>
+    <style>
+body,li,p,ul {
+    margin: 0;
+    padding: 0;
+    font: 12px/1 Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+ul, li, ol { list-style: none; }
+/* 重置文本格式元素 */
+a { text-decoration: none; cursor: pointer; color:#333333; font-size:14px;}
+a:hover { text-decoration: none; }
+.clearfix::after{ display:block; content:''; height:0; overflow:hidden; clear:both;}
+/*星星样式*/
+.content{ width:600px; margin:0 auto; padding-top:20px;}
+.title{ font-size:14px; background:#dfdfdf; padding:10px; margin-bottom:10px;}
+.block{ width:100%; margin:0 0 20px 0; padding-top:10px; padding-left:50px; line-height:21px;}
+.block .star_score{ float:left;}
+.star_list{height:21px;margin:50px; line-height:21px;}
+.block p,.block .attitude{ padding-left:20px; line-height:21px; display:inline-block;}
+.block p span{ color:#C00; font-size:16px; font-family:Georgia, "Times New Roman", Times, serif;}
+.star_score { background:url(/images/score/stark2.png); width:160px; height:21px;  position:relative; }
+.star_score a{ height:21px; display:block; text-indent:-999em; position:absolute;left:0;}
+.star_score a:hover{ background:url(/images/score/stars2.png);left:0;}
+.star_score a.clibg{ background:url(/images/score/stars2.png);left:0;}
+#starttwo .star_score { background:url(/images/score/starky.png);}
+#starttwo .star_score a:hover{ background:url(/images/score/starsy.png);left:0;}
+#starttwo .star_score a.clibg{ background:url(/images/score/starsy.png);left:0;}
+/*星星样式*/
+.show_number{ padding-left:50px; padding-top:20px;}
+.show_number li{ width:240px; border:1px solid #ccc; padding:10px; margin-right:5px; margin-bottom:20px;}
+.atar_Show{background:url(/images/score/stark2.png); width:160px; height:21px;  position:relative; float:left; }
+.atar_Show p{ background:url(/images/score/stars2.png);left:0; height:21px; width:134px;}
+.show_number li span{ display:inline-block; line-height:21px;}
+</style>
+</head>
+
+<body>
+<div class="widewrapper masthead">
+    <div class="container">
+        <div id="mobile-nav-toggle" class="pull-right">
+            <a href="#" data-toggle="collapse" data-target=".clean-nav .navbar-collapse">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+
+        <nav class="pull-right clean-nav">
+            <div class="collapse navbar-collapse">
+                <ul class="nav nav-pills navbar-nav">
+
+                    <li>
+                        <a th:href="@{/mianbao/travel/index}">首页</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}">景点中心</a>
+                    </li>
+                    <li id ="status">
+                        <a th:href="@{/mianbao/travel/user/login}">登录</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/mianbao/travel/user/register}">注册</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+    </div>
+</div>
+<div class="content">
+    <div>
+        <p class="title">平均评价分:</p>
+        <ul class="show_number clearfix" th:if="${not(data.avgScore eq 0)}">
+
+            <li>
+                <div class="atar_Show">
+                    <p tip="1" th:attr="tip=${data.avgScore}"></p>
+                </div>
+                <span></span>
+            </li>
+
+        </ul>
+        <script>
+            //显示分数
+              $(".show_number li p").each(function(index, element) {
+                var num=$(this).attr("tip");
+                var www=num*2*16;//
+                $(this).css("width",www);
+                $(this).parent(".atar_Show").siblings("span").text(num+"分");
+            });
+        </script>
+        <div th:if="${data.avgScore eq 0}">
+            <p>暂无评价</p>
+        </div>
+    </div><br/>
+    <p class="title">评分</p>
+        <div id="startone"  class="block clearfix" >
+            <div class="star_score"></div>
+            <p style="float:left;">您的评分：<span class="fenshu" id="fenshu"></span> 分</p>
+            <div class="attitude"></div>
+        </div>
+    <form action="" id="comment" method="post">
+        <fieldset class="col-md-12 col-sm-12">
+            <textarea  name="content" cols="30" rows="6" placeholder="评价内容..."></textarea>
+        </fieldset>
+        <input type="hidden" id="score" name ="score" value=""/>
+        <input type="hidden" id="scenicId" name ="scenicId" value="" th:attr="value=${id}"/>
+        <input type="button" value="评价" id="evaluate"/>
+    </form>
+    <p class="title">评价列表</p>
+    <ul class="show_number clearfix">
+        <li th:each="evaluate:${data.page.rows}">
+            <div class="atar_Show">
+                <p tip="0" th:attr="tip=${evaluate.score}"></p>
+            </div>
+            <br/>
+            <div>
+                <br/>
+                <p th:text="${evaluate.content}">评价详细信息</p>
+                <p th:text="${evaluate.user}">评价人</p>
+                <p th:text="${evaluate.date}">评价时间</p>
+            </div>
+            <br/>
+        </li>
+
+        <script type="text/javascript" th:src="@{/js/score/startScore.js}"></script>
+        <script>
+         scoreFun($("#startone"))
+         scoreFun($("#starttwo"),{
+               fen_d:22,//每一个a的宽度
+               ScoreGrade:5//a的个数 10或者
+             })
+        </script>
+    </ul>
+    <script>
+        //显示分数
+          $(".show_number li p").each(function(index, element) {
+            var num=$(this).attr("tip");
+            var www=num*2*16;//
+            $(this).css("width",www);
+            $(this).parent(".atar_Show").siblings("span").text(num+"分");
+        });
+    </script>
+</div>
+<div align="center" style="" th:if="${not (data.page.pagerNum eq 0)}">
+    <nobr>
+        <a th:if="${not (data.page.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/scoreList'}(id = ${id},pageNo=${data.page.page -1},pageSize=${data.page.pageSize})}">前一页</a>
+        <a th:if="${data.page.page eq 1}" href="javascript:void(0);">前一页</a>
+        <span th:each="pageNo : ${#numbers.sequence(1, data.page.pagerNum)}">
+                         <a th:if="${data.page.page eq pageNo}" href="javascript:void(0);">
+                             <span th:text="${pageNo}"></span>
+                         </a>
+
+                         <a th:if="${not (data.page.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/scoreList'}(id = ${id},pageNo=${pageNo},pageSize=${data.page.pageSize})}">
+                             <span th:text="${pageNo}"></span>
+                         </a>
+                     </span>
+        <a th:if="${not (data.page.page eq data.page.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/scoreList'}(id = ${id},pageNo=${data.page.page+1},pageSize=${data.page.pageSize})}">下一页</a>
+        <a th:if="${data.page.page eq data.page.pagerNum}" href="javascript:void(0);">下一页</a>
+    </nobr>
+</div>
+</body>
+</html>
+

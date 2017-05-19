@@ -47,41 +47,13 @@ public class TestUtil {
     @Resource
     private ScenicSpotService scenicSpotService;
 
-    @Test
-    public void testRedis() throws SQLException {
-        redisService.addByKey("name","zoujiajian");
-        System.out.println(  redisService.getByKey("name"));
-    }
-
-    @Test
-    public void testDb(){
-        DynamicEvaluateExample dynamicEvaluateExample = new DynamicEvaluateExample();
-                                dynamicEvaluateExample.createCriteria().andDynamicIdEqualTo(1);
-        List<DynamicEvaluate> list = dynamicEvaluateMapper.selectByExample(dynamicEvaluateExample);
-        System.out.println("value =" + JSON.toJSONString(list));
-    }
-
     @Resource
     private DbConnectionUtil dbConnectionUtil;
 
     @Test
-    public void testConnection(){
-        Connection connection = dbConnectionUtil.getConnection();
-        System.out.println(connection);
-        dbConnectionUtil.returnPool(connection);
-    }
-
-    @Test
-    public void test(){
-        final int a = 0;
-        int b = 1;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(a);
-                System.out.println(b);
-            }
-        }).start();
+    public void testRedis() throws SQLException {
+        redisService.addByKey("name","zoujiajian");
+        System.out.println(  redisService.getByKey("name"));
     }
 
     @Test
@@ -110,8 +82,7 @@ public class TestUtil {
     }
 
     @Test
-    public void dynamicInfo(){
-        System.out.println(JSON.toJSONString(dynamicService.getDynamicLikeInfoList(5)));
-//        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+    public void testScenic(){
+        System.out.println(JSON.toJSONString(scenicSpotService.getScenicSpotInfoWithDynamic(4,1,6)));
     }
 }

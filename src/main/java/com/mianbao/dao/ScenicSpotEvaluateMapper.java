@@ -1,10 +1,8 @@
 package com.mianbao.dao;
 
-
-import java.util.List;
-
 import com.mianbao.domain.ScenicSpotEvaluate;
 import com.mianbao.domain.ScenicSpotEvaluateExample;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +29,9 @@ public interface ScenicSpotEvaluateMapper {
     int updateByPrimaryKeySelective(ScenicSpotEvaluate record);
 
     int updateByPrimaryKey(ScenicSpotEvaluate record);
+
+    List<ScenicSpotEvaluate> selectWithLimit(@Param("scenicId") int scenicId, @Param("limit") int limit, @Param("offset") int offset);
+
+    Double selectAvgScore(int scenicId);
+
 }

@@ -10,16 +10,21 @@
     <script th:inline="javascript">
         $(function(){
             $("#like").click(function(){
-                var url = "/mianbao/travel/dynamic/like";
-                var data = {"id":$("#dynamicId").val()};
-                get(url,data,function(data){
-                    if(data.success){
-                        $("#likeStatus").val(1);
-                        window.alert("点赞成功");
-                    }else{
-                        window.alert("点赞失败");
-                    }
-                });
+                var userName = $.cookie("user");
+                if(userName == null){
+                    window.alert("只有登录之后才可以进行评价哦");
+                }else{
+                    var url = "/mianbao/travel/dynamic/like";
+                    var data = {"id":$("#dynamicId").val()};
+                    get(url,data,function(data){
+                        if(data.success){
+                            $("#likeStatus").val(1);
+                             window.location.reload();
+                        }else{
+                            window.alert("点赞失败 您可能已经赞过了");
+                        }
+                    });
+                }
             });
         })
     </script>

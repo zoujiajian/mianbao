@@ -225,6 +225,66 @@ public class ScenicSpotEvaluateExample {
             return (Criteria) this;
         }
 
+        public Criteria andScenicIdIsNull() {
+            addCriterion("scenic_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdIsNotNull() {
+            addCriterion("scenic_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdEqualTo(Integer value) {
+            addCriterion("scenic_id =", value, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdNotEqualTo(Integer value) {
+            addCriterion("scenic_id <>", value, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdGreaterThan(Integer value) {
+            addCriterion("scenic_id >", value, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("scenic_id >=", value, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdLessThan(Integer value) {
+            addCriterion("scenic_id <", value, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdLessThanOrEqualTo(Integer value) {
+            addCriterion("scenic_id <=", value, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdIn(List<Integer> values) {
+            addCriterion("scenic_id in", values, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdNotIn(List<Integer> values) {
+            addCriterion("scenic_id not in", values, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdBetween(Integer value1, Integer value2) {
+            addCriterion("scenic_id between", value1, value2, "scenicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andScenicIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("scenic_id not between", value1, value2, "scenicId");
+            return (Criteria) this;
+        }
+
         public Criteria andEvaluateContentIsNull() {
             addCriterion("evaluate_content is null");
             return (Criteria) this;
@@ -292,76 +352,6 @@ public class ScenicSpotEvaluateExample {
 
         public Criteria andEvaluateContentNotBetween(String value1, String value2) {
             addCriterion("evaluate_content not between", value1, value2, "evaluateContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreIsNull() {
-            addCriterion("evaluate_picutre is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreIsNotNull() {
-            addCriterion("evaluate_picutre is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreEqualTo(String value) {
-            addCriterion("evaluate_picutre =", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreNotEqualTo(String value) {
-            addCriterion("evaluate_picutre <>", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreGreaterThan(String value) {
-            addCriterion("evaluate_picutre >", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreGreaterThanOrEqualTo(String value) {
-            addCriterion("evaluate_picutre >=", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreLessThan(String value) {
-            addCriterion("evaluate_picutre <", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreLessThanOrEqualTo(String value) {
-            addCriterion("evaluate_picutre <=", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreLike(String value) {
-            addCriterion("evaluate_picutre like", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreNotLike(String value) {
-            addCriterion("evaluate_picutre not like", value, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreIn(List<String> values) {
-            addCriterion("evaluate_picutre in", values, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreNotIn(List<String> values) {
-            addCriterion("evaluate_picutre not in", values, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreBetween(String value1, String value2) {
-            addCriterion("evaluate_picutre between", value1, value2, "evaluatePicutre");
-            return (Criteria) this;
-        }
-
-        public Criteria andEvaluatePicutreNotBetween(String value1, String value2) {
-            addCriterion("evaluate_picutre not between", value1, value2, "evaluatePicutre");
             return (Criteria) this;
         }
 
@@ -435,52 +425,52 @@ public class ScenicSpotEvaluateExample {
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarEqualTo(Byte value) {
+        public Criteria andEvaluateStarEqualTo(Double value) {
             addCriterion("evaluate_star =", value, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarNotEqualTo(Byte value) {
+        public Criteria andEvaluateStarNotEqualTo(Double value) {
             addCriterion("evaluate_star <>", value, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarGreaterThan(Byte value) {
+        public Criteria andEvaluateStarGreaterThan(Double value) {
             addCriterion("evaluate_star >", value, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarGreaterThanOrEqualTo(Byte value) {
+        public Criteria andEvaluateStarGreaterThanOrEqualTo(Double value) {
             addCriterion("evaluate_star >=", value, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarLessThan(Byte value) {
+        public Criteria andEvaluateStarLessThan(Double value) {
             addCriterion("evaluate_star <", value, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarLessThanOrEqualTo(Byte value) {
+        public Criteria andEvaluateStarLessThanOrEqualTo(Double value) {
             addCriterion("evaluate_star <=", value, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarIn(List<Byte> values) {
+        public Criteria andEvaluateStarIn(List<Double> values) {
             addCriterion("evaluate_star in", values, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarNotIn(List<Byte> values) {
+        public Criteria andEvaluateStarNotIn(List<Double> values) {
             addCriterion("evaluate_star not in", values, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarBetween(Byte value1, Byte value2) {
+        public Criteria andEvaluateStarBetween(Double value1, Double value2) {
             addCriterion("evaluate_star between", value1, value2, "evaluateStar");
             return (Criteria) this;
         }
 
-        public Criteria andEvaluateStarNotBetween(Byte value1, Byte value2) {
+        public Criteria andEvaluateStarNotBetween(Double value1, Double value2) {
             addCriterion("evaluate_star not between", value1, value2, "evaluateStar");
             return (Criteria) this;
         }

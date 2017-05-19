@@ -4,10 +4,10 @@
   <resultMap id="BaseResultMap" type="com.mianbao.domain.ScenicSpotEvaluate">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="scenic_id" jdbcType="INTEGER" property="scenicId" />
     <result column="evaluate_content" jdbcType="VARCHAR" property="evaluateContent" />
-    <result column="evaluate_picutre" jdbcType="VARCHAR" property="evaluatePicutre" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="evaluate_star" jdbcType="TINYINT" property="evaluateStar" />
+    <result column="evaluate_star" jdbcType="DOUBLE" property="evaluateStar" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, evaluate_content, evaluate_picutre, create_time, evaluate_star
+    id, user_id, scenic_id, evaluate_content, create_time, evaluate_star
   </sql>
   <select id="selectByExample" parameterType="com.mianbao.domain.ScenicSpotEvaluateExample" resultMap="BaseResultMap">
     select
@@ -86,7 +86,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from tb_scenic_spot_evaluate
     where id = #{id,jdbcType=INTEGER}
@@ -105,10 +105,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_scenic_spot_evaluate (user_id, evaluate_content, evaluate_picutre, 
-      create_time, evaluate_star)
-    values (#{userId,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR}, #{evaluatePicutre,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{evaluateStar,jdbcType=TINYINT})
+    insert into tb_scenic_spot_evaluate (user_id, scenic_id, evaluate_content,
+    create_time, evaluate_star)
+    values (#{userId,jdbcType=INTEGER}, #{scenicId,jdbcType=INTEGER}, #{evaluateContent,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{evaluateStar,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.mianbao.domain.ScenicSpotEvaluate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -119,11 +119,11 @@
       <if test="userId != null">
         user_id,
       </if>
+      <if test="scenicId != null">
+        scenic_id,
+      </if>
       <if test="evaluateContent != null">
         evaluate_content,
-      </if>
-      <if test="evaluatePicutre != null">
-        evaluate_picutre,
       </if>
       <if test="createTime != null">
         create_time,
@@ -136,17 +136,17 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
+      <if test="scenicId != null">
+        #{scenicId,jdbcType=INTEGER},
+      </if>
       <if test="evaluateContent != null">
         #{evaluateContent,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluatePicutre != null">
-        #{evaluatePicutre,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="evaluateStar != null">
-        #{evaluateStar,jdbcType=TINYINT},
+        #{evaluateStar,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -165,17 +165,17 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
+      <if test="record.scenicId != null">
+        scenic_id = #{record.scenicId,jdbcType=INTEGER},
+      </if>
       <if test="record.evaluateContent != null">
         evaluate_content = #{record.evaluateContent,jdbcType=VARCHAR},
-      </if>
-      <if test="record.evaluatePicutre != null">
-        evaluate_picutre = #{record.evaluatePicutre,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.evaluateStar != null">
-        evaluate_star = #{record.evaluateStar,jdbcType=TINYINT},
+        evaluate_star = #{record.evaluateStar,jdbcType=DOUBLE},
       </if>
     </set>
     <if test="_parameter != null">
@@ -185,11 +185,11 @@
   <update id="updateByExample" parameterType="map">
     update tb_scenic_spot_evaluate
     set id = #{record.id,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
-      evaluate_content = #{record.evaluateContent,jdbcType=VARCHAR},
-      evaluate_picutre = #{record.evaluatePicutre,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      evaluate_star = #{record.evaluateStar,jdbcType=TINYINT}
+    user_id = #{record.userId,jdbcType=INTEGER},
+    scenic_id = #{record.scenicId,jdbcType=INTEGER},
+    evaluate_content = #{record.evaluateContent,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    evaluate_star = #{record.evaluateStar,jdbcType=DOUBLE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -200,17 +200,17 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="scenicId != null">
+        scenic_id = #{scenicId,jdbcType=INTEGER},
+      </if>
       <if test="evaluateContent != null">
         evaluate_content = #{evaluateContent,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluatePicutre != null">
-        evaluate_picutre = #{evaluatePicutre,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="evaluateStar != null">
-        evaluate_star = #{evaluateStar,jdbcType=TINYINT},
+        evaluate_star = #{evaluateStar,jdbcType=DOUBLE},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -218,10 +218,24 @@
   <update id="updateByPrimaryKey" parameterType="com.mianbao.domain.ScenicSpotEvaluate">
     update tb_scenic_spot_evaluate
     set user_id = #{userId,jdbcType=INTEGER},
-      evaluate_content = #{evaluateContent,jdbcType=VARCHAR},
-      evaluate_picutre = #{evaluatePicutre,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      evaluate_star = #{evaluateStar,jdbcType=TINYINT}
+    scenic_id = #{scenicId,jdbcType=INTEGER},
+    evaluate_content = #{evaluateContent,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    evaluate_star = #{evaluateStar,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectWithLimit" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_scenic_spot_evaluate
+    where scenic_id=#{scenicId}
+    order by create_time desc
+    limit #{limit},#{offset}
+  </select>
+
+
+  <select id="selectAvgScore" parameterType="java.lang.Integer" resultType="java.lang.Double">
+    select avg(evaluate_star) from tb_scenic_spot_evaluate where scenic_id = #{scenicId};
+  </select>
 </mapper>

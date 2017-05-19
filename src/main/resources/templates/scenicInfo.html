@@ -25,35 +25,44 @@
                 }
             }
              //预览
-            preview();
+            //preview();
             //图片上传
             $("#upload").click(function(){
-                var url = "/mianbao/travel/dynamic/release";
-                upload(function(data){
-                    if(data.success){
-                        window.location.href="/mianbao/travel/index.html";
-                    }else{
-                        window.alter("上传失败!");
-                    }
-                },url);
+                var userName = $.cookie("user");
+                if(userName == null){
+                    window.alert("只有登录之后才可以进行评价哦");
+                }else{
+                    var url = "/mianbao/travel/dynamic/release";
+                    upload(function(data){
+                        if(data.success){
+                            window.location.href="/mianbao/travel/index.html";
+                        }else{
+                            window.alter("上传失败!");
+                        }
+                    },url);
+                }
             });
 
             $("#collection").click(function(){
-                var url = "/mianbao/travel/scenic/collection";
-                var data = {"id":$("#scenicIds").val()};
-                get(url,data,function(data){
-                    if(data.success){
-                        window.alert("收藏成功");
-                    }else{
-                        window.alert(data.errorMsg);
-                    }
-                });
+                var userName = $.cookie("user");
+                if(userName == null){
+                    window.alert("只有登录之后才可以进行收藏景点哦");
+                }else{
+                    var url = "/mianbao/travel/scenic/collection";
+                    var data = {"id":$("#scenicIds").val()};
+                    get(url,data,function(data){
+                        if(data.success){
+                            window.alert("收藏成功");
+                        }else{
+                            window.alert(data.errorMsg);
+                        }
+                    });
+                }
             });
         });
     </script>
 </head>
 <body>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 
 <div class="responsive-header visible-xs visible-sm">
     <div class="container">
@@ -90,7 +99,7 @@
         <ul class="navigation">
             <li><a th:href="@{/mianbao/travel/index}"><i class="fa fa-globe"></i>首页</a></li>
             <li><a th:href="@{/mianbao/travel/dynamic/center(pageNo=1,pageSize=3)}"><i class="fa fa-pencil"></i>个人中心</a></li>
-            <li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=3)}"><i class="fa fa-paperclip"></i>景点中心</a></li>
+            <li><a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}"><i class="fa fa-paperclip"></i>景点中心</a></li>
             <li><a th:href="@{/mianbao/travel/scenic/collectionInfo(pageNo=1,pageSize=6)}"><i class="fa fa-link"></i>收藏的景点</a></li>
         </ul>
     </div> <!-- .main-navigation -->
@@ -130,7 +139,8 @@
                             <img th:src="${picture}" alt="about me" width="290px" height="220px"/>
                         </div>
                         <p th:text="${data.scenicSpotInfo}">景点介绍</p>
-                        <a href="#" id="collection">收藏景点</a>
+                        <a href="#" id="collection">收藏景点</a><br/>
+                        <a th:href="@{/mianbao/travel/scenic/scoreList(id = ${data.id},pageNo=1,pageSize=6)}" id="score">查看景点评价</a>
                         <hr/>
                     </div>
                 </div> <!-- #about -->
@@ -170,7 +180,7 @@
                              <span th:text="${pageNo}"></span>
                          </a>
                      </span>
-                     <a th:if="${not (data.page.page eq data.page.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${data.page.page+1},size=${data.page.pageSize})}">下一页</a>
+                     <a th:if="${not (data.page.page eq data.page.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${data.page.page+1},pageSize=${data.page.pageSize})}">下一页</a>
                      <a th:if="${data.page.page eq data.page.pagerNum}" href="javascript:void(0);">下一页</a>
                  </nobr>
              </div>

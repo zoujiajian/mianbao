@@ -1,6 +1,7 @@
 package com.mianbao.service;
 
 import com.mianbao.common.Result;
+import com.mianbao.vo.ScoreVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -40,4 +41,13 @@ public interface ScenicSpotService {
 
     //分页查询所有的景点信息
     Result selectAllScenicInfo(Map<String,Object> params);
+
+    //评价景点
+    Result scoreScenic(ScoreVo scoreVo, int userId);
+
+    //景点评价列表 加上分页参数
+    Result selectScoreList(Map<String,Object> params);
+
+    //获取平均评价分数
+    Result avgScore(int scenicId);
 }

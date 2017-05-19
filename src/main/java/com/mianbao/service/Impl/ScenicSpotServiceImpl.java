@@ -14,10 +14,7 @@ import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.*;
 import com.mianbao.util.BeanUtil;
 import com.mianbao.util.PictureUtil;
-import com.mianbao.vo.DynamicSimpleVo;
-import com.mianbao.vo.ScenicSpotBaseVo;
-import com.mianbao.vo.ScenicSpotSimpleVo;
-import com.mianbao.vo.ScenicSpotVo;
+import com.mianbao.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +25,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -58,10 +57,14 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
     private UserLikeMapper userLikeMapper;
 
     @Resource
+    private ScenicSpotEvaluateMapper scenicSpotEvaluateMapper;
+
+    @Resource
     private FileLoadService fileLoadService;
 
     @Resource
     private RedisService redisService;
+
 
     @Override
     public Result addScenicSpot(HttpServletRequest request, String token) {
@@ -389,6 +392,78 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
         return Result.getDefaultSuccess(page);
     }
 
+    @Override
+    public Result scoreScenic(ScoreVo scoreVo,int userId) {
+        if(scoreVo == null || scoreVo.getScore() < 0 || StringUtils.isEmpty(scoreVo.getContent())){
+            return Result.getDefaultError(Response.SCORE_FAIL.getMsg());
+        }
+        ScenicSpotEvaluate scenicSpotEvaluate = new ScenicSpotEvaluate();
+        scenicSpotEvaluate.setUserId(userId);
+        scenicSpotEvaluate.setEvaluateContent(scoreVo.getContent());
+        scenicSpotEvaluate.setEvaluateStar(scoreVo.getScore());
+        scenicSpotEvaluate.setScenicId(scoreVo.getScenicId());
+        int record = scenicSpotEvaluateMapper.insert(scenicSpotEvaluate);
+        if(record > 0 ){
+            return Result.getDefaultSuccess(Response.SCORE_SUCCESS.getMsg());
+        }
+        return Result.getDefaultError(Response.SCORE_FAIL.getMsg());
+    }
+
+    @Override
+    public Result selectScoreList(Map<String, Object> params) {
+        if(Integer.valueOf(params.get("pageNo").toString()) < 1 || Integer.valueOf(params.get("pageSize").toString()) != 6 ){
+            return Result.getDefaultError(Response.SELECT_SCORE_LIST_FAIL.getMsg());
+        }
+        int scenicId = Integer.valueOf(params.get("scenicId").toString());
+        ScenicSpotEvaluateExample countExample = new ScenicSpotEvaluateExample();
+        countExample.createCriteria().andScenicIdEqualTo(scenicId);
+        long count = scenicSpotEvaluateMapper.countByExample(countExample);
+
+        int pageSize = Integer.valueOf(params.get("pageSize").toString());
+        int pageNo = Integer.valueOf(params.get("pageNo").toString());
+        Page<ScoreListVo> page = new Page<>();
+        page.setRecords(count);
+        page.setPageSize(pageSize);
+        page.setPage(pageNo);
+        if(count < 0){
+            return Result.getDefaultSuccess(page);
+        }
+
+        List<ScenicSpotEvaluate> rows = scenicSpotEvaluateMapper.selectWithLimit(scenicId,page.getStartRecord(),page.getPageSize());
+        if(CollectionUtils.isEmpty(rows)){
+            return Result.getDefaultSuccess(page);
+        }
+        List<ScoreListVo> scoreListVoList = Lists.transform(rows,new Function<ScenicSpotEvaluate, ScoreListVo>(){
+
+            @Override
+            public ScoreListVo apply(ScenicSpotEvaluate scenicSpotEvaluate) {
+                int userId = scenicSpotEvaluate.getUserId();
+                UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userId);
+                String userName = userInfo.getUserName();
+
+                ScoreListVo scoreListVo  = new ScoreListVo();
+                scoreListVo.setUser(userName);
+                scoreListVo.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(scenicSpotEvaluate.getCreateTime()));
+                scoreListVo.setContent(scenicSpotEvaluate.getEvaluateContent());
+                scoreListVo.setScore(scenicSpotEvaluate.getEvaluateStar());
+
+                return scoreListVo;
+            }
+        });
+        page.setRows(scoreListVoList);
+
+        return Result.getDefaultSuccess(page);
+    }
+
+    @Override
+    public Result avgScore(int scenicId) {
+        if(scenicId < 0){
+            return Result.getDefaultError(Response.SCENIC_SPOT_NOT_CONTAINS.getMsg());
+        }
+        Double avg = scenicSpotEvaluateMapper.selectAvgScore(scenicId);
+        double avgScore = avg == null? 0 : new BigDecimal(avg).setScale(1,BigDecimal.ROUND_DOWN).doubleValue();
+        return Result.getDefaultSuccess(avgScore);
+    }
 
     private List<String> getScenicSpotAllPicture(ScenicSpot scenicSpot){
         List<String> picture = Lists.newArrayList();

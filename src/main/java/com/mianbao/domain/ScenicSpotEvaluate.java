@@ -7,13 +7,13 @@ public class ScenicSpotEvaluate {
 
     private Integer userId;
 
-    private String evaluateContent;
+    private Integer scenicId;
 
-    private String evaluatePicutre;
+    private String evaluateContent;
 
     private Date createTime;
 
-    private Byte evaluateStar;
+    private Double evaluateStar;
 
     public Integer getId() {
         return id;
@@ -31,20 +31,20 @@ public class ScenicSpotEvaluate {
         this.userId = userId;
     }
 
+    public Integer getScenicId() {
+        return scenicId;
+    }
+
+    public void setScenicId(Integer scenicId) {
+        this.scenicId = scenicId;
+    }
+
     public String getEvaluateContent() {
         return evaluateContent;
     }
 
     public void setEvaluateContent(String evaluateContent) {
         this.evaluateContent = evaluateContent == null ? null : evaluateContent.trim();
-    }
-
-    public String getEvaluatePicutre() {
-        return evaluatePicutre;
-    }
-
-    public void setEvaluatePicutre(String evaluatePicutre) {
-        this.evaluatePicutre = evaluatePicutre == null ? null : evaluatePicutre.trim();
     }
 
     public Date getCreateTime() {
@@ -55,11 +55,11 @@ public class ScenicSpotEvaluate {
         this.createTime = createTime;
     }
 
-    public Byte getEvaluateStar() {
+    public Double getEvaluateStar() {
         return evaluateStar;
     }
 
-    public void setEvaluateStar(Byte evaluateStar) {
+    public void setEvaluateStar(Double evaluateStar) {
         this.evaluateStar = evaluateStar;
     }
 }

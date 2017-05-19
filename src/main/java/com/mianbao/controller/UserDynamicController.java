@@ -71,21 +71,15 @@ public class UserDynamicController {
 
     @RequestMapping(value = "/dynamicInfo",method = RequestMethod.GET)
     @SuppressWarnings("unchecked")
-    public String getDynamicInfo(@CookieValue(name = "token") String token,
-                                 @RequestParam("id") int id,
+    public String getDynamicInfo(@RequestParam("id") int id,
                                  Model model){
-        UserLogin userLogin = parseService.getUserLogin(token);
-        if(userLogin == null){
-            return "sys/index";
+        Result result = dynamicService.getDynamicInfo(id);
+        if(result.isSuccess()){
+            model.addAttribute("data",result.getData());
         }else{
-            Result result = dynamicService.getDynamicInfo(id);
-            if(result.isSuccess()){
-                model.addAttribute("data",result.getData());
-            }else{
-                Page page = new Page<>();
-                page.setRows(Collections.emptyList());
-                model.addAttribute("data",page);
-            }
+            Page page = new Page<>();
+            page.setRows(Collections.emptyList());
+            model.addAttribute("data",page);
         }
         return "dynamicInfo";
     }
