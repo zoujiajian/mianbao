@@ -26,7 +26,13 @@
 
             $("#evaluate").click(function(){
                 var score = $("#fenshu").text();
+                var content = $("#content").val();
+                if(score == "" || content == ""){
+                    window.alert("评价分数和内容都必须填写哦");
+                    return ;
+                }
                 $("#score").val(score);
+
                 var data = $("#comment").serializeObject();
                 var jsonData = JSON.stringify(data);
                 var url = "/mianbao/travel/scenic/score";
@@ -145,7 +151,7 @@ a:hover { text-decoration: none; }
         </div>
     <form action="" id="comment" method="post">
         <fieldset class="col-md-12 col-sm-12">
-            <textarea  name="content" cols="30" rows="6" placeholder="评价内容..."></textarea>
+            <textarea  name="content" cols="30" rows="6" placeholder="评价内容..." id="content"></textarea>
         </fieldset>
         <input type="hidden" id="score" name ="score" value=""/>
         <input type="hidden" id="scenicId" name ="scenicId" value="" th:attr="value=${id}"/>
