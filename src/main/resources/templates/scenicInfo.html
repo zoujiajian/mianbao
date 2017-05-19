@@ -169,18 +169,18 @@
             <hr/>
              <div align="center" style="" th:if="${not (data.page.pagerNum eq 0)}">
                  <nobr>
-                     <a th:if="${not (data.page.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${data.page.page -1},pageSize=${data.page.pageSize})}">前一页</a>
+                     <a th:if="${not (data.page.page eq 1)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(id=${data.id},pageNo=${data.page.page -1},pageSize=${data.page.pageSize})}">前一页</a>
                      <a th:if="${data.page.page eq 1}" href="javascript:void(0);">前一页</a>
                      <span th:each="pageNo : ${#numbers.sequence(1, data.page.pagerNum)}">
                          <a th:if="${data.page.page eq pageNo}" href="javascript:void(0);">
                              <span th:text="${pageNo}"></span>
                          </a>
 
-                         <a th:if="${not (data.page.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${pageNo},pageSize=${data.page.pageSize})}">
+                         <a th:if="${not (data.page.page eq pageNo)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(id=${data.id},pageNo=${pageNo},pageSize=${data.page.pageSize})}">
                              <span th:text="${pageNo}"></span>
                          </a>
                      </span>
-                     <a th:if="${not (data.page.page eq data.page.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(pageNo=${data.page.page+1},pageSize=${data.page.pageSize})}">下一页</a>
+                     <a th:if="${not (data.page.page eq data.page.pagerNum)}" th:href="@{${'/mianbao/travel/scenic/scenicInfo'}(id=${data.id},pageNo=${data.page.page+1},pageSize=${data.page.pageSize})}">下一页</a>
                      <a th:if="${data.page.page eq data.page.pagerNum}" href="javascript:void(0);">下一页</a>
                  </nobr>
              </div>
