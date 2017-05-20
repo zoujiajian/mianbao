@@ -42,6 +42,8 @@ public class UserDynamicController {
                 return result;
             }else if(result.getErrorMsg().equals(Response.USER_LOGIN_TIMEOUT.getMsg())){
                 return Result.getDefaultError("用户尚未登录");
+            }else{
+                return result;
             }
         }catch (Exception e){
             logger.error("releaseDynamic error",e);

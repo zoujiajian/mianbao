@@ -12,6 +12,7 @@ import com.mianbao.domain.*;
 import com.mianbao.enums.Response;
 import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.*;
+import com.mianbao.util.BadWordsUtil;
 import com.mianbao.util.BeanUtil;
 import com.mianbao.util.PictureUtil;
 import com.mianbao.vo.*;
@@ -75,13 +76,18 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
             Result.getDefaultError(Response.USER_LOGIN_TIMEOUT.getMsg());
         }
 
+
+        ScenicSpotBaseVo scenicSpotVo = BeanUtil.requestParse(request, ScenicSpotBaseVo.class);
+        //敏感词检测
+        if(BadWordsUtil.searchBanWords(scenicSpotVo.getScenicSpotInfo()) || BadWordsUtil.searchBanWords(scenicSpotVo.getScenicSpotName())){
+            return Result.getDefaultError(Response.BAD_WORD.getMsg());
+        }
+
+        UserLogin userLogin = JSON.parseObject(cacheValue,UserLogin.class);
         String pictureAddress = fileLoadService.uploadFile(request);
         if(StringUtils.isEmpty(pictureAddress) && fileLoadService.isContainsFile(request)){
             return Result.getDefaultError(Response.UPLOAD_PICTURE_FAIL.getMsg());
         }
-
-        ScenicSpotBaseVo scenicSpotVo = BeanUtil.requestParse(request, ScenicSpotBaseVo.class);
-        UserLogin userLogin = JSON.parseObject(cacheValue,UserLogin.class);
 
         ScenicSpot scenicSpot = new ScenicSpot();
         scenicSpot.setCreateUser(userLogin.getId());
@@ -397,6 +403,12 @@ public class ScenicSpotServiceImpl implements ScenicSpotService{
         if(scoreVo == null || scoreVo.getScore() < 0 || StringUtils.isEmpty(scoreVo.getContent())){
             return Result.getDefaultError(Response.SCORE_FAIL.getMsg());
         }
+
+        //敏感词检测
+        if(BadWordsUtil.searchBanWords(scoreVo.getContent())){
+            return Result.getDefaultError(Response.BAD_WORD.getMsg());
+        }
+
         ScenicSpotEvaluate scenicSpotEvaluate = new ScenicSpotEvaluate();
         scenicSpotEvaluate.setUserId(userId);
         scenicSpotEvaluate.setEvaluateContent(scoreVo.getContent());

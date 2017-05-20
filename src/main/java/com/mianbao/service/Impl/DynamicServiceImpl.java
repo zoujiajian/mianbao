@@ -18,6 +18,7 @@ import com.mianbao.service.DynamicEvaluateService;
 import com.mianbao.service.DynamicService;
 import com.mianbao.service.FileLoadService;
 import com.mianbao.service.RedisService;
+import com.mianbao.util.BadWordsUtil;
 import com.mianbao.util.BeanUtil;
 import com.mianbao.util.CookieUtil;
 import com.mianbao.util.PictureUtil;
@@ -90,13 +91,17 @@ public class DynamicServiceImpl implements DynamicService{
         }
         UserLogin userLogin = JSON.parseObject(cacheValue,UserLogin.class);
 
+        DynamicReleaseVo dynamicReleaseVo = BeanUtil.requestParse(request,DynamicReleaseVo.class);
+        //敏感词检测
+        if(BadWordsUtil.searchBanWords(dynamicReleaseVo.getDynamicTitle()) || BadWordsUtil.searchBanWords(dynamicReleaseVo.getDynamicContent())){
+            return Result.getDefaultError(Response.BAD_WORD.getMsg());
+        }
+
         String pictureAddress = fileLoadService.uploadFile(request);
         //如果图片存在 而且图片并没有上传成功
         if(StringUtils.isEmpty(pictureAddress) && fileLoadService.isContainsFile(request)){
             Result.getDefaultError(Response.RELEASE_DYNAMIC_FAIL.getMsg());
         }
-
-        DynamicReleaseVo dynamicReleaseVo = BeanUtil.requestParse(request,DynamicReleaseVo.class);
 
         UserDynamic userDynamic = new UserDynamic();
         userDynamic.setUserId(userLogin.getId());
@@ -249,6 +254,11 @@ public class DynamicServiceImpl implements DynamicService{
 
     @Override
     public Result commentDynamic(int userId, int id, String content) {
+
+        //敏感词检测
+        if(BadWordsUtil.searchBanWords(content)){
+            return Result.getDefaultError(Response.BAD_WORD.getMsg());
+        }
 
         DynamicEvaluate dynamicEvaluate = new DynamicEvaluate();
         dynamicEvaluate.setDynamicId(id);

@@ -44,7 +44,7 @@
                     if(data.success){
                        window.location.reload();
                     }else{
-                        window.alter("评价失败!");
+                        window.alert(data.errorMsg);
                     }
                 });
               }

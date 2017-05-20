@@ -35,7 +35,8 @@ public enum Response {
     SCORE_FAIL(100024,"景点评价失败!"),
     SCORE_SUCCESS(100025,"景点评价成功!"),
     SELECT_SCORE_LIST_FAIL(100026,"获取景点评价列表失败"),
-    SELECT_SCORE_LIST_SUCCESS(100027,"获取景点评价列表成功");
+    SELECT_SCORE_LIST_SUCCESS(100027,"获取景点评价列表成功"),
+    BAD_WORD(100028,"内容包含敏感词");
 
     private int code;
 

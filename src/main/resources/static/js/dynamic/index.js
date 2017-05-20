@@ -189,13 +189,15 @@ window.onload=function(){
     });
 
     $("#comment").click(function(){
-        debugger;
         var url = "/mianbao/travel/dynamic/comment";
         var content = $("#content").val();
         var data = {"content" : content,"id":$("#dynamicId").val()};
         get(url,data,function(data){
-            if(!data.success){
-                window.alert("评论失败");
+            if(data.success){
+                window.location.reload();
+            }else{
+                window.alert(data.errorMsg);
+                window.location.reload();
             }
         });
     });

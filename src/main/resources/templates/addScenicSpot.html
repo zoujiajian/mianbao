@@ -35,7 +35,7 @@
                     if(data.success){
                         window.location.href="/mianbao/travel/index.html";
                     }else{
-                        window.alter("上传失败!");
+                        window.alert(data.errorMsg);
                     }
                 },url);
             });
