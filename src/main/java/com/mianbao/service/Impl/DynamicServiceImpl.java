@@ -263,6 +263,32 @@ public class DynamicServiceImpl implements DynamicService{
         return Result.getDefaultError(Response.COMMENT_DYNAMIC_FAIL.getMsg());
     }
 
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Result deleteDynamic(int id) {
+        if(id < 0){
+            return Result.getDefaultError(Response.DYNAMIC_NOT_CONTAINS.getMsg());
+        }
+        int record = userDynamicMapper.deleteByPrimaryKey(id);
+        if(record <= 0){
+            throw new BusinessException();
+        }
+        //级联删除景点下的游记映射关系
+        ScenicSpotDynamicExample scenicSpotDynamicExample = new ScenicSpotDynamicExample();
+        scenicSpotDynamicExample.createCriteria().andDynamicIdEqualTo(id);
+        record = scenicSpotDynamicMapper.deleteByExample(scenicSpotDynamicExample);
+        if(record <= 0){
+            throw new BusinessException();
+        }
+
+        //级联删除游记评价信息
+        DynamicEvaluateExample dynamicEvaluateExample = new DynamicEvaluateExample();
+        dynamicEvaluateExample.createCriteria().andDynamicIdEqualTo(id);
+        dynamicEvaluateMapper.deleteByExample(dynamicEvaluateExample);
+
+        return Result.getDefaultSuccess(null);
+    }
+
 
     /**
      * 获取点赞信息

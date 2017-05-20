@@ -73,4 +73,11 @@ public interface DynamicService {
      * @return
      */
     Result commentDynamic(int userId, int id, String content);
+
+    /**
+     * 删除游记
+     * @param id
+     * @return
+     */
+    Result deleteDynamic(int id);
 }

@@ -13,24 +13,6 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/modernizr.js}"></script>
     <script th:src="@{/js/common.js}"></script>
-    <script th:inline="javascript">
-        $(function(){
-            $("#revoke").click(function(){
-                    debugger;
-                    var id = $("#revoke").data("id");
-                    var data= {"id":id};
-                    var url = "/mianbao/travel/scenic/revoke";
-                    get(url,data,function(data){
-                        if(data.success){
-                            window.alert("取消收藏成功");
-                        }else{
-                            window.alert(data.errorMsg);
-                        }
-                    });
-            });
-        });
-
-    </script>
 </head>
 <body>
 <header>
@@ -92,7 +74,7 @@
                                 <img th:src="${scenic.scenicSpotPicture}" alt=""/>
                                 <h3><a th:href="@{/mianbao/travel/scenic/scenicInfo(id=${scenic.id},pageNo=1,pageSize=6)}"><p th:text="${scenic.scenicSpotName}">景点名称</p></a></h3>
                                 <span class="meta"><p th:text="${scenic.scenicSpotInfo}">景点介绍</p></span>
-                                <a href="#" id="revoke" data-id="" th:attr="data-id=${scenic.id}">取消收藏</a>
+                                <a th:href="@{/mianbao/travel/scenic/revoke(id=${scenic.id})}">取消收藏</a>
                                 <hr/>
 
                             </header>

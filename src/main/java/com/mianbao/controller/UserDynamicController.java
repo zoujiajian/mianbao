@@ -6,6 +6,7 @@ import com.mianbao.enums.Response;
 import com.mianbao.pojo.user.UserLogin;
 import com.mianbao.service.DynamicService;
 import com.mianbao.service.TokenParseService;
+import com.sun.javafx.sg.prism.NGShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -120,5 +121,21 @@ public class UserDynamicController {
         }
 
         return dynamicService.commentDynamic(userLogin.getId(),id,content);
+    }
+
+
+    @RequestMapping(value = "delete",method = RequestMethod.GET)
+    public String delete(@CookieValue(name = "token") String token,
+                         @RequestParam(value = "id") int id){
+        UserLogin userLogin = parseService.getUserLogin(token);
+        if(userLogin == null){
+            return "sys/index";
+        }
+        try {
+            dynamicService.deleteDynamic(id);
+        }catch (Exception e){
+            logger.error("删除游记失败",e);
+        }
+        return "redirect:/mianbao/travel/dynamic/center?pageNo=1&pageSize=3";
     }
 }

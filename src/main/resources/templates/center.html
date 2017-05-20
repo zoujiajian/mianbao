@@ -70,6 +70,7 @@
 							<img th:src="${dynamic.dynamicPicture}" title="image-name" style="width:300px;height:400px"/>
 							<a th:href="@{/mianbao/travel/dynamic/dynamicInfo(id=${dynamic.id})}" th:text="${dynamic.dynamicTitle}">游记标题</a>
 							<p th:text="${dynamic.dynamicContent}">游记内容</p>
+							<a th:href="@{/mianbao/travel/dynamic/delete(id=${dynamic.id})}">删除游记</a>
 						</div>
 					</div>
 					<div class="clear"> </div>

@@ -157,14 +157,14 @@ public class ScenicSpotController {
     }
 
     @RequestMapping(value = "revoke",method = RequestMethod.GET)
-    @ResponseBody
-    public Result revoke(@CookieValue(name = "token") String token,
+    public String revoke(@CookieValue(name = "token") String token,
                          @RequestParam(name = "id") int id){
         UserLogin userLogin = parseService.getUserLogin(token);
         if(userLogin == null){
-            return Result.getDefaultError(Response.USER_NOT_LOGIN.getMsg());
+            return "sys/index";
         }
-        return scenicSpotService.revoke(userLogin.getId(),id);
+        scenicSpotService.revoke(userLogin.getId(),id);
+        return "redirect:/mianbao/travel/scenic/collectionInfo?pageNo=1&pageSize=6";
     }
 
     @RequestMapping(value = "score",method = RequestMethod.POST)
