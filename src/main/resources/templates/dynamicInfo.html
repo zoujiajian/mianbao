@@ -3,6 +3,9 @@
     <meta charset="UTF-8"/>
     <title>动态评论功能</title>
     <link rel="stylesheet" th:href="@{/css/dynamic/style.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/scenic/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/scenic/font-awesome/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/scenic/style.css}" id="theme-styles"/>
     <script th:src="@{/js/vendor/jquery-1.10.2.min.js}"></script>
     <script th:src="@{/js/jquery.cookie.js}"></script>
     <script th:src="@{/js/common.js}"></script>
@@ -12,7 +15,7 @@
             $("#like").click(function(){
                 var userName = $.cookie("user");
                 if(userName == null){
-                    window.alert("只有登录之后才可以进行评价哦");
+                    window.alert("只有登录之后才可以点赞哦");
                 }else{
                     var url = "/mianbao/travel/dynamic/like";
                     var data = {"id":$("#dynamicId").val()};
@@ -30,6 +33,36 @@
     </script>
 </head>
 <body>
+<div class="widewrapper masthead">
+    <div class="container">
+        <div id="mobile-nav-toggle" class="pull-right">
+            <a href="#" data-toggle="collapse" data-target=".clean-nav .navbar-collapse">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+
+        <nav class="pull-right clean-nav">
+            <div class="collapse navbar-collapse">
+                <ul class="nav nav-pills navbar-nav">
+
+                    <li>
+                        <a th:href="@{/mianbao/travel/index}">首页</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/mianbao/travel/scenic/center(pageNo=1,pageSize=6)}">景点中心</a>
+                    </li>
+                    <li id ="status">
+                        <a th:href="@{/mianbao/travel/user/login}">登录</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/mianbao/travel/user/register}">注册</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+    </div>
+</div>
 <div id="list">
     <div class="box clearfix">
         <a class="close" href="javascript:;">×</a>
